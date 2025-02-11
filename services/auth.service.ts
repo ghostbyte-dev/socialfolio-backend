@@ -19,7 +19,7 @@ export class AuthService {
         if (!profile) throw new HttpError(401, "Invalid Email");
 
         const isMatch = await bcrypt.compare(password, profile.password);
-        if (!isMatch) throw new Error("Invalid credentials");
+        if (!isMatch) throw new HttpError(401, "Invalid Password");
 
         return createJWT({ id: profile._id.toString() });
     }

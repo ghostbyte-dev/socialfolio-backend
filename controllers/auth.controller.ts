@@ -12,13 +12,7 @@ export class AuthController {
             context.response.status = 200;
             context.response.body = { message: "Login successful", jwt };
         } catch (error) {
-            if (error instanceof HttpError) {
-                context.response.status = error.status;
-                context.response.body = { message: error.message };
-            } else {
-                context.response.status = 500;
-                context.response.body = { message: "An unknow error occured" };
-            }
+            HttpError.handleError(context, error);
         }
     }
 
@@ -31,13 +25,7 @@ export class AuthController {
             context.response.status = 201;
             context.response.body = { message: "Register successful", jwt };
         } catch (error) {
-            if (error instanceof HttpError) {
-                context.response.status = error.status;
-                context.response.body = { message: error.message };
-            } else {
-                context.response.status = 500;
-                context.response.body = { message: "An unknow error occured" };
-            }
+            HttpError.handleError(context, error);
         }
     }
 }
