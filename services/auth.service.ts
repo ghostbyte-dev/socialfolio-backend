@@ -11,7 +11,7 @@ export class AuthService {
         const hashedPassword = await bcrypt.hash(password);
         const newProfile = await Profile.create({ email, username, password: hashedPassword });
 
-        return createJWT({ id: newProfile._id.toString() });
+        return createJWT(newProfile._id.toString(), newProfile.email, newProfile.username);
     }
 
     static async login(email: string, password: string): Promise<string> {
@@ -21,6 +21,6 @@ export class AuthService {
         const isMatch = await bcrypt.compare(password, profile.password);
         if (!isMatch) throw new HttpError(401, "Invalid Password");
 
-        return createJWT({ id: profile._id.toString() });
+        return createJWT(profile._id.toString(), profile.email, profile.username);
     }
 }

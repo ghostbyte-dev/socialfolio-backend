@@ -10,8 +10,11 @@ export class AuthController {
             const jwt = await AuthService.login(loginRequest.email, loginRequest.password);
 
             context.response.status = 200;
+            console.log("success");
             context.response.body = { message: "Login successful", jwt };
         } catch (error) {
+            console.log("error");
+
             HttpError.handleError(context, error);
         }
     }
