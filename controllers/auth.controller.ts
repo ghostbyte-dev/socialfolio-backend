@@ -1,44 +1,43 @@
-import { Router } from "@oak/oak/router";
-import Profile from "../model/Profile.ts";
-import { createJWT } from "../utils/jwt.ts";
+import { Context } from "@oak/oak/context";
+import { LoginRequest, RegisterRequest } from "../types/auth.types.ts";
+import { AuthService } from "../services/auth.service.ts";
+import { HttpError } from "../utils/HttpError.ts";
 
-const authController = new Router()
-    .post("/login", async (context) => {
-        const { email, password } = await context.request.body.json();
-        const profile = await Profile.findOne({ email, password });
-        if (profile) {
-            const jwt = await createJWT({ id: profile._id });
+export class AuthController {
+    static async login(context: Context): Promise<void> {
+        const loginRequest = await context.request.body.json() as LoginRequest;
+        try {
+            const jwt = await AuthService.login(loginRequest.email, loginRequest.password);
 
             context.response.status = 200;
             context.response.body = { message: "Login successful", jwt };
-        } else {
-            context.response.status = 401;
-            context.response.body = { message: "Invalid credentials" };
-        }
-    })
-
-    .post("/register", async (context) => {
-        const { email, username, password } = await context.request.body.json();
-        const profile = await Profile.findOne({ email });
-        if (profile) {
-            context.response.status = 409;
-            context.response.body = { message: "Email already exists" };
-        } else {
-            const newProfile = await Profile.create({
-                email,
-                username,
-                password,
-            });
-            if (newProfile) {
-                const jwt = await createJWT({ id: newProfile._id });
-                context.response.status = 201;
-                context.response.body = { 
-                    message: "Profile created successfully",
-                    jwt
-                 };
+        } catch (error) {
+            if (error instanceof HttpError) {
+                context.response.status = error.status;
+                context.response.body = { message: error.message };
+            } else {
+                context.response.status = 500;
+                context.response.body = { message: "An unknow error occured" };
             }
         }
-    });  
+    }
 
+    static async register(context: Context) {
+        const registerRequest = await context.request.body.json() as RegisterRequest;
 
-export default authController;
+        try {
+            const jwt = await AuthService.register(registerRequest.email, registerRequest.username, registerRequest.password);
+
+            context.response.status = 201;
+            context.response.body = { message: "Register successful", jwt };
+        } catch (error) {
+            if (error instanceof HttpError) {
+                context.response.status = error.status;
+                context.response.body = { message: error.message };
+            } else {
+                context.response.status = 500;
+                context.response.body = { message: "An unknow error occured" };
+            }
+        }
+    }
+}

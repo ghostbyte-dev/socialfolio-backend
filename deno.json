@@ -5,6 +5,8 @@
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",
     "@std/assert": "jsr:@std/assert@1",
-    "mongoose": "npm:mongoose@^8.10.0"
+    "cors": "https://deno.land/x/cors/mod.ts",
+    "mongoose": "npm:mongoose@^8.10.0",
+    "bcrypt": "https://deno.land/x/bcrypt/mod.ts"
   }
 }
