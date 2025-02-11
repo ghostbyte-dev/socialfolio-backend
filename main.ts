@@ -1,12 +1,15 @@
 import { Application } from "jsr:@oak/oak/application";
 import { Router } from "@oak/oak/router";
-import profileController from "./controllers/profile.controller.ts";
+import authController from "./controllers/auth.controller.ts";
+import { connectDB } from "./database.ts";
 
 const app = new Application();
 const router = new Router();
 
+connectDB();
+
 router
-  .use("/profile", profileController.routes());
+  .use("/api/auth", authController.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
