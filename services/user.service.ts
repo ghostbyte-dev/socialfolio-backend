@@ -9,4 +9,14 @@ export class UserService {
         }
         return profile;
     }
+
+    static async getByUsername(username: string): Promise<IUser> {
+        const profile = await User.findOne({
+            username: username,
+        });
+        if (!profile) {
+            throw new HttpError(404, "Profile not found");
+        }
+        return profile;
+    }
 }

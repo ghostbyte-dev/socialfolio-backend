@@ -8,4 +8,7 @@ userRouter.use(authMiddleware);
 
 userRouter.get("/self", UserController.self);
 
+export const GET_BY_USERNAME_ROUTE = "/username/:username";
+userRouter.get(GET_BY_USERNAME_ROUTE, UserController.getByUsername);
+
 export default userRouter;
