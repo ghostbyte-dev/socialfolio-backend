@@ -5,6 +5,8 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
+  displayName?: string;
+  description?: string;
 }
 
 // Define schema.
@@ -12,6 +14,8 @@ const userSchema = new Schema<IUser>({
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
+  displayName: { type: String },
+  description: { type: String }
 });
 
 // Validations

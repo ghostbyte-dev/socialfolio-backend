@@ -4,11 +4,14 @@ import { authMiddleware } from "../utils/AuthMiddleware.ts";
 
 const userRouter = new Router();
 
+export const GET_BY_USERNAME_ROUTE = "/username/:username";
+userRouter.get(GET_BY_USERNAME_ROUTE, UserController.getByUsername);
+
 userRouter.use(authMiddleware);
 
 userRouter.get("/self", UserController.self);
-
-export const GET_BY_USERNAME_ROUTE = "/username/:username";
-userRouter.get(GET_BY_USERNAME_ROUTE, UserController.getByUsername);
+userRouter.put("/update/username", UserController.updateUsername);
+userRouter.put("/update/description", UserController.updateDescription);
+userRouter.put("/update/displayname", UserController.updateDisplayName);
 
 export default userRouter;
