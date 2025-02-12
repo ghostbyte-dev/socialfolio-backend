@@ -4,6 +4,7 @@ import { connectDB } from "./database.ts";
 import authRouter from "./routes/auth.routes.ts";
 import { oakCors } from "cors";
 import userRouter from "./routes/user.routes.ts";
+import widgetRouter from "./routes/widget.routes.ts";
 
 const app = new Application();
 const router = new Router();
@@ -12,7 +13,8 @@ connectDB();
 
 router
   .use("/api/auth", authRouter.routes())
-  .use("/api/user", userRouter.routes());
+  .use("/api/user", userRouter.routes())
+  .use("/api/widgets", widgetRouter.routes());
 
 app.use(oakCors());
 app.use(router.routes());

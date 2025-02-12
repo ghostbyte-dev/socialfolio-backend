@@ -1,4 +1,5 @@
-import { model, Schema } from "npm:mongoose";
+import { model, ObjectId, Schema } from "npm:mongoose";
+import { IWidget, widgetSchema } from "./Widget.ts";
 
 export interface IUser {
   _id: string;
@@ -7,9 +8,9 @@ export interface IUser {
   password: string;
   displayName?: string;
   description?: string;
+  widgets: ObjectId[];
 }
 
-// Define schema.
 const userSchema = new Schema<IUser>({
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true, required: true },

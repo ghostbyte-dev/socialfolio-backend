@@ -21,6 +21,13 @@ export class UserService {
   }
 
   static async updateUsername(id: string, username: string): Promise<IUser> {
+    const profileWithUsername = await User.find( {
+      username: username,
+    })
+    if (profileWithUsername.length > 0) {
+      throw new HttpError(400, "Username already exists");
+    }
+
     const profile = await User.findOneAndUpdate({ _id: id }, {
       username: username,
     }, { new: true });
