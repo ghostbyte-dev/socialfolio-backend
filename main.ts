@@ -12,9 +12,9 @@ connectDB();
 
 router
   .use("/api/auth", authRouter.routes())
-  .use("/api/user", userRouter.routes())
+  .use("/api/user", userRouter.routes());
 
-app.use(oakCors())
+app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 

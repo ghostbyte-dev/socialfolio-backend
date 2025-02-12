@@ -2,7 +2,11 @@ import { JWTPayload, jwtVerify, SignJWT } from "npm:jose@5.9.6";
 
 const secret = new TextEncoder().encode("secret-that-no-one-knows");
 
-async function createJWT(id: string, email: string, username: string): Promise<string> {
+async function createJWT(
+  id: string,
+  email: string,
+  username: string,
+): Promise<string> {
   const jwt = await new SignJWT({ id, email, username })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
