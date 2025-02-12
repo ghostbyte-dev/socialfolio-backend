@@ -7,92 +7,98 @@ import { RouterContext } from "@oak/oak/router";
 import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
 
 export class UserController {
-    static async self(context: Context) {
-        const userId = context.state.user.id;
-        try {
-            const user: IUser = await UserService.getById(userId);
-            const userDto = UserDto.fromUser(user);
-            context.response.status = 200;
-            context.response.body = userDto;
-        } catch (error) {
-            HttpError.handleError(context, error);
-        }
+  static async self(context: Context) {
+    const userId = context.state.user.id;
+    try {
+      const user: IUser = await UserService.getById(userId);
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async getByUsername(
+    context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
+  ) {
+    const username = context.params.username;
+    if (!username) {
+      context.response.status = 400;
+      context.response.body = { message: "Username is required" };
+      return;
     }
 
-    static async getByUsername(
-        context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
-    ) {
-        const username = context.params.username;
-        if (!username) {
-            context.response.status = 400;
-            context.response.body = { message: "Username is required" };
-            return;
-        }
+    try {
+      const user: IUser = await UserService.getByUsername(username);
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 
-        try {
-            const user: IUser = await UserService.getByUsername(username);
-            const userDto = UserDto.fromUser(user);
-            context.response.status = 200;
-            context.response.body = userDto;
-        } catch (error) {
-            HttpError.handleError(context, error);
-        }
+  static async updateUsername(context: Context) {
+    const userId = context.state.user.id;
+    const { username } = await context.request.body.json();
+    if (!username) {
+      context.response.status = 400;
+      context.response.body = { message: "Username is required" };
+      return;
     }
 
-    static async updateUsername(context: Context) {
-        const userId = context.state.user.id;
-        const { username } = await context.request.body.json();
-        if (!username) {
-            context.response.status = 400;
-            context.response.body = { message: "Username is required" };
-            return;
-        }
+    try {
+      const user: IUser = await UserService.updateUsername(userId, username);
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 
-        try {
-            const user: IUser = await UserService.updateUsername(userId, username);
-            const userDto = UserDto.fromUser(user);
-            context.response.status = 200;
-            context.response.body = userDto;
-        } catch (error) {
-            HttpError.handleError(context, error);
-        }
+  static async updateDescription(context: Context) {
+    const userId = context.state.user.id;
+    const { description } = await context.request.body.json();
+    if (!description) {
+      context.response.status = 400;
+      context.response.body = { message: "Description is required" };
+      return;
     }
 
-    static async updateDescription(context: Context) {
-        const userId = context.state.user.id;
-        const { description } = await context.request.body.json();
-        if (!description) {
-            context.response.status = 400;
-            context.response.body = { message: "Description is required" };
-            return;
-        }
+    try {
+      const user: IUser = await UserService.updateDescription(
+        userId,
+        description,
+      );
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 
-        try {
-            const user: IUser = await UserService.updateDescription(userId, description);
-            const userDto = UserDto.fromUser(user);
-            context.response.status = 200;
-            context.response.body = userDto;
-        } catch (error) {
-            HttpError.handleError(context, error);
-        }
+  static async updateDisplayName(context: Context) {
+    const userId = context.state.user.id;
+    const { displayname } = await context.request.body.json();
+    if (!displayname) {
+      context.response.status = 400;
+      context.response.body = { message: "Displayname is required" };
+      return;
     }
 
-    static async updateDisplayName(context: Context) {
-        const userId = context.state.user.id;
-        const { displayname } = await context.request.body.json();
-        if (!displayname) {
-            context.response.status = 400;
-            context.response.body = { message: "Displayname is required" };
-            return;
-        }
-
-        try {
-            const user: IUser = await UserService.updateDisplayName(userId, displayname);
-            const userDto = UserDto.fromUser(user);
-            context.response.status = 200;
-            context.response.body = userDto;
-        } catch (error) {
-            HttpError.handleError(context, error);
-        }
+    try {
+      const user: IUser = await UserService.updateDisplayName(
+        userId,
+        displayname,
+      );
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
     }
+  }
 }

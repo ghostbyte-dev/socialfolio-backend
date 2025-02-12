@@ -7,9 +7,15 @@ export class UserDto {
     public email: string,
     public displayName?: string,
     public description?: string,
-  ) { }
+  ) {}
 
   static fromUser(user: IUser): UserDto {
-    return new UserDto(user._id, user.username, user.email, user.displayName, user.description);
+    return new UserDto(
+      user._id,
+      user.username,
+      user.email,
+      user.displayName,
+      user.description,
+    );
   }
 }

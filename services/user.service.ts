@@ -21,26 +21,35 @@ export class UserService {
   }
 
   static async updateUsername(id: string, username: string): Promise<IUser> {
-    const profile = await User.findOneAndUpdate
-    ({ _id: id }, { username: username }, { new: true });
+    const profile = await User.findOneAndUpdate({ _id: id }, {
+      username: username,
+    }, { new: true });
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
     return profile;
   }
 
-  static async updateDescription(id: string, description: string): Promise<IUser> {
-    const profile = await User.findOneAndUpdate
-    ({ _id: id }, { description: description }, { new: true });
+  static async updateDescription(
+    id: string,
+    description: string,
+  ): Promise<IUser> {
+    const profile = await User.findOneAndUpdate({ _id: id }, {
+      description: description,
+    }, { new: true });
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
     return profile;
   }
 
-  static async updateDisplayName(id: string, displayName: string): Promise<IUser> {
-    const profile = await User.findOneAndUpdate
-    ({ _id: id }, { displayName: displayName }, { new: true });
+  static async updateDisplayName(
+    id: string,
+    displayName: string,
+  ): Promise<IUser> {
+    const profile = await User.findOneAndUpdate({ _id: id }, {
+      displayName: displayName,
+    }, { new: true });
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
