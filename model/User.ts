@@ -1,5 +1,4 @@
 import { model, ObjectId, Schema } from "npm:mongoose";
-import { IWidget, widgetSchema } from "./Widget.ts";
 
 export interface IUser {
   _id: string;
