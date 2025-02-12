@@ -4,7 +4,6 @@ import { AuthService } from "../services/auth.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { verifyJWT } from "../utils/jwt.ts";
 import { UserService } from "../services/user.service.ts";
-import { UserDto } from "../types/user.types.ts";
 
 export class AuthController {
     static async login(context: Context): Promise<void> {
@@ -17,7 +16,7 @@ export class AuthController {
             }
             const user = await UserService.getById(jwtPayload.id.toString());
             
-            const authResponse = new AuthResponseDto(UserDto.fromUser(user), jwt);
+            const authResponse = new AuthResponseDto(user._id, user.username, user.email, jwt);
 
             context.response.status = 200;
             console.log("success");
@@ -41,7 +40,7 @@ export class AuthController {
             }
             const user = await UserService.getById(jwtPayload.id.toString());
 
-            const authResponse = new AuthResponseDto(UserDto.fromUser(user), jwt);
+            const authResponse = new AuthResponseDto(user._id, user.username, user.email, jwt);
 
             context.response.status = 201;
             context.response.body = authResponse;

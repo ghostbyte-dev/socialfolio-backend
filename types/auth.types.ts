@@ -17,7 +17,9 @@ export class RegisterRequestDto {
 
 export class AuthResponseDto {
     constructor(
-        public user: UserDto,
-        public jwt?: string
+        public id: string,
+        public username: string,
+        public email: string,
+        public jwt: string
     ) {}
 }
