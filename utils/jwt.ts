@@ -6,7 +6,7 @@ async function createJWT(id: string, email: string, username: string): Promise<s
   const jwt = await new SignJWT({ id, email, username })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("1h")
+    .setExpirationTime("100y")
     .sign(secret);
 
   return jwt;

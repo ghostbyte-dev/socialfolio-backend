@@ -1,7 +1,14 @@
 import { model, Schema } from "npm:mongoose";
 
+
+export interface IUser {
+  username: string;
+  email: string;
+  password: string;
+}
+
 // Define schema.
-const profileScheme = new Schema({
+const userSchema = new Schema<IUser>({
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },  
@@ -10,4 +17,4 @@ const profileScheme = new Schema({
 // Validations
 
 // Export model.
-export default model("Dinosaur", profileScheme);
+export default model<IUser>("User", userSchema);

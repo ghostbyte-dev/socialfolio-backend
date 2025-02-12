@@ -1,15 +1,21 @@
-export interface LoginRequest {
-    email: string;
-    password: string;
+export class LoginRequestDto {
+    constructor(
+        public email: string,
+        public password: string
+    ) {}
 }
 
-export interface RegisterRequest {
-    email: string;
-    username: string;
-    password: string;
+export class RegisterRequestDto {
+    constructor(
+        public email: string,
+        public username: string,
+        public password: string
+    ) {}
 }
 
-export interface AuthResponse {
-    message: string;
-    jwt?: string;
+export class AuthResponseDto {
+    constructor(
+        public message: string,
+        public jwt?: string
+    ) {}
 }
