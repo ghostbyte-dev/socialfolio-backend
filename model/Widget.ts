@@ -12,7 +12,7 @@ export interface IMastodon {
 }
 
 export enum WidgetType {
-  Pixlfed = "Pixlfed",
+  Pixelfed = "Pixelfed",
   Mastodon = "Mastodon",
 }
 

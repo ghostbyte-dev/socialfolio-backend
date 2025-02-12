@@ -4,8 +4,10 @@ import { authMiddleware } from "../utils/AuthMiddleware.ts";
 
 const widgetRouter = new Router();
 
-export const GET_WIDGETS_ROUTE = "/:username";
+export const GET_WIDGETS_ROUTE = "/:username/all";
 widgetRouter.get(GET_WIDGETS_ROUTE, WidgetController.widgets);
+export const GET_WIDGET_ROUTE = "/:id";
+widgetRouter.get(GET_WIDGET_ROUTE, WidgetController.getWidget);
 
 widgetRouter.use(authMiddleware);
 
