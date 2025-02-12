@@ -30,14 +30,14 @@ export class WidgetService {
   static async createWidget(userId: ObjectId): Promise<WidgetDto> {
     const newWidget: IWidget = await Widget.create({
       user: userId,
-      type: WidgetType.Mastodon,
+      type: WidgetType.Pixelfed,
       variant: 1,
       size: {
         cols: 2,
         rows: 4,
       },
       data: {
-        baseUrl: "https://mastodon.social",
+        baseUrl: "https://pixelfed.social",
         username: "hiebeler05",
       },
     });

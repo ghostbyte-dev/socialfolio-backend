@@ -28,6 +28,7 @@ export interface WidgetData {}
 
 export interface MastodonData extends WidgetData {
   username: string;
+  displayName: string;
   description: string;
 }
 

@@ -4,13 +4,15 @@ import { WidgetDataService } from "./widgetdata.service.ts";
 
 export class MastodonService
   implements WidgetDataService<IMastodon, MastodonData> {
-  fetchData(input: IMastodon): Promise<MastodonData> {
-    return new Promise((resolve) => {
-      const pixelfedData: MastodonData = {
-        description: "hallo description mastodon",
-        username: input.username,
-      };
-      resolve(pixelfedData);
-    });
+  async fetchData(input: IMastodon): Promise<MastodonData> {
+    const baseUrl = input.baseUrl;
+    const res = await fetch(`${baseUrl}/api/v1/accounts/lookup?acct=Pixelix`);
+    const account = await res.json();
+
+    return {
+      username: account.username,
+      displayName: account.display_name,
+      description: account.note,
+    };
   }
 }
