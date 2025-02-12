@@ -30,6 +30,9 @@ export interface MastodonData extends WidgetData {
   username: string;
   displayName: string;
   description: string;
+  avatar: string;
+  followersCount: string;
+  url: string;
 }
 
 export interface PixelfedData extends WidgetData {

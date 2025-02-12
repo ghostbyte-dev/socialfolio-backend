@@ -13,6 +13,9 @@ export class MastodonService
       username: account.username,
       displayName: account.display_name,
       description: account.note,
+      avatar: account.avatar,
+      followersCount: account.followers_count,
+      url: account.url,
     };
   }
 }
