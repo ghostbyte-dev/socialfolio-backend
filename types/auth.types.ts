@@ -1,3 +1,5 @@
+import { UserDto } from "./user.types.ts";
+
 export class LoginRequestDto {
     constructor(
         public email: string,
@@ -15,7 +17,7 @@ export class RegisterRequestDto {
 
 export class AuthResponseDto {
     constructor(
-        public message: string,
+        public user: UserDto,
         public jwt?: string
     ) {}
 }

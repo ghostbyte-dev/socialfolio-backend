@@ -2,13 +2,22 @@ import { Context } from "@oak/oak/context";
 import { AuthResponseDto, LoginRequestDto, RegisterRequestDto } from "../types/auth.types.ts";
 import { AuthService } from "../services/auth.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
+import { verifyJWT } from "../utils/jwt.ts";
+import { UserService } from "../services/user.service.ts";
+import { UserDto } from "../types/user.types.ts";
 
 export class AuthController {
     static async login(context: Context): Promise<void> {
         const loginRequest = await context.request.body.json() as LoginRequestDto;
         try {
             const jwt = await AuthService.login(loginRequest.email, loginRequest.password);
-            const authResponse = new AuthResponseDto("Login successful", jwt);
+            const jwtPayload = await verifyJWT(jwt);
+            if (jwtPayload?.id == null) {
+                throw new HttpError(500, "Invalid JWT");
+            }
+            const user = await UserService.getById(jwtPayload.id.toString());
+            
+            const authResponse = new AuthResponseDto(UserDto.fromUser(user), jwt);
 
             context.response.status = 200;
             console.log("success");
@@ -25,8 +34,15 @@ export class AuthController {
 
         try {
             const jwt = await AuthService.register(registerRequest.email, registerRequest.username, registerRequest.password);
-            const authResponse = new AuthResponseDto("Register successful", jwt);
-            
+
+            const jwtPayload = await verifyJWT(jwt);
+            if (jwtPayload?.id == null) {
+                throw new HttpError(500, "Invalid JWT");
+            }
+            const user = await UserService.getById(jwtPayload.id.toString());
+
+            const authResponse = new AuthResponseDto(UserDto.fromUser(user), jwt);
+
             context.response.status = 201;
             context.response.body = authResponse;
         } catch (error) {

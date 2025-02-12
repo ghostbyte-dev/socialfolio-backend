@@ -10,7 +10,7 @@ export class UserController {
     static async self(context: Context) {
         const userId = context.state.user.id
         try {
-            const user: IUser = await UserService.self(userId);
+            const user: IUser = await UserService.getById(userId);
             const userDto = UserDto.fromUser(user);
             context.response.status = 200;
             context.response.body = userDto;
