@@ -5,6 +5,7 @@ import { UserService } from "./user.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { WidgetDataServiceFactory } from "./widgets/widgetdata.service.ts";
 import { WidgetDataDto } from "../types/widgetdata.types.ts";
+import mongoose from "mongoose";
 
 export class WidgetService {
   static async widgets(username: string): Promise<WidgetDto[]> {
@@ -39,5 +40,25 @@ export class WidgetService {
       data: createWidgetDto.data,
     });
     return WidgetDto.fromWidget(newWidget);
+  }
+
+  static async deleteWidget(userId: ObjectId, widgetId: string) {
+    if (!mongoose.Types.ObjectId.isValid(widgetId)) {
+      throw new HttpError(400, "Invalid Widget ID");
+    }
+
+    const widgetToDelete = await Widget.findById(widgetId);
+
+    if (!widgetToDelete) {
+      throw new HttpError(404, "Widget not found");
+    }
+
+    if (widgetToDelete.user != userId) {
+      throw new HttpError(401, "Unauthorized");
+    }
+
+    await widgetToDelete.deleteOne();
+
+    return;
   }
 }

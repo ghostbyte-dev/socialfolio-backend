@@ -1,6 +1,7 @@
 import { RouterContext } from "@oak/oak/router";
 import { WidgetService } from "../services/widget.service.ts";
 import {
+  DELETE_WIDGET_ROUTE,
   GET_WIDGET_ROUTE,
   GET_WIDGETS_ROUTE,
 } from "../routes/widget.routes.ts";
@@ -51,6 +52,25 @@ export class WidgetController {
       const widget = await WidgetService.createWidget(userId, createWidgetDto);
       context.response.status = 201;
       context.response.body = widget;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async deleteWidget(
+    context: RouterContext<typeof DELETE_WIDGET_ROUTE>,
+  ) {
+    const userId = context.state.user.id;
+    const { id } = context.params;
+    if (id == null) {
+      context.response.status = 400;
+      context.response.body = { message: "ID is required" };
+      return;
+    }
+
+    try {
+      await WidgetService.deleteWidget(userId, id);
+      context.response.status = 200;
     } catch (error) {
       HttpError.handleError(context, error);
     }

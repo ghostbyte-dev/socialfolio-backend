@@ -13,4 +13,7 @@ widgetRouter.use(authMiddleware);
 
 widgetRouter.post("/", WidgetController.createWidget);
 
+export const DELETE_WIDGET_ROUTE = "/:id";
+widgetRouter.delete(DELETE_WIDGET_ROUTE, WidgetController.deleteWidget);
+
 export default widgetRouter;
