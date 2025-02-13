@@ -21,7 +21,6 @@ export class WidgetService {
     if (widget == null) {
       throw new HttpError(400, "Widget not found");
     }
-    console.log(widget.data);
 
     const service = WidgetDataServiceFactory.createService(widget.type);
     const data = await service.fetchData(widget.data);

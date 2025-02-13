@@ -45,10 +45,10 @@ export class WidgetController {
 
   static async createWidget(context: Context) {
     const userId = context.state.user.id;
-    const createWidgetDto = await context.request.body
-      .json() as CreateWidgetDto;
 
     try {
+      const createWidgetDto = CreateWidgetDto
+        .fromJson(await context.request.body.json());
       const widget = await WidgetService.createWidget(userId, createWidgetDto);
       context.response.status = 201;
       context.response.body = widget;

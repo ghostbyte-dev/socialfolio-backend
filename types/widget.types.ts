@@ -1,5 +1,6 @@
 import { IGithub, IMastodon, INote, IPixelfed } from "../model/Widget.ts";
 import { ISize, IWidget, WidgetType } from "../model/Widget.ts";
+import { HttpError } from "../utils/HttpError.ts";
 
 export class WidgetDto {
   constructor(
@@ -27,5 +28,60 @@ export class CreateWidgetDto {
     public variant: number,
     public size: ISize,
     public data: IPixelfed | IMastodon | INote | IGithub,
-  ) {}
+  ) {
+    if (!this.isValidData(type, data)) {
+      throw new HttpError(400, "Invalid data for widget type: " + type);
+    }
+  }
+
+  // deno-lint-ignore no-explicit-any
+  static fromJson(json: any): CreateWidgetDto {
+    if (!json || typeof json !== "object") {
+      throw new Error("Invalid JSON payload");
+    }
+    return new CreateWidgetDto(
+      json.type,
+      json.variant,
+      json.size,
+      json.data,
+    );
+  }
+
+  // deno-lint-ignore no-explicit-any
+  isValidData(type: WidgetType, data: any): boolean {
+    switch (type) {
+      case WidgetType.Pixelfed:
+        return this.isPixelfedData(data);
+      case WidgetType.Mastodon:
+        return this.isMastodonData(data);
+      case WidgetType.Note:
+        return this.isNoteData(data);
+      case WidgetType.Github:
+        return this.isGithubData(data);
+      default:
+        return false;
+    }
+  }
+
+  isPixelfedData(data: IPixelfed) {
+    return typeof data === "object" && data !== null &&
+      typeof data.instance === "string" &&
+      typeof data.username === "string";
+  }
+
+  isMastodonData(data: IMastodon) {
+    return typeof data === "object" && data !== null &&
+      typeof data.instance === "string" &&
+      typeof data.username === "string";
+  }
+
+  isNoteData(data: INote) {
+    return typeof data === "object" && data !== null &&
+      typeof data.note === "string";
+  }
+
+  isGithubData(data: IGithub) {
+    return typeof data === "object" && data !== null &&
+      typeof data.username === "string";
+  }
 }

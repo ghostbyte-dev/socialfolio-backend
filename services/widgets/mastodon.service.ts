@@ -5,7 +5,7 @@ import { WidgetDataService } from "./widgetdata.service.ts";
 export class MastodonService
   implements WidgetDataService<IMastodon, MastodonData> {
   async fetchData(input: IMastodon): Promise<MastodonData> {
-    const baseUrl = input.baseUrl;
+    const baseUrl = input.instance;
     const res = await fetch(
       `${baseUrl}/api/v1/accounts/lookup?acct=` + input.username,
     );

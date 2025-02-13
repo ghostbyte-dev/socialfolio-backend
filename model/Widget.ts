@@ -3,12 +3,12 @@ import { model, Schema } from "mongoose";
 import { urlParser } from "../utils/UrlParser.ts";
 
 export interface IPixelfed {
-  baseUrl: string;
+  instance: string;
   username: string;
 }
 
 export interface IMastodon {
-  baseUrl: string;
+  instance: string;
   username: string;
 }
 
@@ -50,12 +50,13 @@ export const widgetSchema = new Schema<IWidget>({
 });
 
 widgetSchema.pre("save", function (next) {
+  console.log(this.data);
   console.log(this.type);
   switch (this.type) {
     case WidgetType.Pixelfed:
     case WidgetType.Mastodon:
-      (this.data as IPixelfed | IMastodon).baseUrl = urlParser(
-        (this.data as IPixelfed | IMastodon).baseUrl,
+      (this.data as IPixelfed | IMastodon).instance = urlParser(
+        (this.data as IPixelfed | IMastodon).instance,
       );
       break;
   }
