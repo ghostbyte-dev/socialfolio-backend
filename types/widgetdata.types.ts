@@ -39,3 +39,7 @@ export interface PixelfedData extends WidgetData {
   username: string;
   description: string;
 }
+
+export interface NoteData extends WidgetData {
+  note: string;
+}

@@ -2,6 +2,7 @@ import { WidgetType } from "../../model/Widget.ts";
 import { WidgetData } from "../../types/widgetdata.types.ts";
 import { MastodonService } from "./mastodon.service.ts";
 import { PixelfedService } from "./pixelfed.service.ts";
+import { NoteService } from "./note.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
   fetchData(input: TInput): Promise<TOutput>;
@@ -19,6 +20,11 @@ export class WidgetDataServiceFactory {
         >;
       case WidgetType.Pixelfed:
         return new PixelfedService() as unknown as WidgetDataService<
+          TInput,
+          TOutput
+        >;
+      case WidgetType.Note:
+        return new NoteService() as unknown as WidgetDataService<
           TInput,
           TOutput
         >;

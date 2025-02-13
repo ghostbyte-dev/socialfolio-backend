@@ -12,9 +12,14 @@ export interface IMastodon {
   username: string;
 }
 
+export interface INote {
+  note: string;
+}
+
 export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
+  Note = "note",
 }
 
 export interface ISize {
@@ -28,7 +33,7 @@ export interface IWidget {
   type: WidgetType;
   variant: number;
   size: ISize;
-  data: IPixelfed | IMastodon;
+  data: IPixelfed | IMastodon | INote;
 }
 
 export const widgetSchema = new Schema<IWidget>({
@@ -45,7 +50,7 @@ widgetSchema.pre("save", function (next) {
     case WidgetType.Pixelfed:
     case WidgetType.Mastodon:
       (this.data as IPixelfed | IMastodon).baseUrl = urlParser(
-        this.data.baseUrl,
+        (this.data as IPixelfed | IMastodon).baseUrl,
       );
       break;
   }

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import Widget, { IWidget } from "../model/Widget.ts";
+import Widget, { IWidget, WidgetType } from "../model/Widget.ts";
 import { CreateWidgetDto, WidgetDto } from "../types/widget.types.ts";
 import { UserService } from "./user.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
@@ -32,6 +32,10 @@ export class WidgetService {
     userId: ObjectId,
     createWidgetDto: CreateWidgetDto,
   ): Promise<WidgetDto> {
+    if (!Object.values(WidgetType).includes(createWidgetDto.type)) {
+      throw new HttpError(400, "Wrong Widget Type");
+    }
+
     const newWidget: IWidget = await Widget.create({
       user: userId,
       type: createWidgetDto.type,
