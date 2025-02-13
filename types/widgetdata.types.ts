@@ -53,4 +53,23 @@ export interface GithubData extends WidgetData {
   followers: number;
   following: number;
   publicRepos: number;
+  contributions: ContributionsCollection;
+}
+
+export interface ContributionsCollection {
+  colors: string[];
+  totalContributions: number;
+  weeks: ContributionsWeek[];
+}
+
+interface ContributionsWeek {
+  contributionDays: ContributionDay[];
+  firtsDay: string;
+}
+
+interface ContributionDay {
+  color: string;
+  contributeCount: number;
+  date: string;
+  weekday: number;
 }
