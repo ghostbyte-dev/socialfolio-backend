@@ -16,10 +16,15 @@ export interface INote {
   note: string;
 }
 
+export interface IGithub {
+  username: string;
+}
+
 export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
   Note = "note",
+  Github = "github",
 }
 
 export interface ISize {

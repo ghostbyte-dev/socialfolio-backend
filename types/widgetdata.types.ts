@@ -43,3 +43,14 @@ export interface PixelfedData extends WidgetData {
 export interface NoteData extends WidgetData {
   note: string;
 }
+
+export interface GithubData extends WidgetData {
+  username: string;
+  name: string;
+  avatar: string;
+  url: string;
+  location: string;
+  followers: number;
+  following: number;
+  publicRepos: number;
+}

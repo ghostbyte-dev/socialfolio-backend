@@ -1,4 +1,4 @@
-import { IMastodon, INote, IPixelfed } from "../model/Widget.ts";
+import { IGithub, IMastodon, INote, IPixelfed } from "../model/Widget.ts";
 import { ISize, IWidget, WidgetType } from "../model/Widget.ts";
 
 export class WidgetDto {
@@ -7,7 +7,7 @@ export class WidgetDto {
     public type: string,
     public variant: number,
     public size: ISize,
-    public data?: IPixelfed | IMastodon | INote,
+    public data?: IPixelfed | IMastodon | INote | IGithub,
   ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
@@ -26,6 +26,6 @@ export class CreateWidgetDto {
     public type: WidgetType,
     public variant: number,
     public size: ISize,
-    public data: IPixelfed | IMastodon | INote,
+    public data: IPixelfed | IMastodon | INote | IGithub,
   ) {}
 }
