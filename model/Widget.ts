@@ -1,7 +1,8 @@
 import { ObjectId } from "mongoose";
 import { model, Schema } from "mongoose";
+import { urlParser } from "../utils/UrlParser.ts";
 
-export interface IPixlfed {
+export interface IPixelfed {
   baseUrl: string;
   username: string;
 }
@@ -12,8 +13,8 @@ export interface IMastodon {
 }
 
 export enum WidgetType {
-  Pixelfed = "Pixelfed",
-  Mastodon = "Mastodon",
+  Pixelfed = "pixelfed",
+  Mastodon = "mastodon",
 }
 
 export interface ISize {
@@ -27,7 +28,7 @@ export interface IWidget {
   type: WidgetType;
   variant: number;
   size: ISize;
-  data: IPixlfed | IMastodon;
+  data: IPixelfed | IMastodon;
 }
 
 export const widgetSchema = new Schema<IWidget>({
@@ -35,7 +36,20 @@ export const widgetSchema = new Schema<IWidget>({
   type: { type: String, required: true },
   variant: { type: Number, required: true },
   size: { type: Object, required: true },
-  data: { type: Object, required: true },
+  data: { type: Schema.Types.Mixed, required: true },
+});
+
+widgetSchema.pre("save", function (next) {
+  console.log(this.type);
+  switch (this.type) {
+    case WidgetType.Pixelfed:
+    case WidgetType.Mastodon:
+      (this.data as IPixelfed | IMastodon).baseUrl = urlParser(
+        this.data.baseUrl,
+      );
+      break;
+  }
+  next();
 });
 
 export default model<IWidget>("Widget", widgetSchema);

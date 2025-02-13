@@ -17,6 +17,9 @@ export const authMiddleware = async (
       throw new Error("Invalid JWT");
     }
     context.state.user = jwtPayload;
+    if (context.state.user.id == null) {
+      throw new Error("Invalid JWT");
+    }
     await next();
   } catch (_error: unknown) {
     context.response.status = 401;

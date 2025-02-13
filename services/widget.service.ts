@@ -1,6 +1,6 @@
 import { ObjectId } from "mongoose";
-import Widget, { IWidget, WidgetType } from "../model/Widget.ts";
-import { WidgetDto } from "../types/widget.types.ts";
+import Widget, { IWidget } from "../model/Widget.ts";
+import { CreateWidgetDto, WidgetDto } from "../types/widget.types.ts";
 import { UserService } from "./user.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { WidgetDataServiceFactory } from "./widgets/widgetdata.service.ts";
@@ -15,7 +15,7 @@ export class WidgetService {
     return widgets.map((widget) => WidgetDto.fromWidget(widget));
   }
 
-  static async getWidget(id: string): Promise<WidgetDto> {
+  static async getWidget(id: string): Promise<WidgetDataDto> {
     const widget: IWidget | null = await Widget.findById(id);
     if (widget == null) {
       throw new HttpError(400, "Widget not found");
@@ -27,19 +27,16 @@ export class WidgetService {
     return WidgetDataDto.fromWidgetData(widget, data);
   }
 
-  static async createWidget(userId: ObjectId): Promise<WidgetDto> {
+  static async createWidget(
+    userId: ObjectId,
+    createWidgetDto: CreateWidgetDto,
+  ): Promise<WidgetDto> {
     const newWidget: IWidget = await Widget.create({
       user: userId,
-      type: WidgetType.Pixelfed,
-      variant: 1,
-      size: {
-        cols: 2,
-        rows: 4,
-      },
-      data: {
-        baseUrl: "https://pixelfed.social",
-        username: "hiebeler05",
-      },
+      type: createWidgetDto.type,
+      variant: createWidgetDto.variant,
+      size: createWidgetDto.size,
+      data: createWidgetDto.data,
     });
     return WidgetDto.fromWidget(newWidget);
   }

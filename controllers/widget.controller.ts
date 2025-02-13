@@ -6,6 +6,7 @@ import {
 } from "../routes/widget.routes.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { Context } from "@oak/oak/context";
+import { CreateWidgetDto } from "../types/widget.types.ts";
 
 export class WidgetController {
   static async widgets(context: RouterContext<typeof GET_WIDGETS_ROUTE>) {
@@ -43,9 +44,11 @@ export class WidgetController {
 
   static async createWidget(context: Context) {
     const userId = context.state.user.id;
+    const createWidgetDto = await context.request.body
+      .json() as CreateWidgetDto;
 
     try {
-      const widget = await WidgetService.createWidget(userId);
+      const widget = await WidgetService.createWidget(userId, createWidgetDto);
       context.response.status = 201;
       context.response.body = widget;
     } catch (error) {

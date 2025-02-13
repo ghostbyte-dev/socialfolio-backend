@@ -1,4 +1,5 @@
-import { ISize, IWidget } from "../model/Widget.ts";
+import { IMastodon, IPixelfed } from "../model/Widget.ts";
+import { ISize, IWidget, WidgetType } from "../model/Widget.ts";
 
 export class WidgetDto {
   constructor(
@@ -6,6 +7,7 @@ export class WidgetDto {
     public type: string,
     public variant: number,
     public size: ISize,
+    public data?: IPixelfed | IMastodon,
   ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
@@ -14,6 +16,16 @@ export class WidgetDto {
       widget.type,
       widget.variant,
       widget.size,
+      widget.data,
     );
   }
+}
+
+export class CreateWidgetDto {
+  constructor(
+    public type: WidgetType,
+    public variant: number,
+    public size: ISize,
+    public data: IPixelfed | IMastodon,
+  ) {}
 }

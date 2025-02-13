@@ -6,7 +6,9 @@ export class MastodonService
   implements WidgetDataService<IMastodon, MastodonData> {
   async fetchData(input: IMastodon): Promise<MastodonData> {
     const baseUrl = input.baseUrl;
-    const res = await fetch(`${baseUrl}/api/v1/accounts/lookup?acct=Pixelix`);
+    const res = await fetch(
+      `${baseUrl}/api/v1/accounts/lookup?acct=` + input.username,
+    );
     const account = await res.json();
 
     return {
