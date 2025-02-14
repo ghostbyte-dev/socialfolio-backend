@@ -1,2 +1,3 @@
 .env
 public/avatars/*
+!public/avatars/.gitkeep
