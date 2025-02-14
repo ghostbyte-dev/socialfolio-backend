@@ -7,6 +7,7 @@ export interface IUser {
   password: string;
   displayName?: string;
   description?: string;
+  avatarUrl?: string;
   widgets: ObjectId[];
 }
 
@@ -16,6 +17,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
   displayName: { type: String },
   description: { type: String },
+  avatarUrl: { type: String },
 });
 
 // Validations

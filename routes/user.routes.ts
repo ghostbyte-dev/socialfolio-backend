@@ -13,5 +13,6 @@ userRouter.get("/self", UserController.self);
 userRouter.put("/update/username", UserController.updateUsername);
 userRouter.put("/update/description", UserController.updateDescription);
 userRouter.put("/update/displayname", UserController.updateDisplayName);
+userRouter.post("/uploadAvatar", UserController.uploadAvatar);
 
 export default userRouter;

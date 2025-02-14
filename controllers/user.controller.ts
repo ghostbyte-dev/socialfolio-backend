@@ -101,4 +101,19 @@ export class UserController {
       HttpError.handleError(context, error);
     }
   }
+
+  static async uploadAvatar(context: Context) {
+    const userId = context.state.user.id;
+    try {
+      const body = context.request.body;
+      const form = await body.formData();
+      const file = form.get("avatar") as File;
+      const user: IUser = await UserService.uploadAvatar(file, userId);
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 }

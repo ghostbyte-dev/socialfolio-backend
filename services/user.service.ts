@@ -1,5 +1,6 @@
 import User, { IUser } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
+import webp from "webp";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -61,5 +62,49 @@ export class UserService {
       throw new HttpError(404, "Profile not found");
     }
     return profile;
+  }
+
+  static async uploadAvatar(avatar: File, id: string): Promise<IUser> {
+    const uuid = crypto.randomUUID();
+    const path = Deno.cwd() + "/uploads/avatars/";
+    const fileName = path + uuid;
+    const fileEnding = avatar.name.substring(avatar.name.lastIndexOf("."));
+
+    const url = await this.uploadImage(avatar, fileName, fileEnding);
+
+    const profile = await User.findOneAndUpdate({ _id: id }, {
+      avatarUrl: url,
+    }, { new: true });
+    if (!profile) {
+      throw new HttpError(404, "Profile not found");
+    }
+    return profile;
+  }
+
+  private static async uploadImage(
+    file: File,
+    path: string,
+    fileEnding: string,
+  ): Promise<string> {
+    const webpBuffer = await this.fileToWebpBuffer(file, fileEnding);
+    const uuid = crypto.randomUUID();
+    const pathWithFile = path + uuid + ".webp";
+    Deno.writeFile(pathWithFile, webpBuffer);
+    return pathWithFile;
+  }
+
+  private static async fileToWebpBuffer(
+    file: File,
+    fileEnding: string,
+  ): Promise<Uint8Array> {
+    const stream = file.stream();
+    const buffer = (await stream.getReader().read()).value;
+    if (!buffer) throw new HttpError(500, "An unexpected error occured");
+    return await webp.buffer2webpbuffer(
+      buffer,
+      fileEnding,
+      "-q 80",
+      "./image.webp",
+    ) as Uint8Array;
   }
 }

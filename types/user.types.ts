@@ -7,6 +7,7 @@ export class UserDto {
     public email: string,
     public displayName: string,
     public description: string,
+    public avatar: string,
   ) {}
 
   static fromUser(user: IUser): UserDto {
@@ -16,6 +17,7 @@ export class UserDto {
       user.email,
       user.displayName ?? "",
       user.description ?? "",
+      user.avatarUrl ?? "",
     );
   }
 }
