@@ -21,7 +21,7 @@ export interface IGithub {
 }
 
 export interface ILocalTime {
-  timeZone: string;
+  timezone: string;
 }
 
 export enum WidgetType {

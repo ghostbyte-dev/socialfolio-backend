@@ -33,7 +33,7 @@ export class CreateWidgetDto {
     public type: WidgetType,
     public variant: number,
     public size: ISize,
-    public data: IPixelfed | IMastodon | INote | IGithub,
+    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
   ) {
     if (!this.isValidData(type, data)) {
       throw new HttpError(400, "Invalid data for widget type: " + type);
@@ -95,6 +95,6 @@ export class CreateWidgetDto {
 
   isLocalTimeData(data: ILocalTime) {
     return typeof data === "object" && data !== null &&
-      typeof data.timeZone === "string";
+      typeof data.timezone === "string";
   }
 }
