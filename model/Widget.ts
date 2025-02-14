@@ -20,11 +20,16 @@ export interface IGithub {
   username: string;
 }
 
+export interface ILocalTime {
+  timeZone: string;
+}
+
 export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
   Note = "note",
   Github = "github",
+  LocalTime = "localTime",
 }
 
 export interface ISize {
@@ -38,7 +43,7 @@ export interface IWidget {
   type: WidgetType;
   variant: number;
   size: ISize;
-  data: IPixelfed | IMastodon | INote;
+  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime;
 }
 
 export const widgetSchema = new Schema<IWidget>({

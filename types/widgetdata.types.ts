@@ -44,6 +44,10 @@ export interface NoteData extends WidgetData {
   note: string;
 }
 
+export interface LocalTimeData extends WidgetData {
+  timeZone: string;
+}
+
 export interface GithubData extends WidgetData {
   username: string;
   name: string;

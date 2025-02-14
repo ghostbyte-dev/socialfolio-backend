@@ -1,4 +1,10 @@
-import { IGithub, IMastodon, INote, IPixelfed } from "../model/Widget.ts";
+import {
+  IGithub,
+  ILocalTime,
+  IMastodon,
+  INote,
+  IPixelfed,
+} from "../model/Widget.ts";
 import { ISize, IWidget, WidgetType } from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 
@@ -8,7 +14,7 @@ export class WidgetDto {
     public type: string,
     public variant: number,
     public size: ISize,
-    public data?: IPixelfed | IMastodon | INote | IGithub,
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
   ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
@@ -58,6 +64,8 @@ export class CreateWidgetDto {
         return this.isNoteData(data);
       case WidgetType.Github:
         return this.isGithubData(data);
+      case WidgetType.LocalTime:
+        return this.isLocalTimeData(data);
       default:
         return false;
     }
@@ -83,5 +91,10 @@ export class CreateWidgetDto {
   isGithubData(data: IGithub) {
     return typeof data === "object" && data !== null &&
       typeof data.username === "string";
+  }
+
+  isLocalTimeData(data: ILocalTime) {
+    return typeof data === "object" && data !== null &&
+      typeof data.timeZone === "string";
   }
 }
