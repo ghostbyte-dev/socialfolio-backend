@@ -13,10 +13,12 @@ export const authMiddleware = async (
   }
   try {
     const jwtPayload = await verifyJWT(token);
+
     if (jwtPayload == null) {
       throw new Error("Invalid JWT");
     }
     context.state.user = jwtPayload;
+
     if (context.state.user.id == null) {
       throw new Error("Invalid JWT");
     }

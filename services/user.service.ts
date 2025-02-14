@@ -64,14 +64,18 @@ export class UserService {
     return profile;
   }
 
-  static async uploadAvatar(avatar: File, id: string): Promise<IUser> {
+  static async uploadAvatar(
+    avatar: File,
+    id: string,
+    originUrl: string,
+  ): Promise<IUser> {
     const uuid = crypto.randomUUID();
-    const path = Deno.cwd() + "/uploads/avatars/";
+    const path = "avatars/";
     const fileName = path + uuid;
     const fileEnding = avatar.name.substring(avatar.name.lastIndexOf("."));
 
-    const url = await this.uploadImage(avatar, fileName, fileEnding);
-
+    const savedPath = await this.uploadImage(avatar, fileName, fileEnding);
+    const url = originUrl + savedPath;
     const profile = await User.findOneAndUpdate({ _id: id }, {
       avatarUrl: url,
     }, { new: true });
@@ -88,8 +92,8 @@ export class UserService {
   ): Promise<string> {
     const webpBuffer = await this.fileToWebpBuffer(file, fileEnding);
     const uuid = crypto.randomUUID();
-    const pathWithFile = path + uuid + ".webp";
-    Deno.writeFile(pathWithFile, webpBuffer);
+    const pathWithFile = "/public/" + path + uuid + ".webp";
+    Deno.writeFile(Deno.cwd() + pathWithFile, webpBuffer);
     return pathWithFile;
   }
 

@@ -5,11 +5,14 @@ import authRouter from "./routes/auth.routes.ts";
 import { oakCors } from "cors";
 import userRouter from "./routes/user.routes.ts";
 import widgetRouter from "./routes/widget.routes.ts";
+import { staticFileMiddleware } from "./utils/StaticFileMiddleware.ts";
 
 const app = new Application();
 const router = new Router();
 
 connectDB();
+
+app.use(staticFileMiddleware);
 
 router
   .use("/api/auth", authRouter.routes())

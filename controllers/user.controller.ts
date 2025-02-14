@@ -12,6 +12,7 @@ export class UserController {
     try {
       const user: IUser = await UserService.getById(userId);
       const userDto = UserDto.fromUser(user);
+
       context.response.status = 200;
       context.response.body = userDto;
     } catch (error) {
@@ -108,7 +109,11 @@ export class UserController {
       const body = context.request.body;
       const form = await body.formData();
       const file = form.get("avatar") as File;
-      const user: IUser = await UserService.uploadAvatar(file, userId);
+      const user: IUser = await UserService.uploadAvatar(
+        file,
+        userId,
+        context.request.url.origin,
+      );
       const userDto = UserDto.fromUser(user);
       context.response.status = 200;
       context.response.body = userDto;
