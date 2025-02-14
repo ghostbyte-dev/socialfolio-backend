@@ -95,6 +95,7 @@ export class CreateWidgetDto {
 
   isLocalTimeData(data: ILocalTime) {
     return typeof data === "object" && data !== null &&
-      typeof data.timezone === "string";
+      typeof data.timezone === "string" &&
+      Intl.supportedValuesOf("timeZone").includes(data.timezone);
   }
 }
