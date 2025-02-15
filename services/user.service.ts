@@ -72,24 +72,42 @@ export class UserService {
     const uuid = crypto.randomUUID();
     const path = "avatars/";
     const fileName = path + uuid;
-    const fileEnding = avatar.name.substring(avatar.name.lastIndexOf("."));
 
-    const savedPath = await this.uploadImage(avatar, fileName, fileEnding);
-    const url = originUrl + savedPath;
-    const profile = await User.findOneAndUpdate({ _id: id }, {
-      avatarUrl: url,
-    }, { new: true });
-    if (!profile) {
+    const user = await User.findById(id);
+    if (!user) {
       throw new HttpError(404, "Profile not found");
     }
-    return profile;
+    const oldAvatarUrl = user.avatarUrl;
+    try {
+      const savedPath = await this.uploadImage(avatar, fileName);
+      const url = originUrl + savedPath;
+      user.avatarUrl = url;
+      await user.save();
+    } catch (_error) {
+      throw new HttpError(500, "Unable to save new avatar");
+    }
+    if (oldAvatarUrl && oldAvatarUrl != "") {
+      await this.deleteImage(oldAvatarUrl);
+    }
+
+    return user;
+  }
+
+  private static async deleteImage(url: string) {
+    const filePath = url.substring(url.lastIndexOf("public/"));
+    try {
+      console.log(filePath);
+      await Deno.remove(filePath);
+    } catch (_error) {
+      console.log("unable to delete image " + filePath);
+    }
   }
 
   private static async uploadImage(
     file: File,
     path: string,
-    fileEnding: string,
   ): Promise<string> {
+    const fileEnding = file.name.substring(file.name.lastIndexOf("."));
     const webpBuffer = await this.fileToWebpBuffer(file, fileEnding);
     const uuid = crypto.randomUUID();
     const pathWithFile = "/public/" + path + uuid + ".webp";
