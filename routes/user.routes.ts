@@ -14,5 +14,6 @@ userRouter.put("/update/username", UserController.updateUsername);
 userRouter.put("/update/description", UserController.updateDescription);
 userRouter.put("/update/displayname", UserController.updateDisplayName);
 userRouter.post("/uploadAvatar", UserController.uploadAvatar);
+userRouter.delete("/avatar", UserController.deleteAvatar);
 
 export default userRouter;

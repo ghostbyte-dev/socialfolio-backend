@@ -121,4 +121,18 @@ export class UserController {
       HttpError.handleError(context, error);
     }
   }
+
+  static async deleteAvatar(context: Context) {
+    const userId = context.state.user.id;
+    try {
+      const user: IUser = await UserService.deleteAvatar(
+        userId,
+      );
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 }

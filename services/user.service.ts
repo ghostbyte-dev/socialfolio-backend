@@ -87,9 +87,29 @@ export class UserService {
       throw new HttpError(500, "Unable to save new avatar");
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
-      await this.deleteImage(oldAvatarUrl);
+      try {
+        await this.deleteImage(oldAvatarUrl);
+      } catch (_error) {
+        console.log("unable to delete image " + oldAvatarUrl);
+      }
     }
 
+    return user;
+  }
+
+  static async deleteAvatar(userId: string): Promise<IUser> {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new HttpError(404, "Profile not found");
+    }
+
+    if (user.avatarUrl && user.avatarUrl != "") {
+      await this.deleteImage(user.avatarUrl);
+    }
+
+    user.avatarUrl = undefined;
+
+    await user.save();
     return user;
   }
 
@@ -99,7 +119,7 @@ export class UserService {
       console.log(filePath);
       await Deno.remove(filePath);
     } catch (_error) {
-      console.log("unable to delete image " + filePath);
+      throw new HttpError(500, "Unable to delete image " + url);
     }
   }
 
