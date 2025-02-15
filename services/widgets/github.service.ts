@@ -8,11 +8,14 @@ import { WidgetDataService } from "./widgetdata.service.ts";
 export class GithubService implements WidgetDataService<IGithub, GithubData> {
   async fetchData(input: IGithub): Promise<GithubData> {
     console.log(input.username);
-
+    const token = Deno.env.get("GITHUB_TOKEN");
+    const headers = {
+      "Authorization": `bearer ${token}`,
+    };
     const [account, contributions] = await Promise.all([
-      fetch("https://api.github.com/users/" + input.username).then((res) =>
-        res.json()
-      ),
+      fetch("https://api.github.com/users/" + input.username, {
+        headers: headers,
+      }).then((res) => res.json()),
       this.fetchContributions(input.username),
     ]);
 
@@ -66,7 +69,7 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
     const data = await response.json();
     console.log(data);
     const contributionsCollection: ContributionsCollection =
-      data.data.user.contributionsCollection;
+      data.data.user.contributionsCollection.contributionCalendar;
     return contributionsCollection;
   }
 }
