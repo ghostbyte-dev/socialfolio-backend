@@ -16,4 +16,7 @@ widgetRouter.post("/", WidgetController.createWidget);
 export const DELETE_WIDGET_ROUTE = "/:id";
 widgetRouter.delete(DELETE_WIDGET_ROUTE, WidgetController.deleteWidget);
 
+export const CHANGE_WIDGET_PRIORITY = "/priority/:id";
+widgetRouter.put(CHANGE_WIDGET_PRIORITY, WidgetController.updatePriority);
+
 export default widgetRouter;

@@ -14,6 +14,7 @@ export class WidgetDto {
     public type: string,
     public variant: number,
     public size: ISize,
+    public priority: number,
     public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
   ) {}
 
@@ -23,6 +24,7 @@ export class WidgetDto {
       widget.type,
       widget.variant,
       widget.size,
+      widget.priority,
       widget.data,
     );
   }

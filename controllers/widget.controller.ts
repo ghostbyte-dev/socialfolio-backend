@@ -1,6 +1,7 @@
 import { RouterContext } from "@oak/oak/router";
 import { WidgetService } from "../services/widget.service.ts";
 import {
+  CHANGE_WIDGET_PRIORITY,
   DELETE_WIDGET_ROUTE,
   GET_WIDGET_ROUTE,
   GET_WIDGETS_ROUTE,
@@ -71,6 +72,34 @@ export class WidgetController {
     try {
       await WidgetService.deleteWidget(userId, id);
       context.response.status = 200;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async updatePriority(
+    context: RouterContext<typeof CHANGE_WIDGET_PRIORITY>,
+  ) {
+    const userId = context.state.user.id;
+    const { id } = context.params;
+    if (id == null) {
+      context.response.status = 400;
+      context.response.body = { message: "ID is required" };
+      return;
+    }
+
+    const body = await context.request.body.json();
+    const priority = body.priority;
+
+    if (priority == null) {
+      context.response.status = 400;
+      context.response.body = { message: "priority is required" };
+      return;
+    }
+    try {
+      const widget = await WidgetService.updatePriority(userId, id, priority);
+      context.response.status = 201;
+      context.response.body = widget;
     } catch (error) {
       HttpError.handleError(context, error);
     }

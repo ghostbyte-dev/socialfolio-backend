@@ -13,6 +13,7 @@ export class WidgetService {
     const widgets: IWidget[] = await Widget.find({
       user: user._id,
     });
+    widgets.sort((a: IWidget, b: IWidget) => a.priority - b.priority);
     return widgets.map((widget) => WidgetDto.fromWidget(widget));
   }
 
@@ -64,5 +65,33 @@ export class WidgetService {
     await widgetToDelete.deleteOne();
 
     return;
+  }
+
+  static async updatePriority(
+    userId: ObjectId,
+    widgetId: string,
+    priority: number,
+  ): Promise<IWidget> {
+    if (!mongoose.Types.ObjectId.isValid(widgetId)) {
+      throw new HttpError(400, "Invalid Widget ID");
+    }
+    const widgetToUpdate = await Widget.findById(widgetId);
+
+    if (!widgetToUpdate) {
+      throw new HttpError(404, "Widget not found");
+    }
+    if (widgetToUpdate.user != userId) {
+      throw new HttpError(401, "You can only edit your own widgets");
+    }
+
+    const updatedWidget: IWidget | null = await Widget.findByIdAndUpdate(
+      widgetId,
+      { priority },
+      { new: true },
+    );
+    if (!updatedWidget) {
+      throw new HttpError(500, "Failed to save widget");
+    }
+    return updatedWidget;
   }
 }

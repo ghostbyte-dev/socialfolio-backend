@@ -43,6 +43,7 @@ export interface IWidget {
   type: WidgetType;
   variant: number;
   size: ISize;
+  priority: number;
   data: IPixelfed | IMastodon | INote | IGithub | ILocalTime;
 }
 
@@ -51,6 +52,7 @@ export const widgetSchema = new Schema<IWidget>({
   type: { type: String, required: true },
   variant: { type: Number, required: true },
   size: { type: Object, required: true },
+  priority: { type: Number, required: true, default: 1 },
   data: { type: Schema.Types.Mixed, required: true },
 });
 
