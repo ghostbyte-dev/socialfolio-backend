@@ -13,6 +13,7 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
+    "npm:@imagemagick/magick-wasm@0.0.31": "0.0.31",
     "npm:@types/node@*": "22.5.4",
     "npm:jose@5.9.6": "5.9.6",
     "npm:mongoose@*": "8.10.0",
@@ -77,6 +78,9 @@
     }
   },
   "npm": {
+    "@imagemagick/magick-wasm@0.0.31": {
+      "integrity": "sha512-QNivAUxSaItuiY8ziI/vRy6TtoecD7TOsD1LGZCG3wv8lfbdGbIj2QiJk0FlGkGwAVR966NlD3mkxPNvQrvq0w=="
+    },
     "@mongodb-js/saslprep@1.2.0": {
       "integrity": "sha512-+ywrb0AqkfaYuhHs6LxKWgqbh3I72EpEgESCw37o+9qPx9WTCkgDm2B+eMrwehGtHBWHFU4GXvnSCNiFhhausg==",
       "dependencies": [
@@ -261,7 +265,8 @@
     "https://deno.land/x/bcrypt/mod.ts": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "https://deno.land/x/cors/mod.ts": "https://deno.land/x/cors@v1.2.2/mod.ts",
     "https://deno.land/x/deno_webp_converter/mod.ts": "https://deno.land/x/deno_webp_converter@0.0.4/mod.ts",
-    "https://deno.land/x/download/mod.ts": "https://deno.land/x/download@v2.0.2/mod.ts"
+    "https://deno.land/x/download/mod.ts": "https://deno.land/x/download@v2.0.2/mod.ts",
+    "https://deno.land/x/imagemagick_deno/mod.ts": "https://deno.land/x/imagemagick_deno@0.0.31/mod.ts"
   },
   "remote": {
     "https://deno.land/std@0.190.0/_util/asserts.ts": "178dfc49a464aee693a7e285567b3d0b555dc805ff490505a8aae34f9cfb1462",
@@ -332,7 +337,8 @@
     "https://deno.land/x/deno_webp_converter@0.0.4/src/exec.ts": "f2c49ac08effad22d952cb1aa6a0e1473f0bfd22c681ffe967d6826c99ad4920",
     "https://deno.land/x/download@v2.0.2/download.ts": "4c1e70b79a5eb47500c3cd048781c7d71063c906cd15a431f82f22950729e43c",
     "https://deno.land/x/download@v2.0.2/mod.ts": "ec1649bc70d41898baa1123743486dba40612581d2478243fe45e875233f6b6a",
-    "https://deno.land/x/download@v2.0.2/types.ts": "564477c37f19599cc336678c6d26e8d0dac35fcef76db680cc5f5657523c2f94"
+    "https://deno.land/x/download@v2.0.2/types.ts": "564477c37f19599cc336678c6d26e8d0dac35fcef76db680cc5f5657523c2f94",
+    "https://deno.land/x/imagemagick_deno@0.0.31/mod.ts": "124d7f045429f6e6c486b86e72d025410d09576bc0d8075e69f97118a1a33413"
   },
   "workspace": {
     "dependencies": [

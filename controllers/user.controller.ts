@@ -118,6 +118,7 @@ export class UserController {
       context.response.status = 200;
       context.response.body = userDto;
     } catch (error) {
+      console.log(error);
       HttpError.handleError(context, error);
     }
   }

@@ -1,6 +1,7 @@
 import User, { IUser } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import webp from "webp";
+import { ImageMagick, IMagickImage, initialize } from "imageMick";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -84,6 +85,7 @@ export class UserService {
       user.avatarUrl = url;
       await user.save();
     } catch (_error) {
+      console.log(_error);
       throw new HttpError(500, "Unable to save new avatar");
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
@@ -128,25 +130,41 @@ export class UserService {
     path: string,
   ): Promise<string> {
     const fileEnding = file.name.substring(file.name.lastIndexOf("."));
-    const webpBuffer = await this.fileToWebpBuffer(file, fileEnding);
+
+    const resizedBuffer = await this.resizeImage(file);
+    const webp = await this.fileToWebpBuffer(resizedBuffer, fileEnding);
+
     const uuid = crypto.randomUUID();
     const pathWithFile = "/public/" + path + uuid + ".webp";
-    Deno.writeFile(Deno.cwd() + pathWithFile, webpBuffer);
+    Deno.writeFile(Deno.cwd() + pathWithFile, webp);
     return pathWithFile;
   }
 
   private static async fileToWebpBuffer(
-    file: File,
+    file: Uint8Array,
     fileEnding: string,
   ): Promise<Uint8Array> {
-    const stream = file.stream();
-    const buffer = (await stream.getReader().read()).value;
-    if (!buffer) throw new HttpError(500, "An unexpected error occured");
     return await webp.buffer2webpbuffer(
-      buffer,
+      file,
       fileEnding,
-      "-q 80",
+      "-q 100",
       "./image.webp",
     ) as Uint8Array;
+  }
+
+  private static async resizeImage(img: File): Promise<Uint8Array> {
+    const stream = img.stream();
+    const buffer = (await stream.getReader().read()).value;
+    if (!buffer) throw new HttpError(500, "An unexpected error occured");
+
+    await initialize();
+    return new Promise((resolve) =>
+      ImageMagick.read(buffer, (image: IMagickImage) => {
+        image.resize(400, 400);
+        image.write(
+          (data) => resolve(data),
+        );
+      })
+    );
   }
 }
