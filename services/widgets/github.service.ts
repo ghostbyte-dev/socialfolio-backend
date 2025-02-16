@@ -10,7 +10,7 @@ const CACHE_GITHUB_KEY = "github:";
 
 export class GithubService implements WidgetDataService<IGithub, GithubData> {
   async fetchData(input: IGithub): Promise<GithubData> {
-    const cachedData = await redisClient.get(CACHE_GITHUB_KEY + input.username);
+    const cachedData = await redisClient.get(this.getCacheKey(input.username));
 
     if (cachedData) {
       return JSON.parse(cachedData) as GithubData;
@@ -39,12 +39,16 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
     };
 
     await redisClient.setEx(
-      CACHE_GITHUB_KEY + input.username,
+      this.getCacheKey(input.username),
       86400,
       JSON.stringify(githubData),
     );
 
     return githubData;
+  }
+
+  private getCacheKey(username: string): string {
+    return CACHE_GITHUB_KEY + username;
   }
 
   private async fetchUser(username: string, headers: object) {
