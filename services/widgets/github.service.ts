@@ -1,3 +1,4 @@
+import { redisClient } from "../../database.ts";
 import { IGithub } from "../../model/Widget.ts";
 import {
   ContributionsCollection,
@@ -5,21 +6,27 @@ import {
 } from "../../types/widgetdata.types.ts";
 import { WidgetDataService } from "./widgetdata.service.ts";
 
+const CACHE_GITHUB_KEY = "github:";
+
 export class GithubService implements WidgetDataService<IGithub, GithubData> {
   async fetchData(input: IGithub): Promise<GithubData> {
-    console.log(input.username);
+    const cachedData = await redisClient.get(CACHE_GITHUB_KEY + input.username);
+
+    if (cachedData) {
+      return JSON.parse(cachedData) as GithubData;
+    }
+
     const token = Deno.env.get("GITHUB_TOKEN");
     const headers = {
       "Authorization": `bearer ${token}`,
     };
+
     const [account, contributions] = await Promise.all([
-      fetch("https://api.github.com/users/" + input.username, {
-        headers: headers,
-      }).then((res) => res.json()),
-      this.fetchContributions(input.username),
+      this.fetchUser(input.username, headers),
+      this.fetchContributions(input.username, headers),
     ]);
 
-    return {
+    const githubData: GithubData = {
       username: account.login,
       name: account.name,
       avatar: account.avatar_url,
@@ -30,16 +37,29 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
       url: account.url,
       contributions,
     };
+
+    await redisClient.setEx(
+      CACHE_GITHUB_KEY + input.username,
+      86400,
+      JSON.stringify(githubData),
+    );
+
+    return githubData;
+  }
+
+  private async fetchUser(username: string, headers: object) {
+    const res = await fetch("https://api.github.com/users/" + username, {
+      headers: headers,
+    });
+    return await res.json();
   }
 
   private async fetchContributions(
     username: string,
+    headers: object,
   ): Promise<ContributionsCollection> {
     const token = Deno.env.get("GITHUB_TOKEN");
     console.log(token);
-    const headers = {
-      "Authorization": `bearer ${token}`,
-    };
     const body = {
       "query": `query {
               user(login: "${username}") {
@@ -67,7 +87,6 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
       headers: headers,
     });
     const data = await response.json();
-    console.log(data);
     const contributionsCollection: ContributionsCollection =
       data.data.user.contributionsCollection.contributionCalendar;
     return contributionsCollection;

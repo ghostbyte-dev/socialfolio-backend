@@ -1,6 +1,6 @@
 import { Application } from "jsr:@oak/oak/application";
 import { Router } from "@oak/oak/router";
-import { connectDB } from "./database.ts";
+import { connectDB, connectRedis } from "./database.ts";
 import authRouter from "./routes/auth.routes.ts";
 import { oakCors } from "cors";
 import userRouter from "./routes/user.routes.ts";
@@ -11,6 +11,7 @@ const app = new Application();
 const router = new Router();
 
 connectDB();
+connectRedis();
 
 app.use(staticFileMiddleware);
 

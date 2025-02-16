@@ -9,6 +9,7 @@
     "cors": "https://deno.land/x/cors/mod.ts",
     "mongoose": "npm:mongoose@^8.10.0",
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
-    "webp": "npm:webp-converter@2.3.3"
+    "webp": "npm:webp-converter@2.3.3",
+    "redis": "npm:redis@^4.5"
   }
 }
