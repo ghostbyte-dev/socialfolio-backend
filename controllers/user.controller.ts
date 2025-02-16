@@ -62,7 +62,7 @@ export class UserController {
   static async updateDescription(context: Context) {
     const userId = context.state.user.id;
     const { description } = await context.request.body.json();
-    if (!description) {
+    if (!description && description != "") {
       context.response.status = 400;
       context.response.body = { message: "Description is required" };
       return;
