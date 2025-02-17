@@ -10,7 +10,7 @@ export async function sendVerificationEmail(
     "./utils/mailTemplates/verification.template.html",
   );
   content = content.replace(/{{verificationUrl}}/g, verificationUrl);
-  await sendEmail(to, content);
+  await sendEmail(to, content, "Verify your Profile");
 }
 
 export async function sendPasswordResetEmail(
@@ -18,15 +18,15 @@ export async function sendPasswordResetEmail(
   resetToken: string,
 ) {
   const clientUrl = Deno.env.get("CLIENT_URL");
-  const verificationUrl = clientUrl + "/reset/" + resetToken;
+  const verificationUrl = clientUrl + "/auth/password/reset/" + resetToken;
   let content = await Deno.readTextFile(
     "./utils/mailTemplates/passwordReset.template.html",
   );
   content = content.replace(/{{RESET_LINK}}/g, verificationUrl);
-  await sendEmail(to, content);
+  await sendEmail(to, content, "Reset your password");
 }
 
-async function sendEmail(to: string, content: string) {
+async function sendEmail(to: string, content: string, subject: string) {
   const emailPassword = Deno.env.get("EMAIL_PASSWORD");
   const email = Deno.env.get("EMAIL");
   if (!emailPassword || !email) {
@@ -47,7 +47,7 @@ async function sendEmail(to: string, content: string) {
   await client.send({
     from: email,
     to,
-    subject: "Verify Your Account",
+    subject: subject,
     content: content,
     html: content,
   });
