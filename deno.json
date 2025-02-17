@@ -12,6 +12,7 @@
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
     "webp": "npm:webp-converter@2.3.3",
     "redis": "npm:redis@^4.5",
-    "imageMick": "https://deno.land/x/imagemagick_deno@0.0.31/mod.ts"
+    "imageMick": "https://deno.land/x/imagemagick_deno@0.0.31/mod.ts",
+    "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts"
   }
 }

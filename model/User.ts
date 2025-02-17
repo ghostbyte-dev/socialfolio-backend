@@ -1,4 +1,4 @@
-import { model, ObjectId, Schema } from "npm:mongoose";
+import { model, Schema } from "npm:mongoose";
 
 export interface IUser {
   _id: string;
@@ -8,7 +8,8 @@ export interface IUser {
   displayName?: string;
   description?: string;
   avatarUrl?: string;
-  widgets: ObjectId[];
+  verificationCode?: string;
+  verified: boolean;
 }
 
 const userSchema = new Schema<IUser>({
@@ -18,6 +19,8 @@ const userSchema = new Schema<IUser>({
   displayName: { type: String },
   description: { type: String },
   avatarUrl: { type: String },
+  verificationCode: { type: String },
+  verified: { type: Boolean },
 });
 
 // Validations

@@ -5,5 +5,6 @@ const authRouter = new Router();
 
 authRouter.post("/login", AuthController.login);
 authRouter.post("/register", AuthController.register);
-
+export const VERIFY_ROUTE = "/verify/:code";
+authRouter.post(VERIFY_ROUTE, AuthController.verify);
 export default authRouter;

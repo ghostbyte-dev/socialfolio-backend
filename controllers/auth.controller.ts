@@ -8,6 +8,8 @@ import { AuthService } from "../services/auth.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { verifyJWT } from "../utils/jwt.ts";
 import { UserService } from "../services/user.service.ts";
+import { RouterContext } from "@oak/oak/router";
+import { VERIFY_ROUTE } from "../routes/auth.routes.ts";
 
 export class AuthController {
   static async login(context: Context): Promise<void> {
@@ -66,6 +68,21 @@ export class AuthController {
 
       context.response.status = 201;
       context.response.body = authResponse;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async verify(context: RouterContext<typeof VERIFY_ROUTE>) {
+    const code = context.params.code;
+    if (!code) {
+      context.response.status = 400;
+      context.response.body = { message: "Verification code is required" };
+      return;
+    }
+    try {
+      await AuthService.verify(code);
+      context.response.status = 200;
     } catch (error) {
       HttpError.handleError(context, error);
     }
