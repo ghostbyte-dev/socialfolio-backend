@@ -13,6 +13,19 @@ export async function sendVerificationEmail(
   await sendEmail(to, content);
 }
 
+export async function sendPasswordResetEmail(
+  to: string,
+  resetToken: string,
+) {
+  const clientUrl = Deno.env.get("CLIENT_URL");
+  const verificationUrl = clientUrl + "/reset/" + resetToken;
+  let content = await Deno.readTextFile(
+    "./utils/mailTemplates/passwordReset.template.html",
+  );
+  content = content.replace(/{{RESET_LINK}}/g, verificationUrl);
+  await sendEmail(to, content);
+}
+
 async function sendEmail(to: string, content: string) {
   const emailPassword = Deno.env.get("EMAIL_PASSWORD");
   const email = Deno.env.get("EMAIL");

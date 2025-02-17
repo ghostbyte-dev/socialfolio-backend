@@ -7,4 +7,8 @@ authRouter.post("/login", AuthController.login);
 authRouter.post("/register", AuthController.register);
 export const VERIFY_ROUTE = "/verify/:code";
 authRouter.post(VERIFY_ROUTE, AuthController.verify);
+
+authRouter.post("/password/request", AuthController.requestPasswordReset);
+authRouter.post("/password/reset", AuthController.resetPassword);
+
 export default authRouter;

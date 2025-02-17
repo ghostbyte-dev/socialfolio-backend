@@ -87,4 +87,31 @@ export class AuthController {
       HttpError.handleError(context, error);
     }
   }
+
+  static async requestPasswordReset(context: Context) {
+    try {
+      const body = await context.request.body.json();
+      const email = body?.email;
+      if (!email) throw new HttpError(400, "Email is Required");
+      await AuthService.requestPasswordReset(email);
+      context.response.status = 200;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async resetPassword(context: Context) {
+    try {
+      const body = await context.request.body.json();
+      const token = body?.token;
+      const newPassword = body?.password;
+      if (!token || !newPassword) {
+        throw new HttpError(400, "Token and Password are required");
+      }
+      await AuthService.resetPassword(token, newPassword);
+      context.response.status = 200;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 }

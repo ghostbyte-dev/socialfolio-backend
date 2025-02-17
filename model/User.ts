@@ -10,6 +10,8 @@ export interface IUser {
   avatarUrl?: string;
   verificationCode?: string;
   verified: boolean;
+  passwordResetToken?: string;
+  passwordResetExpiresTimestamp?: Date;
 }
 
 const userSchema = new Schema<IUser>({
@@ -21,6 +23,8 @@ const userSchema = new Schema<IUser>({
   avatarUrl: { type: String },
   verificationCode: { type: String },
   verified: { type: Boolean },
+  passwordResetToken: { type: String },
+  passwordResetExpiresTimestamp: { type: Date },
 });
 
 // Validations
