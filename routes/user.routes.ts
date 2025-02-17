@@ -1,19 +1,28 @@
 import { Router } from "@oak/oak/router";
 import { UserController } from "../controllers/user.controller.ts";
-import { authMiddleware } from "../utils/AuthMiddleware.ts";
+import {
+  authMiddleware,
+  getTokenPayloadMiddleware,
+} from "../utils/AuthMiddleware.ts";
+
+const unsecuredUserRouter = new Router();
+unsecuredUserRouter.use(getTokenPayloadMiddleware);
+export const GET_BY_USERNAME_ROUTE = "/username/:username";
+unsecuredUserRouter.get(GET_BY_USERNAME_ROUTE, UserController.getByUsername);
+
+const securedUserRouter = new Router();
+
+securedUserRouter.use(authMiddleware);
+
+securedUserRouter.get("/self", UserController.self);
+securedUserRouter.put("/update/username", UserController.updateUsername);
+securedUserRouter.put("/update/description", UserController.updateDescription);
+securedUserRouter.put("/update/displayname", UserController.updateDisplayName);
+securedUserRouter.post("/uploadAvatar", UserController.uploadAvatar);
+securedUserRouter.delete("/avatar", UserController.deleteAvatar);
 
 const userRouter = new Router();
-
-export const GET_BY_USERNAME_ROUTE = "/username/:username";
-userRouter.get(GET_BY_USERNAME_ROUTE, UserController.getByUsername);
-
-userRouter.use(authMiddleware);
-
-userRouter.get("/self", UserController.self);
-userRouter.put("/update/username", UserController.updateUsername);
-userRouter.put("/update/description", UserController.updateDescription);
-userRouter.put("/update/displayname", UserController.updateDisplayName);
-userRouter.post("/uploadAvatar", UserController.uploadAvatar);
-userRouter.delete("/avatar", UserController.deleteAvatar);
+userRouter.use(unsecuredUserRouter.routes());
+userRouter.use(securedUserRouter.routes());
 
 export default userRouter;

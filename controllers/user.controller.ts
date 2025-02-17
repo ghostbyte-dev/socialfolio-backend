@@ -23,6 +23,7 @@ export class UserController {
   static async getByUsername(
     context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
   ) {
+    const userId: string | undefined = context.state.user?.id;
     const username = context.params.username;
     if (!username) {
       context.response.status = 400;
@@ -31,7 +32,7 @@ export class UserController {
     }
 
     try {
-      const user: IUser = await UserService.getByUsername(username);
+      const user: IUser = await UserService.getByUsername(username, userId);
       const userDto = UserDto.fromUser(user);
       context.response.status = 200;
       context.response.body = userDto;

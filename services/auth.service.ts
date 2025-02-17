@@ -48,7 +48,10 @@ export class AuthService {
       {
         verificationCode: code,
       },
-      { verified: true },
+      {
+        verified: true,
+        verificationCode: null,
+      },
       { new: true },
     );
     if (!user) {

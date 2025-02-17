@@ -12,6 +12,7 @@ import { CreateWidgetDto } from "../types/widget.types.ts";
 
 export class WidgetController {
   static async widgets(context: RouterContext<typeof GET_WIDGETS_ROUTE>) {
+    const userId: string | undefined = context.state.user?.id;
     const { username } = context.params;
     if (username == null) {
       context.response.status = 400;
@@ -19,7 +20,10 @@ export class WidgetController {
       return;
     }
     try {
-      const widgets = await WidgetService.widgets(context.params.username);
+      const widgets = await WidgetService.widgets(
+        context.params.username,
+        userId,
+      );
       context.response.status = 200;
       context.response.body = widgets;
     } catch (error) {

@@ -28,3 +28,30 @@ export const authMiddleware = async (
     context.response.body = { message: "Unauthorized" };
   }
 };
+
+export const getTokenPayloadMiddleware = async (
+  context: Context,
+  next: () => Promise<unknown>,
+) => {
+  const token = context.request.headers.get("Authorization");
+  if (!token) {
+    await next();
+  } else {
+    try {
+      const jwtPayload = await verifyJWT(token);
+
+      if (jwtPayload == null) {
+        await next();
+      }
+      context.state.user = jwtPayload;
+
+      if (context.state.user.id == null) {
+        await next();
+      }
+      await next();
+    } catch (_error: unknown) {
+      context.response.status = 401;
+      context.response.body = { message: "Unauthorized" };
+    }
+  }
+};

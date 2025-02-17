@@ -8,8 +8,11 @@ import { WidgetDataDto } from "../types/widgetdata.types.ts";
 import mongoose from "mongoose";
 
 export class WidgetService {
-  static async widgets(username: string): Promise<WidgetDto[]> {
-    const user = await UserService.getByUsername(username);
+  static async widgets(
+    username: string,
+    jwtUserId: string | undefined,
+  ): Promise<WidgetDto[]> {
+    const user = await UserService.getByUsername(username, jwtUserId);
     const widgets: IWidget[] = await Widget.find({
       user: user._id,
     });

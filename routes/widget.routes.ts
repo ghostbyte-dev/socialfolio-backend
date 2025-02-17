@@ -1,22 +1,35 @@
 import { Router } from "@oak/oak/router";
 import { WidgetController } from "../controllers/widget.controller.ts";
-import { authMiddleware } from "../utils/AuthMiddleware.ts";
+import {
+  authMiddleware,
+  getTokenPayloadMiddleware,
+} from "../utils/AuthMiddleware.ts";
 
-const widgetRouter = new Router();
+const unsecuredWidgetRouter = new Router();
+unsecuredWidgetRouter.use(getTokenPayloadMiddleware);
 
 export const GET_WIDGETS_ROUTE = "/:username/all";
-widgetRouter.get(GET_WIDGETS_ROUTE, WidgetController.widgets);
+unsecuredWidgetRouter.get(GET_WIDGETS_ROUTE, WidgetController.widgets);
 export const GET_WIDGET_ROUTE = "/:id";
-widgetRouter.get(GET_WIDGET_ROUTE, WidgetController.getWidget);
+unsecuredWidgetRouter.get(GET_WIDGET_ROUTE, WidgetController.getWidget);
 
-widgetRouter.use(authMiddleware);
+const securedWidgetRouter = new Router();
 
-widgetRouter.post("/", WidgetController.createWidget);
+securedWidgetRouter.use(authMiddleware);
+
+securedWidgetRouter.post("/", WidgetController.createWidget);
 
 export const DELETE_WIDGET_ROUTE = "/:id";
-widgetRouter.delete(DELETE_WIDGET_ROUTE, WidgetController.deleteWidget);
+securedWidgetRouter.delete(DELETE_WIDGET_ROUTE, WidgetController.deleteWidget);
 
 export const CHANGE_WIDGET_PRIORITY = "/priority/:id";
-widgetRouter.put(CHANGE_WIDGET_PRIORITY, WidgetController.updatePriority);
+securedWidgetRouter.put(
+  CHANGE_WIDGET_PRIORITY,
+  WidgetController.updatePriority,
+);
+
+const widgetRouter = new Router();
+widgetRouter.use(unsecuredWidgetRouter.routes());
+widgetRouter.use(securedWidgetRouter.routes());
 
 export default widgetRouter;

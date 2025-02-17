@@ -12,13 +12,24 @@ export class UserService {
     return profile;
   }
 
-  static async getByUsername(username: string): Promise<IUser> {
+  static async getByUsername(
+    username: string,
+    jwtUserId: string | undefined,
+  ): Promise<IUser> {
     const profile = await User.findOne({
       username: username,
     });
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
+    console.log(jwtUserId + " " + profile.id);
+    if (
+      !profile.verified &&
+      ((jwtUserId && jwtUserId != profile.id) || !jwtUserId)
+    ) {
+      throw new HttpError(400, "This Profile is not verified yet");
+    }
+
     return profile;
   }
 
