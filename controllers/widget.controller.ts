@@ -5,10 +5,11 @@ import {
   DELETE_WIDGET_ROUTE,
   GET_WIDGET_ROUTE,
   GET_WIDGETS_ROUTE,
+  UPDATE_WIDGET_ROUTE,
 } from "../routes/widget.routes.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { Context } from "@oak/oak/context";
-import { CreateWidgetDto } from "../types/widget.types.ts";
+import { CreateWidgetDto, UpdateWidgetDto } from "../types/widget.types.ts";
 
 export class WidgetController {
   static async widgets(context: RouterContext<typeof GET_WIDGETS_ROUTE>) {
@@ -103,6 +104,32 @@ export class WidgetController {
     try {
       const widget = await WidgetService.updatePriority(userId, id, priority);
       context.response.status = 201;
+      context.response.body = widget;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+  static async updateWidget(
+    context: RouterContext<typeof UPDATE_WIDGET_ROUTE>,
+  ) {
+    const userId = context.state.user.id;
+    const { id } = context.params;
+    if (id == null) {
+      context.response.status = 400;
+      context.response.body = { message: "ID is required" };
+      return;
+    }
+
+    try {
+      const updateWidgetDto = UpdateWidgetDto
+        .fromJson(await context.request.body.json());
+      const widget = await WidgetService.updateWidget(
+        userId,
+        id,
+        updateWidgetDto,
+      );
+      context.response.status = 200;
       context.response.body = widget;
     } catch (error) {
       HttpError.handleError(context, error);

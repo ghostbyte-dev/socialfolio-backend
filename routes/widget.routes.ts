@@ -28,6 +28,12 @@ securedWidgetRouter.put(
   WidgetController.updatePriority,
 );
 
+export const UPDATE_WIDGET_ROUTE = "/:id";
+securedWidgetRouter.patch(
+  UPDATE_WIDGET_ROUTE,
+  WidgetController.updateWidget,
+);
+
 const widgetRouter = new Router();
 widgetRouter.use(unsecuredWidgetRouter.routes());
 widgetRouter.use(securedWidgetRouter.routes());

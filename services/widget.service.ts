@@ -1,6 +1,10 @@
 import { ObjectId } from "mongoose";
 import Widget, { IWidget, WidgetType } from "../model/Widget.ts";
-import { CreateWidgetDto, WidgetDto } from "../types/widget.types.ts";
+import {
+  CreateWidgetDto,
+  UpdateWidgetDto,
+  WidgetDto,
+} from "../types/widget.types.ts";
 import { UserService } from "./user.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { WidgetDataServiceFactory } from "./widgets/widgetdata.service.ts";
@@ -95,6 +99,36 @@ export class WidgetService {
     if (!updatedWidget) {
       throw new HttpError(500, "Failed to save widget");
     }
+    return updatedWidget;
+  }
+
+  static async updateWidget(
+    userId: ObjectId,
+    widgetId: string,
+    widget: UpdateWidgetDto,
+  ): Promise<IWidget> {
+    if (!mongoose.Types.ObjectId.isValid(widgetId)) {
+      throw new HttpError(400, "Invalid Widget ID");
+    }
+    const widgetToUpdate = await Widget.findById(widgetId);
+
+    if (!widgetToUpdate) {
+      throw new HttpError(404, "Widget not found");
+    }
+    if (widgetToUpdate.user != userId) {
+      throw new HttpError(401, "Unauthorized to edit this widget");
+    }
+
+    const updatedWidget = await Widget.findByIdAndUpdate(
+      widgetId,
+      { $set: widget },
+      { new: true, upsert: false },
+    );
+
+    if (!updatedWidget) {
+      throw new HttpError(500, "Failed to update widget");
+    }
+
     return updatedWidget;
   }
 }

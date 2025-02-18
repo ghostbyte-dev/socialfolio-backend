@@ -30,6 +30,26 @@ export class WidgetDto {
   }
 }
 
+export class UpdateWidgetDto {
+  constructor(
+    public variant?: number,
+    public size?: ISize,
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
+  ) {}
+
+  // deno-lint-ignore no-explicit-any
+  static fromJson(json: any): UpdateWidgetDto {
+    if (!json || typeof json !== "object") {
+      throw new Error("Invalid JSON payload");
+    }
+    return new UpdateWidgetDto(
+      json.variant,
+      json.size,
+      json.data,
+    );
+  }
+}
+
 export class CreateWidgetDto {
   constructor(
     public type: WidgetType,
