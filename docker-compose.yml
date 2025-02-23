@@ -12,6 +12,8 @@ services:
     depends_on:
       - mongo
       - redis
+    networks:
+      - proxy-networks
 
   mongo:
     image: mongo:latest
@@ -34,3 +36,7 @@ services:
 volumes:
   mongo_data:
   redis_data:
+
+networks:
+  proxy-network:
+    external: true

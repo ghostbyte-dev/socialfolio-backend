@@ -58,7 +58,7 @@ export class AuthService {
       { new: true },
     );
     if (!user) {
-      throw new HttpError(404, "could not find User with Verification Code");
+      throw new HttpError(404, "Invalid Verification Code");
     }
   }
 
