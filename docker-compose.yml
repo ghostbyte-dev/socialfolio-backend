@@ -13,7 +13,7 @@ services:
       - mongo
       - redis
     networks:
-      - proxy-networks
+      - proxy-network
 
   mongo:
     image: mongo:latest
