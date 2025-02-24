@@ -6,7 +6,6 @@ import {
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "../utils/sendEmail.ts";
-import { ObjectId } from "../../../../Library/Caches/deno/npm/registry.npmjs.org/mongodb/6.13.0/mongodb.d.ts";
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 20;
@@ -148,7 +147,7 @@ export class AuthService {
     await user.save();
   }
 
-  static async resendVerificationCode(userId: ObjectId) {
+  static async resendVerificationCode(userId: string) {
     console.log("userId: " + userId)
     const user = await User.findById(userId);
     if (!user) {
