@@ -14,6 +14,7 @@ services:
       - redis
     networks:
       - proxy-network
+      - backend-network
 
   mongo:
     image: mongo:latest
@@ -23,6 +24,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - backend-network
 
   redis:
     image: redis/redis-stack-server:latest
@@ -32,6 +35,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - backend-network
 
 volumes:
   mongo_data:
@@ -39,4 +44,7 @@ volumes:
 
 networks:
   proxy-network:
-    external: true
+    external: true  # This allows Nginx Proxy Manager to route traffic to backend
+  backend-network:
+    driver: bridge  # Internal network for backend services
+
