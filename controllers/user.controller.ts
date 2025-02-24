@@ -110,6 +110,9 @@ export class UserController {
       const body = context.request.body;
       const form = await body.formData();
       const file = form.get("avatar") as File;
+      const protocol = context.request.headers.get("x-forwarded-proto");
+      const domain = context.request.url.host;
+      console.log(`${protocol}://${domain}`)
       const user: IUser = await UserService.uploadAvatar(
         file,
         userId,
