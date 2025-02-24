@@ -114,4 +114,14 @@ export class AuthController {
       HttpError.handleError(context, error);
     }
   }
+
+  static async resendVerificationCode(context: Context) {
+    const userId = context.state.user?.id;
+    try {
+      await AuthService.resendVerificationCode(userId);
+      context.response.status = 200
+    } catch (error) {
+      HttpError.handleError(context, error)
+    }
+  }
 }

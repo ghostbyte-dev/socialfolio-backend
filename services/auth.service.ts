@@ -6,6 +6,7 @@ import {
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "../utils/sendEmail.ts";
+import { ObjectId } from "../../../../Library/Caches/deno/npm/registry.npmjs.org/mongodb/6.13.0/mongodb.d.ts";
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 20;
@@ -145,5 +146,28 @@ export class AuthService {
     user.password = hashedNewPassword;
 
     await user.save();
+  }
+
+  static async resendVerificationCode(userId: ObjectId) {
+    console.log("userId: " + userId)
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new HttpError(404, "User not found")
+    }
+    if (user.verified) {
+      throw new HttpError(400, "Already verified")
+    }
+
+    const verificationCode = crypto.randomUUID();
+    user.verificationCode = verificationCode;
+    try {
+      await sendVerificationEmail(user.email, verificationCode)
+    } catch(_error) {
+      throw new HttpError(500, "An error occured sending the email.")
+    }
+
+    await user.save();
+
+    return;
   }
 }
