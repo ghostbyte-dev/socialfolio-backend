@@ -29,12 +29,13 @@ export async function sendPasswordResetEmail(
 async function sendEmail(to: string, content: string, subject: string) {
   const emailPassword = Deno.env.get("EMAIL_PASSWORD");
   const email = Deno.env.get("EMAIL");
-  if (!emailPassword || !email) {
+  const mailHostname = Deno.env.get("MAIL_HOSTNAME");
+  if (!emailPassword || !email || !mailHostname) {
     return;
   }
   const client = new SMTPClient({
     connection: {
-      hostname: "smtp.gmail.com",
+      hostname: mailHostname,
       port: 465,
       tls: true,
       auth: {
