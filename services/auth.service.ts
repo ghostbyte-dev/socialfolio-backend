@@ -7,19 +7,51 @@ import {
   sendVerificationEmail,
 } from "../utils/sendEmail.ts";
 
+const USERNAME_MIN_LENGTH = 3;
+const USERNAME_MAX_LENGTH = 20;
+const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/
+const USERNMAME_BLACKLIST = [
+  "explore",
+  "auth",
+  "dashboard",
+  "verify",
+  "password"
+]
 export class AuthService {
   static async register(
     email: string,
     username: string,
     password: string,
   ): Promise<string> {
+
+    username = username.trim()
+    if (username.includes(" ")) {
+      throw new HttpError(401, "Username can not include Whitespaces")
+    }
+
+    if (username.length > USERNAME_MAX_LENGTH) {
+      throw new HttpError(401, `Username can not be longer than ${USERNAME_MAX_LENGTH} characters`)
+    }
+
+    if (username.length < USERNAME_MIN_LENGTH) {
+      throw new HttpError(401, `Username has to have a minimum length of ${USERNAME_MIN_LENGTH} characters`)
+    }
+
+    if (!USERNAME_REGEX.test(username)) {
+      throw new HttpError(401, "invalid Username")
+    }
+
+    if (USERNMAME_BLACKLIST.includes(username)) {
+      throw new HttpError(401, "This Username is not allowed");
+    }
+
+    const controlUser = username.toLowerCase()
+    const existingUsername = await User.findOne({ controlUser });
+    if (existingUsername) throw new HttpError(401, "Username already exists");
+
+    email = email.toLowerCase().trim()
     const existingEmail = await User.findOne({ email });
     if (existingEmail) throw new HttpError(401, "Email already exists");
-
-    const existingUsername = await User.findOne({
-      username,
-    });
-    if (existingUsername) throw new HttpError(401, "Username already exists");
 
     const hashedPassword = await bcrypt.hash(password);
     const verificationCode = crypto.randomUUID();
