@@ -17,7 +17,7 @@ export class UserService {
     jwtUserId: string | undefined,
   ): Promise<IUser> {
     const profile = await User.findOne({
-      username: username,
+      username: { $regex: new RegExp(`^${username}$`, "i") },
     });
     if (!profile) {
       throw new HttpError(404, "Profile not found");
