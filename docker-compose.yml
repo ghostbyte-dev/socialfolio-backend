@@ -20,6 +20,8 @@ services:
     image: mongo:latest
     container_name: mongo_db
     restart: always
+    env_file:
+     - path: production.env
     ports:
       - "27017:27017"
     volumes:
@@ -47,4 +49,3 @@ networks:
     external: true  # This allows Nginx Proxy Manager to route traffic to backend
   backend-network:
     driver: bridge  # Internal network for backend services
-
