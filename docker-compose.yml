@@ -39,6 +39,9 @@ services:
       - redis_data:/data
     networks:
       - backend-network
+    env_file:
+     - path: ./production.env
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
 
 volumes:
   mongo_data:
