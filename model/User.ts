@@ -12,6 +12,7 @@ export interface IUser {
   verified: boolean;
   passwordResetToken?: string;
   passwordResetExpiresTimestamp?: Date;
+  createdAt: Date;
 }
 
 const userSchema = new Schema<IUser>({
@@ -25,7 +26,9 @@ const userSchema = new Schema<IUser>({
   verified: { type: Boolean },
   passwordResetToken: { type: String },
   passwordResetExpiresTimestamp: { type: Date },
-});
+},
+  { timestamps: true }
+);
 
 // Validations
 

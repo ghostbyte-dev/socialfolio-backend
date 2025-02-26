@@ -1,6 +1,5 @@
-import { RouterContext } from "@oak/oak/router";
 import { ExploreService } from "../services/explore.service.ts";
-import { IExploreProfile } from "../model/ExploreUser.ts";
+import { IExploreProfile } from "../types/explore.types.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { Context } from "@oak/oak/context";
 

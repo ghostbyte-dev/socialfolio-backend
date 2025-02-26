@@ -61,6 +61,7 @@ export class AuthService {
       password: hashedPassword,
       verified: false,
       verificationCode: verificationCode,
+      createdAt: new Date(Date.now())
     });
 
     sendVerificationEmail(email, verificationCode);

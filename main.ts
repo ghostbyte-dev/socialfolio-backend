@@ -23,6 +23,7 @@ router
   .use("/api/explore", exploreRouter.routes())
 
 app.use(oakCors());
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 

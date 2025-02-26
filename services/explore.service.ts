@@ -1,4 +1,4 @@
-import { IExploreProfile } from "../model/ExploreUser.ts";
+import { IExploreProfile } from "../types/explore.types.ts";
 import User from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 
@@ -15,7 +15,9 @@ export class ExploreService {
             id: user._id.toString(),
             username: user.username,
             avatar: user.avatarUrl || "",
+            displayName: user.displayName || "",
             description: user.description || "",
+            createdAt: user.createdAt
         }));
 
         return exploreProfiles;
