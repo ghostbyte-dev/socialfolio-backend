@@ -6,7 +6,7 @@ export class LocalTimeService
   implements WidgetDataService<ILocalTime, LocalTimeData> {
   fetchData(input: ILocalTime): Promise<LocalTimeData> {
     const timeData: LocalTimeData = {
-      timeZone: input.timeZone,
+      timeZone: input.timezone,
     };
     return Promise.resolve(timeData);
   }

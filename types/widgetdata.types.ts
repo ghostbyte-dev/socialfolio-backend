@@ -53,6 +53,10 @@ export interface LocalTimeData extends WidgetData {
   timeZone: string;
 }
 
+export interface LiberapayData extends WidgetData {
+  username: string;
+}
+
 export interface GithubData extends WidgetData {
   username: string;
   name: string;

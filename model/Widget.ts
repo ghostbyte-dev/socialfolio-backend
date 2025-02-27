@@ -25,6 +25,10 @@ export interface IGithub {
   username: string;
 }
 
+export interface ILiberaPay {
+  username: string;
+}
+
 export interface ILocalTime {
   timezone: string;
 }
@@ -35,7 +39,8 @@ export enum WidgetType {
   Note = "note",
   Github = "github",
   LocalTime = "localTime",
-  Lemmy = "lemmy"
+  Lemmy = "lemmy",
+  Liberapay = "liberapay"
 }
 
 export interface ISize {
@@ -50,7 +55,7 @@ export interface IWidget {
   variant: number;
   size: ISize;
   priority: number;
-  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy;
+  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay;
 }
 
 export const widgetSchema = new Schema<IWidget>({

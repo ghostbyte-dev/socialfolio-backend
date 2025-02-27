@@ -1,6 +1,7 @@
 import {
   IGithub,
   ILemmy,
+  ILiberaPay,
   ILocalTime,
   IMastodon,
   INote,
@@ -16,8 +17,8 @@ export class WidgetDto {
     public variant: number,
     public size: ISize,
     public priority: number,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
-  ) {}
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
+  ) { }
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -35,8 +36,8 @@ export class UpdateWidgetDto {
   constructor(
     public variant?: number,
     public size?: ISize,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
-  ) {}
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
+  ) { }
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
@@ -56,7 +57,7 @@ export class CreateWidgetDto {
     public type: WidgetType,
     public variant: number,
     public size: ISize,
-    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
+    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
   ) {
     if (!this.isValidData(type, data)) {
       throw new HttpError(400, "Invalid data for widget type: " + type);
@@ -89,8 +90,10 @@ export class CreateWidgetDto {
         return this.isGithubData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
-        case WidgetType.Lemmy:
-          return this.isLemmyData(data);
+      case WidgetType.Lemmy:
+        return this.isLemmyData(data);
+      case WidgetType.Liberapay:
+        return this.isLiberapayData(data)
       default:
         return false;
     }
@@ -120,6 +123,11 @@ export class CreateWidgetDto {
   }
 
   isGithubData(data: IGithub) {
+    return typeof data === "object" && data !== null &&
+      typeof data.username === "string";
+  }
+
+  isLiberapayData(data: ILiberaPay) {
     return typeof data === "object" && data !== null &&
       typeof data.username === "string";
   }

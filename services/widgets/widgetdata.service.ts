@@ -6,6 +6,7 @@ import { NoteService } from "./note.service.ts";
 import { GithubService } from "./github.service.ts";
 import { LocalTimeService } from "./localTime.service.ts";
 import { LemmyService } from "./lemmy.service.ts";
+import { LiberapayServie } from "./liberapay.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
   fetchData(input: TInput): Promise<TOutput>;
@@ -43,6 +44,11 @@ export class WidgetDataServiceFactory {
         >;
       case WidgetType.Lemmy:
         return new LemmyService() as unknown as WidgetDataService<
+          TInput,
+          TOutput
+        >;
+      case WidgetType.Liberapay:
+        return new LiberapayServie() as unknown as WidgetDataService<
           TInput,
           TOutput
         >;
