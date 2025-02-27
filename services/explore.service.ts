@@ -14,7 +14,7 @@ export class ExploreService {
             query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };
         }
 
-        const profiles = await User.find(query).sort({createdAt: -1}).limit(parsedLimit);
+        const profiles = await User.find(query).sort({_id: -1}).limit(parsedLimit);
 
         if (!profiles) {
             throw new HttpError(404, "No profiles found");
