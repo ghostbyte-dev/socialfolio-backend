@@ -40,6 +40,11 @@ export interface PixelfedData extends WidgetData {
   description: string;
 }
 
+export interface LemmyData extends WidgetData {
+  username: string;
+  description: string;
+}
+
 export interface NoteData extends WidgetData {
   note: string;
 }

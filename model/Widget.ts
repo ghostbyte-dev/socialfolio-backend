@@ -7,6 +7,11 @@ export interface IPixelfed {
   username: string;
 }
 
+export interface ILemmy {
+  instance: string;
+  username: string;
+}
+
 export interface IMastodon {
   instance: string;
   username: string;
@@ -30,6 +35,7 @@ export enum WidgetType {
   Note = "note",
   Github = "github",
   LocalTime = "localTime",
+  Lemmy = "lemmy"
 }
 
 export interface ISize {
@@ -44,7 +50,7 @@ export interface IWidget {
   variant: number;
   size: ISize;
   priority: number;
-  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime;
+  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy;
 }
 
 export const widgetSchema = new Schema<IWidget>({
@@ -61,9 +67,10 @@ widgetSchema.pre("save", function (next) {
   console.log(this.type);
   switch (this.type) {
     case WidgetType.Pixelfed:
+    case WidgetType.Lemmy:
     case WidgetType.Mastodon:
-      (this.data as IPixelfed | IMastodon).instance = urlParser(
-        (this.data as IPixelfed | IMastodon).instance,
+      (this.data as IPixelfed | IMastodon | ILemmy).instance = urlParser(
+        (this.data as IPixelfed | IMastodon | ILemmy).instance,
       );
       break;
   }

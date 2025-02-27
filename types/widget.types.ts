@@ -1,5 +1,6 @@
 import {
   IGithub,
+  ILemmy,
   ILocalTime,
   IMastodon,
   INote,
@@ -15,7 +16,7 @@ export class WidgetDto {
     public variant: number,
     public size: ISize,
     public priority: number,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
   ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
@@ -34,7 +35,7 @@ export class UpdateWidgetDto {
   constructor(
     public variant?: number,
     public size?: ISize,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
+    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
   ) {}
 
   // deno-lint-ignore no-explicit-any
@@ -55,7 +56,7 @@ export class CreateWidgetDto {
     public type: WidgetType,
     public variant: number,
     public size: ISize,
-    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime,
+    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy,
   ) {
     if (!this.isValidData(type, data)) {
       throw new HttpError(400, "Invalid data for widget type: " + type);
@@ -88,6 +89,8 @@ export class CreateWidgetDto {
         return this.isGithubData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
+        case WidgetType.Lemmy:
+          return this.isLemmyData(data);
       default:
         return false;
     }
@@ -100,6 +103,12 @@ export class CreateWidgetDto {
   }
 
   isMastodonData(data: IMastodon) {
+    return typeof data === "object" && data !== null &&
+      typeof data.instance === "string" &&
+      typeof data.username === "string";
+  }
+
+  isLemmyData(data: ILemmy) {
     return typeof data === "object" && data !== null &&
       typeof data.instance === "string" &&
       typeof data.username === "string";

@@ -5,6 +5,7 @@ import { PixelfedService } from "./pixelfed.service.ts";
 import { NoteService } from "./note.service.ts";
 import { GithubService } from "./github.service.ts";
 import { LocalTimeService } from "./localTime.service.ts";
+import { LemmyService } from "./lemmy.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
   fetchData(input: TInput): Promise<TOutput>;
@@ -37,6 +38,11 @@ export class WidgetDataServiceFactory {
         >;
       case WidgetType.LocalTime:
         return new LocalTimeService() as unknown as WidgetDataService<
+          TInput,
+          TOutput
+        >;
+      case WidgetType.Lemmy:
+        return new LemmyService() as unknown as WidgetDataService<
           TInput,
           TOutput
         >;
