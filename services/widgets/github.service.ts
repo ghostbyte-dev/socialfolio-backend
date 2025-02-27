@@ -62,8 +62,6 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
     username: string,
     headers: object,
   ): Promise<ContributionsCollection> {
-    const token = Deno.env.get("GITHUB_TOKEN");
-    console.log(token);
     const body = {
       "query": `query {
               user(login: "${username}") {

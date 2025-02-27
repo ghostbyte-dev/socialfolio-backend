@@ -6,3 +6,8 @@ export interface IExploreProfile {
   description: string;
   createdAt: Date;
 }
+
+export interface IExploreProfilesResponse {
+  nextCursor: string | null;
+  profiles: IExploreProfile[];
+}

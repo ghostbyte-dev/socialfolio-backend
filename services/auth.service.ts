@@ -149,7 +149,6 @@ export class AuthService {
   }
 
   static async resendVerificationCode(userId: string) {
-    console.log("userId: " + userId)
     const user = await User.findById(userId);
     if (!user) {
       throw new HttpError(404, "User not found")

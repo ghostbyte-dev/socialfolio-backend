@@ -68,8 +68,6 @@ export const widgetSchema = new Schema<IWidget>({
 });
 
 widgetSchema.pre("save", function (next) {
-  console.log(this.data);
-  console.log(this.type);
   switch (this.type) {
     case WidgetType.Pixelfed:
     case WidgetType.Lemmy:
