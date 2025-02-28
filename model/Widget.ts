@@ -34,6 +34,7 @@ widgetSchema.pre("save", function (next) {
     case WidgetType.Pixelfed:
     case WidgetType.Lemmy:
     case WidgetType.Mastodon:
+    case WidgetType.Peertube:
       (this.data as IFediverse).instance = urlParser(
         (this.data as IFediverse).instance,
       );

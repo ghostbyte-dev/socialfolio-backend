@@ -38,6 +38,7 @@ export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
   Fediverse = "fediverse",
+  Peertube = "peertube",
   Matrix = "matrix",
   Note = "note",
   Github = "github",
@@ -122,8 +123,8 @@ export class CreateWidgetDto {
       case WidgetType.Pixelfed:
       case WidgetType.Mastodon:
       case WidgetType.Lemmy:
+      case WidgetType.Peertube:
       case WidgetType.Matrix:
-        console.log(data)
         return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
