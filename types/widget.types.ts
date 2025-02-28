@@ -33,6 +33,7 @@ export enum WidgetType {
   Matrix = "matrix",
   Note = "note",
   Github = "github",
+  Codeberg = "codeberg",
   LocalTime = "localTime",
   Lemmy = "lemmy",
   Liberapay = "liberapay"
@@ -118,6 +119,7 @@ export class CreateWidgetDto {
         return this.isNoteData(data);
       case WidgetType.Liberapay:
       case WidgetType.Github:
+      case WidgetType.Codeberg:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
