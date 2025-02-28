@@ -30,6 +30,7 @@ export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
   Fediverse = "fediverse",
+  Matrix = "matrix",
   Note = "note",
   Github = "github",
   LocalTime = "localTime",
@@ -110,6 +111,8 @@ export class CreateWidgetDto {
       case WidgetType.Pixelfed:
       case WidgetType.Mastodon:
       case WidgetType.Lemmy:
+      case WidgetType.Matrix:
+        console.log(data)
         return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
@@ -118,7 +121,7 @@ export class CreateWidgetDto {
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
-        case WidgetType.Fediverse:
+      case WidgetType.Fediverse:
         return this.isFediverseWidgetData(data);
       default:
         return false;
