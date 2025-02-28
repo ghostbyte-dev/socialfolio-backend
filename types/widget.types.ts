@@ -24,11 +24,15 @@ export interface ILocalTime {
   timezone: string;
 }
 
+export interface ILink {
+  link: string;
+}
+
 export interface IEmail {
   email: string;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail;
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -41,7 +45,8 @@ export enum WidgetType {
   LocalTime = "localTime",
   Lemmy = "lemmy",
   Liberapay = "liberapay",
-  Email = "email"
+  Email = "email",
+  Link = "link"
 }
 
 export class WidgetDto {
@@ -130,8 +135,10 @@ export class CreateWidgetDto {
         return this.isLocalTimeData(data);
       case WidgetType.Fediverse:
         return this.isFediverseWidgetData(data);
-        case WidgetType.Email:
-          return this.isEmailData(data)
+      case WidgetType.Email:
+        return this.isEmailData(data);
+      case WidgetType.Link:
+        return this.isLinkData(data);
       default:
         return false;
     }
@@ -166,8 +173,12 @@ export class CreateWidgetDto {
   }
 
   isEmailData(data: IEmail) {
-    console.log(data);
-        return typeof data === "object" && data !== null &&
+    return typeof data === "object" && data !== null &&
       typeof data.email === "string";
+  }
+
+  isLinkData(data: ILink) {
+    return typeof data === "object" && data !== null &&
+      typeof data.link === "string";
   }
 }
