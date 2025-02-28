@@ -108,12 +108,12 @@ export class AuthService {
     const hashedResetToken = new TextDecoder().decode(hashedResetTokenBuffer);
 
     user.passwordResetToken = hashedResetToken;
-    user.passwordResetExpiresTimestamp = new Date(Date.now() + 30 * 60 * 1000);
+    const expirationTimeMinutes = 30;
+    user.passwordResetExpiresTimestamp = new Date(Date.now() + expirationTimeMinutes * 60 * 1000);
 
     try {
-      await sendPasswordResetEmail(email, resetToken);
+      await sendPasswordResetEmail(email, resetToken, expirationTimeMinutes.toString() + " min");
     } catch (_error) {
-      console.log("hallo");
       throw new HttpError(500, "failed to send email");
     }
 

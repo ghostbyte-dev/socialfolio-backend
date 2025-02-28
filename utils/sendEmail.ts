@@ -2,7 +2,7 @@ import { SMTPClient } from "denoMailer";
 
 export async function sendVerificationEmail(
   to: string,
-  verificationCode: string,
+  verificationCode: string
 ) {
   const clientUrl = Deno.env.get("CLIENT_URL");
   const verificationUrl = clientUrl + "/verify/" + verificationCode;
@@ -10,12 +10,14 @@ export async function sendVerificationEmail(
     "./utils/mailTemplates/verification.template.html",
   );
   content = content.replace(/{{verificationUrl}}/g, verificationUrl);
+
   await sendEmail(to, content, "Verify your Profile");
 }
 
 export async function sendPasswordResetEmail(
   to: string,
   resetToken: string,
+  expirationTime: string
 ) {
   const clientUrl = Deno.env.get("CLIENT_URL");
   const verificationUrl = clientUrl + "/auth/password/reset/" + resetToken;
@@ -23,6 +25,8 @@ export async function sendPasswordResetEmail(
     "./utils/mailTemplates/passwordReset.template.html",
   );
   content = content.replace(/{{RESET_LINK}}/g, verificationUrl);
+  content = content.replace(/{{EXPIRATION_TIME}}/g, expirationTime);
+
   await sendEmail(to, content, "Reset your password");
 }
 

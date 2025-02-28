@@ -12,7 +12,7 @@ async function seedUsers() {
     await User.deleteMany({});
     console.log("Existing users removed");
     // Generate dummy users
-    const dummyUsers = Array.from({ length: 100 }).map(() => {
+    const dummyUsers = Array.from({ length: 1000 }).map(() => {
         const past = faker.date.past();
         return {
         _id: new Types.ObjectId(Math.floor(past.getTime()) / 1000),
