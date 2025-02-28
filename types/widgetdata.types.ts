@@ -31,7 +31,9 @@ export interface MastodonData extends WidgetData {
   displayName: string;
   description: string;
   avatar: string;
-  followersCount: string;
+  followersCount: number;
+  followingCount: number;
+  statusesCount: number;
   url: string;
 }
 

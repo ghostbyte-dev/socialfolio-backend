@@ -31,6 +31,8 @@ export class MastodonService
       description: account.note,
       avatar: account.avatar,
       followersCount: account.followers_count,
+      followingCount: account.following_count,
+      statusesCount: account.statuses_count,
       url: account.url,
     };
 
