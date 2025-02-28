@@ -15,15 +15,20 @@ export interface IUsername {
   username: string;
 }
 
+export interface ILink {
+  link: string;
+}
+
 export interface ILocalTime {
   timezone: string;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime;
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | ILink;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
   Mastodon = "mastodon",
+  Fediverse = "fediverse",
   Note = "note",
   Github = "github",
   LocalTime = "localTime",
@@ -112,6 +117,8 @@ export class CreateWidgetDto {
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
+        case WidgetType.Fediverse:
+        return this.isLinkData(data);
       default:
         return false;
     }
@@ -131,6 +138,11 @@ export class CreateWidgetDto {
   isUsernameData(data: IUsername) {
     return typeof data === "object" && data !== null &&
       typeof data.username === "string";
+  }
+
+  isLinkData(data: ILink) {
+    return typeof data === "object" && data !== null &&
+      typeof data.link === "string";
   }
 
   isLocalTimeData(data: ILocalTime) {
