@@ -118,12 +118,16 @@ export class WidgetService {
     if (widgetToUpdate.user != userId) {
       throw new HttpError(401, "Unauthorized to edit this widget");
     }
-
-    const updatedWidget = await Widget.findByIdAndUpdate(
-      widgetId,
-      { $set: widget },
-      { new: true, upsert: false },
-    );
+    const updatedWidget = await Widget.findById(widgetId);
+    if (!updatedWidget) {
+      throw new HttpError(500, "cant find widget")
+    }
+    updatedWidget.variant = widget.variant ?? updatedWidget.variant;
+    updatedWidget.size = widget.size ?? updatedWidget.size;
+    updatedWidget.data = widget.data ?? updatedWidget.data;
+    if (updatedWidget.isModified()) {
+      updatedWidget.save();
+    }
 
     if (!updatedWidget) {
       throw new HttpError(500, "Failed to update widget");
