@@ -15,7 +15,11 @@ const USERNMAME_BLACKLIST = [
   "auth",
   "dashboard",
   "verify",
-  "password"
+  "password",
+  "credits",
+  "imprint",
+  "privacy",
+  "privacy-policy"
 ]
 export class AuthService {
   static async register(
