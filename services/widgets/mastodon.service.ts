@@ -1,13 +1,13 @@
 import { redisClient } from "../../database.ts";
-import { IMastodon } from "../../model/Widget.ts";
+import { IFediverse } from "../../types/widget.types.ts";
 import { MastodonData } from "../../types/widgetdata.types.ts";
 import { WidgetDataService } from "./widgetdata.service.ts";
 
 const CACHE_MASTODON_KEY = "mastodon:";
 
 export class MastodonService
-  implements WidgetDataService<IMastodon, MastodonData> {
-  async fetchData(input: IMastodon): Promise<MastodonData> {
+  implements WidgetDataService<IFediverse, MastodonData> {
+  async fetchData(input: IFediverse): Promise<MastodonData> {
     const baseUrl = input.instance;
     const username = input.username;
 

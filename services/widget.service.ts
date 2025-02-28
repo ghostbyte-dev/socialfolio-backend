@@ -1,9 +1,10 @@
 import { ObjectId } from "mongoose";
-import Widget, { IWidget, WidgetType } from "../model/Widget.ts";
+import Widget, { IWidget } from "../model/Widget.ts";
 import {
   CreateWidgetDto,
   UpdateWidgetDto,
   WidgetDto,
+  WidgetType,
 } from "../types/widget.types.ts";
 import { UserService } from "./user.service.ts";
 import { HttpError } from "../utils/HttpError.ts";

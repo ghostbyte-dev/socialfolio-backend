@@ -1,47 +1,8 @@
 import { ObjectId } from "mongoose";
 import { model, Schema } from "mongoose";
 import { urlParser } from "../utils/UrlParser.ts";
+import { IFediverse, IWidgetsData, WidgetType } from "../types/widget.types.ts";
 
-export interface IPixelfed {
-  instance: string;
-  username: string;
-}
-
-export interface ILemmy {
-  instance: string;
-  username: string;
-}
-
-export interface IMastodon {
-  instance: string;
-  username: string;
-}
-
-export interface INote {
-  note: string;
-}
-
-export interface IGithub {
-  username: string;
-}
-
-export interface ILiberaPay {
-  username: string;
-}
-
-export interface ILocalTime {
-  timezone: string;
-}
-
-export enum WidgetType {
-  Pixelfed = "pixelfed",
-  Mastodon = "mastodon",
-  Note = "note",
-  Github = "github",
-  LocalTime = "localTime",
-  Lemmy = "lemmy",
-  Liberapay = "liberapay"
-}
 
 export interface ISize {
   cols: number;
@@ -55,7 +16,7 @@ export interface IWidget {
   variant: number;
   size: ISize;
   priority: number;
-  data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay;
+  data: IWidgetsData;
 }
 
 export const widgetSchema = new Schema<IWidget>({
@@ -73,8 +34,8 @@ widgetSchema.pre("save", function (next) {
     case WidgetType.Pixelfed:
     case WidgetType.Lemmy:
     case WidgetType.Mastodon:
-      (this.data as IPixelfed | IMastodon | ILemmy).instance = urlParser(
-        (this.data as IPixelfed | IMastodon | ILemmy).instance,
+      (this.data as IFediverse).instance = urlParser(
+        (this.data as IFediverse).instance,
       );
       break;
   }

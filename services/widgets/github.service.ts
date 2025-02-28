@@ -1,5 +1,5 @@
 import { redisClient } from "../../database.ts";
-import { IGithub } from "../../model/Widget.ts";
+import { IUsername } from "../../types/widget.types.ts";
 import {
   ContributionsCollection,
   GithubData,
@@ -8,8 +8,8 @@ import { WidgetDataService } from "./widgetdata.service.ts";
 
 const CACHE_GITHUB_KEY = "github:";
 
-export class GithubService implements WidgetDataService<IGithub, GithubData> {
-  async fetchData(input: IGithub): Promise<GithubData> {
+export class GithubService implements WidgetDataService<IUsername, GithubData> {
+  async fetchData(input: IUsername): Promise<GithubData> {
     const cachedData = await redisClient.get(this.getCacheKey(input.username));
 
     if (cachedData) {
@@ -51,7 +51,7 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
     return CACHE_GITHUB_KEY + username;
   }
 
-  private async fetchUser(username: string, headers: object) {
+  private async fetchUser(username: string, headers: HeadersInit) {
     const res = await fetch("https://api.github.com/users/" + username, {
       headers: headers,
     });
@@ -60,7 +60,7 @@ export class GithubService implements WidgetDataService<IGithub, GithubData> {
 
   private async fetchContributions(
     username: string,
-    headers: object,
+    headers: HeadersInit,
   ): Promise<ContributionsCollection> {
     const body = {
       "query": `query {

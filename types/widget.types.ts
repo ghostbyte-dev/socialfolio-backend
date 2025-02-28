@@ -1,14 +1,35 @@
-import {
-  IGithub,
-  ILemmy,
-  ILiberaPay,
-  ILocalTime,
-  IMastodon,
-  INote,
-  IPixelfed,
-} from "../model/Widget.ts";
-import { ISize, IWidget, WidgetType } from "../model/Widget.ts";
+import { ISize, IWidget } from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
+
+
+export interface IFediverse {
+  instance: string;
+  username: string;
+}
+
+export interface INote {
+  note: string;
+}
+
+export interface IUsername {
+  username: string;
+}
+
+export interface ILocalTime {
+  timezone: string;
+}
+
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime;
+
+export enum WidgetType {
+  Pixelfed = "pixelfed",
+  Mastodon = "mastodon",
+  Note = "note",
+  Github = "github",
+  LocalTime = "localTime",
+  Lemmy = "lemmy",
+  Liberapay = "liberapay"
+}
 
 export class WidgetDto {
   constructor(
@@ -17,7 +38,7 @@ export class WidgetDto {
     public variant: number,
     public size: ISize,
     public priority: number,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
+    public data?: IWidgetsData,
   ) { }
 
   static fromWidget(widget: IWidget): WidgetDto {
@@ -36,7 +57,7 @@ export class UpdateWidgetDto {
   constructor(
     public variant?: number,
     public size?: ISize,
-    public data?: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
+    public data?: IWidgetsData,
   ) { }
 
   // deno-lint-ignore no-explicit-any
@@ -57,7 +78,7 @@ export class CreateWidgetDto {
     public type: WidgetType,
     public variant: number,
     public size: ISize,
-    public data: IPixelfed | IMastodon | INote | IGithub | ILocalTime | ILemmy | ILiberaPay,
+    public data: IWidgetsData,
   ) {
     if (!this.isValidData(type, data)) {
       throw new HttpError(400, "Invalid data for widget type: " + type);
@@ -81,37 +102,22 @@ export class CreateWidgetDto {
   isValidData(type: WidgetType, data: any): boolean {
     switch (type) {
       case WidgetType.Pixelfed:
-        return this.isPixelfedData(data);
       case WidgetType.Mastodon:
-        return this.isMastodonData(data);
+      case WidgetType.Lemmy:
+        return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
+      case WidgetType.Liberapay:
       case WidgetType.Github:
-        return this.isGithubData(data);
+        return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
-      case WidgetType.Lemmy:
-        return this.isLemmyData(data);
-      case WidgetType.Liberapay:
-        return this.isLiberapayData(data)
       default:
         return false;
     }
   }
 
-  isPixelfedData(data: IPixelfed) {
-    return typeof data === "object" && data !== null &&
-      typeof data.instance === "string" &&
-      typeof data.username === "string";
-  }
-
-  isMastodonData(data: IMastodon) {
-    return typeof data === "object" && data !== null &&
-      typeof data.instance === "string" &&
-      typeof data.username === "string";
-  }
-
-  isLemmyData(data: ILemmy) {
+  isFediverseData(data: IFediverse) {
     return typeof data === "object" && data !== null &&
       typeof data.instance === "string" &&
       typeof data.username === "string";
@@ -122,12 +128,7 @@ export class CreateWidgetDto {
       typeof data.note === "string";
   }
 
-  isGithubData(data: IGithub) {
-    return typeof data === "object" && data !== null &&
-      typeof data.username === "string";
-  }
-
-  isLiberapayData(data: ILiberaPay) {
+  isUsernameData(data: IUsername) {
     return typeof data === "object" && data !== null &&
       typeof data.username === "string";
   }

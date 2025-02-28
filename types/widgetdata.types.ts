@@ -37,28 +37,6 @@ export interface MastodonData extends WidgetData {
   url: string;
 }
 
-export interface PixelfedData extends WidgetData {
-  username: string;
-  description: string;
-}
-
-export interface LemmyData extends WidgetData {
-  username: string;
-  description: string;
-}
-
-export interface NoteData extends WidgetData {
-  note: string;
-}
-
-export interface LocalTimeData extends WidgetData {
-  timeZone: string;
-}
-
-export interface LiberapayData extends WidgetData {
-  username: string;
-}
-
 export interface GithubData extends WidgetData {
   username: string;
   name: string;
