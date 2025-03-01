@@ -29,7 +29,7 @@ export class UserService {
       throw new HttpError(400, "This Profile is not verified yet");
     }
 
-    if (profile.status == Status.Disabled) {
+    if (profile.status == Status.Disabled && profile.id != jwtUserId) {
       throw new HttpError(400, "This Profile is disabled")
     }
 
