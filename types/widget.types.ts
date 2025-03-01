@@ -7,6 +7,10 @@ export interface IFediverse {
   username: string;
 }
 
+export interface IBluesky {
+  handle: string;
+}
+
 export interface INote {
   note: string;
 }
@@ -32,7 +36,7 @@ export interface IEmail {
   email: string;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink;
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -126,7 +130,6 @@ export class CreateWidgetDto {
       case WidgetType.Lemmy:
       case WidgetType.Peertube:
       case WidgetType.Matrix:
-      case WidgetType.Bluesky:
         return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
@@ -142,6 +145,8 @@ export class CreateWidgetDto {
         return this.isEmailData(data);
       case WidgetType.Link:
         return this.isLinkData(data);
+      case WidgetType.Bluesky:
+        return this.isBlueskyData(data);
       default:
         return false;
     }
@@ -183,5 +188,10 @@ export class CreateWidgetDto {
   isLinkData(data: ILink) {
     return typeof data === "object" && data !== null &&
       typeof data.link === "string";
+  }
+
+  isBlueskyData(data: IBluesky) {
+    return typeof data === "object" && data !== null &&
+      typeof data.handle === "string";
   }
 }
