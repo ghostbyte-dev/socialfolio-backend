@@ -104,6 +104,28 @@ export class UserController {
     }
   }
 
+  static async updateStatus(context: Context) {
+    const userId = context.state.user.id;
+    const { status } = await context.request.body.json();
+    if (!status) {
+      context.response.status = 400;
+      context.response.body = { message: "Status is required" };
+      return;
+    }
+
+    try {
+      const user: IUser = await UserService.updateStatus(
+        userId,
+        status,
+      );
+      const userDto = UserDto.fromUser(user);
+      context.response.status = 200;
+      context.response.body = userDto;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
   static async uploadAvatar(context: Context) {
     const userId = context.state.user.id;
     try {

@@ -29,6 +29,10 @@ export class UserService {
       throw new HttpError(400, "This Profile is not verified yet");
     }
 
+    if (profile.status == Status.Disabled) {
+      throw new HttpError(400, "This Profile is disabled")
+    }
+
     return profile;
   }
 
@@ -72,6 +76,30 @@ export class UserService {
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
+    return profile;
+  }
+
+  static async updateStatus(
+    id: string,
+    status: Status,
+  ): Promise<IUser> {
+
+    if (!Object.values(Status).includes(status)) {
+      throw new HttpError(400, "Invalid status type")
+    }
+
+    const profile = await User.findById(id);
+    if (!profile) {
+      throw new HttpError(404, "Profile not found")
+    }
+
+    if (profile.status == Status.Unverified) {
+      throw new HttpError(401, "Your Profile has to be verified to change your status")
+    }
+
+    profile.status = status;
+    profile.save();
+
     return profile;
   }
 
