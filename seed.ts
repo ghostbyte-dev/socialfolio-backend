@@ -1,6 +1,6 @@
 import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker/+esm";
 import { connectDB } from "./database.ts";
-import User from "./model/User.ts";
+import User, { Status } from "./model/User.ts";
 import { Types } from "mongoose";
 
 // Connect to MongoDB
@@ -19,7 +19,7 @@ async function seedUsers() {
       username: faker.internet.username(),
       email: faker.internet.email(),
       password: "$2a$10$xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyz", // Dummy bcrypt hash
-      verified: true,
+      status: Status.Visible,
       createdAt: past,
       updatedAt: new Date(),
       displayName: faker.person.fullName(),

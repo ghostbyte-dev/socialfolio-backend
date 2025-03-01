@@ -1,4 +1,4 @@
-import User, { IUser } from "../model/User.ts";
+import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import webp from "webp";
 import { ImageMagick, IMagickImage, initialize } from "imageMick";
@@ -23,7 +23,7 @@ export class UserService {
       throw new HttpError(404, "Profile not found");
     }
     if (
-      !profile.verified &&
+      profile.status == Status.Unverified &&
       ((jwtUserId && jwtUserId != profile.id) || !jwtUserId)
     ) {
       throw new HttpError(400, "This Profile is not verified yet");

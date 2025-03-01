@@ -1,4 +1,4 @@
-import { IUser } from "../model/User.ts";
+import { IUser, Status } from "../model/User.ts";
 
 export class UserDto {
   constructor(
@@ -8,7 +8,7 @@ export class UserDto {
     public displayName: string,
     public description: string,
     public avatar: string,
-    public verified: boolean,
+    public status: Status,
   ) {}
 
   static fromUser(user: IUser): UserDto {
@@ -19,7 +19,7 @@ export class UserDto {
       user.displayName ?? "",
       user.description ?? "",
       user.avatarUrl ?? "",
-      user.verified,
+      user.status,
     );
   }
 }

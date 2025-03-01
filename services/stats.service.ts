@@ -1,14 +1,18 @@
-import User from "../model/User.ts";
+import User, { Status } from "../model/User.ts";
 import Widget from "../model/Widget.ts";
 import { IStats, IStatsWidget } from "../types/stats.types.ts";
 import { WidgetType } from "../types/widget.types.ts";
 
 export class StatsService {
     static async getStats(): Promise<IStats> {
-        const userCount = await User.countDocuments({ verified: true });
-        const widgetCount = await Widget.countDocuments({
-            user: { $in: await User.find({ verified: true }).distinct("_id") }
+        const userCount = await User.countDocuments({
+            $or: [{ status: Status.Visible }, { status: Status.Hidden }]
         });
+
+        const widgetCount = await Widget.countDocuments({
+            user: { $in: await User.find({ $or: [{ status: Status.Visible }, { status: Status.Hidden }] }).distinct("_id") },
+        });
+
 
         const topWidgetTypesWithTopVariant = await Widget.aggregate([
             {

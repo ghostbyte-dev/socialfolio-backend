@@ -1,4 +1,4 @@
-import User from "../model/User.ts";
+import User, { Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { createJWT } from "../utils/jwt.ts";
 import * as bcrypt from "bcrypt";
@@ -63,7 +63,7 @@ export class AuthService {
       email,
       username,
       password: hashedPassword,
-      verified: false,
+      status: Status.Unverified,
       verificationCode: verificationCode,
       createdAt: new Date(Date.now())
     });
@@ -89,7 +89,7 @@ export class AuthService {
         verificationCode: code,
       },
       {
-        verified: true,
+        status: Status.Visible,
         verificationCode: null,
       },
       { new: true },
@@ -157,7 +157,8 @@ export class AuthService {
     if (!user) {
       throw new HttpError(404, "User not found")
     }
-    if (user.verified) {
+
+    if (user.status == Status.Unverified) {
       throw new HttpError(400, "Already verified")
     }
 

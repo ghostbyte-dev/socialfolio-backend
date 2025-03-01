@@ -1,5 +1,5 @@
 import { IExploreProfile, IExploreProfilesResponse } from "../types/explore.types.ts";
-import User, { IUser } from '../model/User.ts'; // Ensure you have IUser defined
+import User, { IUser, Status } from '../model/User.ts'; // Ensure you have IUser defined
 import { HttpError } from "../utils/HttpError.ts";
 import mongoose from "mongoose";
 import { FilterQuery } from "mongoose";
@@ -8,7 +8,7 @@ export class ExploreService {
     static async getExploreProfiles(cursor: string | null, limit: string | null): Promise<IExploreProfilesResponse> {
         const parsedLimit = parseInt(limit as string, 10); 
 
-        const query: FilterQuery<IUser>= { verified: true };
+        const query: FilterQuery<IUser>= { status: Status.Visible };
 
         if (cursor && mongoose.isValidObjectId(cursor as string)) {
             query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };

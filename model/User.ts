@@ -1,5 +1,12 @@
 import { model, Schema } from "npm:mongoose";
 
+export enum Status {
+  Visible = "visible",
+  Hidden = "hidden",
+  Disabled = "disabled",
+  Unverified = "unverified"
+}
+
 export interface IUser {
   _id: string;
   username: string;
@@ -9,7 +16,7 @@ export interface IUser {
   description?: string;
   avatarUrl?: string;
   verificationCode?: string;
-  verified: boolean;
+  status: Status;
   passwordResetToken?: string;
   passwordResetExpiresTimestamp?: Date;
   createdAt: Date;
@@ -23,7 +30,7 @@ const userSchema = new Schema<IUser>({
   description: { type: String },
   avatarUrl: { type: String },
   verificationCode: { type: String },
-  verified: { type: Boolean },
+  status: { type: String },
   passwordResetToken: { type: String },
   passwordResetExpiresTimestamp: { type: Date },
 },
