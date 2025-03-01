@@ -35,6 +35,7 @@ widgetSchema.pre("save", function (next) {
     case WidgetType.Lemmy:
     case WidgetType.Mastodon:
     case WidgetType.Peertube:
+    case WidgetType.Bluesky:
       (this.data as IFediverse).instance = urlParser(
         (this.data as IFediverse).instance,
       );
