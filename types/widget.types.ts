@@ -43,6 +43,7 @@ export enum WidgetType {
   Mastodon = "mastodon",
   Fediverse = "fediverse",
   Peertube = "peertube",
+  Vernissage = "vernissage",
   Matrix = "matrix",
   Bluesky = "bluesky",
   NeoDb = "neodb",
@@ -140,6 +141,7 @@ export class CreateWidgetDto {
       case WidgetType.Github:
       case WidgetType.BuyMeACoffee:
       case WidgetType.Codeberg:
+      case WidgetType.Vernissage:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
