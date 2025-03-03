@@ -21,7 +21,7 @@ export class WidgetService {
     const widgets: IWidget[] = await Widget.find({
       user: user._id,
     });
-    widgets.sort((a: IWidget, b: IWidget) => a.priority - b.priority);
+    widgets.sort((a: IWidget, b: IWidget) => b.priority - a.priority);
     return widgets.map((widget) => WidgetDto.fromWidget(widget));
   }
 
@@ -126,6 +126,8 @@ export class WidgetService {
     updatedWidget.variant = widget.variant ?? updatedWidget.variant;
     updatedWidget.size = widget.size ?? updatedWidget.size;
     updatedWidget.data = widget.data ?? updatedWidget.data;
+    updatedWidget.priority = widget.priority ?? updatedWidget.priority;
+
     if (updatedWidget.isModified()) {
       updatedWidget.save();
     }

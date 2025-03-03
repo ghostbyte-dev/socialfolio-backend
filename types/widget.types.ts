@@ -90,6 +90,7 @@ export class UpdateWidgetDto {
     public variant?: number,
     public size?: ISize,
     public data?: IWidgetsData,
+    public priority?: number
   ) { }
 
   // deno-lint-ignore no-explicit-any
@@ -101,6 +102,7 @@ export class UpdateWidgetDto {
       json.variant,
       json.size,
       json.data,
+      json.priority
     );
   }
 }
