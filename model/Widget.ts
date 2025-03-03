@@ -49,8 +49,10 @@ widgetSchema.pre("save", function (next) {
       (this.data as ILink).link = urlParser(
         (this.data as ILink).link,
       );
+      break;
   }
   next();
 });
+
 
 export default model<IWidget>("Widget", widgetSchema);

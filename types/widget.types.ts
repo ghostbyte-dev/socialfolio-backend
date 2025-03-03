@@ -1,7 +1,6 @@
 import { ISize, IWidget } from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 
-
 export interface IFediverse {
   instance: string;
   username: string;
@@ -36,7 +35,11 @@ export interface IEmail {
   email: string;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky;
+export interface ICountry {
+  countryName: string;
+}
+
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky | ICountry;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -56,7 +59,8 @@ export enum WidgetType {
   BuyMeACoffee = "buymeacoffee",
   KoFi = "kofi",
   Email = "email",
-  Link = "link"
+  Link = "link",
+  Country = "country"
 }
 
 export class WidgetDto {
@@ -155,6 +159,8 @@ export class CreateWidgetDto {
         return this.isLinkData(data);
       case WidgetType.Bluesky:
         return this.isBlueskyData(data);
+      case WidgetType.Country:
+        return this.isCountryData(data);
       default:
         return false;
     }
@@ -201,5 +207,10 @@ export class CreateWidgetDto {
   isBlueskyData(data: IBluesky) {
     return typeof data === "object" && data !== null &&
       typeof data.handle === "string";
+  }
+
+  isCountryData(data: ICountry) {
+    return typeof data === "object" && data != null &&
+      typeof data.countryName === "string";
   }
 }
