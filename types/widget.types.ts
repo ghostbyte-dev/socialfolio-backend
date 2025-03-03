@@ -29,6 +29,7 @@ export interface ILocalTime {
 
 export interface ILink {
   link: string;
+  label: string;
 }
 
 export interface IEmail {
@@ -205,7 +206,8 @@ export class CreateWidgetDto {
 
   isLinkData(data: ILink) {
     return typeof data === "object" && data !== null &&
-      typeof data.link === "string";
+      typeof data.link === "string" &&
+      typeof data.label === "string";
   }
 
   isBlueskyData(data: IBluesky) {
