@@ -2,6 +2,7 @@ import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import webp from "webp";
 import { ImageMagick, IMagickImage, initialize } from "imageMick";
+import { deleteImage } from "../utils/ImageUtils.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -128,7 +129,7 @@ export class UserService {
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
       try {
-        await this.deleteImage(oldAvatarUrl);
+        await deleteImage(oldAvatarUrl);
       } catch (_error) {
         console.log("unable to delete image " + oldAvatarUrl);
       }
@@ -144,23 +145,13 @@ export class UserService {
     }
 
     if (user.avatarUrl && user.avatarUrl != "") {
-      await this.deleteImage(user.avatarUrl);
+      await deleteImage(user.avatarUrl);
     }
 
     user.avatarUrl = undefined;
 
     await user.save();
     return user;
-  }
-
-  private static async deleteImage(url: string) {
-    const filePath = url.substring(url.lastIndexOf("public/"));
-    try {
-      console.log(filePath);
-      await Deno.remove(filePath);
-    } catch (_error) {
-      throw new HttpError(500, "Unable to delete image " + url);
-    }
   }
 
   private static async uploadImage(

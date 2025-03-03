@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 import { model, Schema } from "mongoose";
 import { urlParser } from "../utils/UrlParser.ts";
-import { IFediverse, IFediverseWidget, ILink, IWidgetsData, WidgetType } from "../types/widget.types.ts";
+import { IFediverse, IFediverseWidget, IImage, ILink, IWidgetsData, WidgetType } from "../types/widget.types.ts";
 
 
 export interface ISize {
@@ -51,6 +51,13 @@ widgetSchema.pre("save", function (next) {
         (this.data as ILink).link,
       );
       break;
+      case WidgetType.Image:
+        if ((this.data as IImage).link) {
+          (this.data as IImage).link = urlParser(
+            (this.data as IImage).link!,
+          );
+        }
+      
   }
   next();
 });

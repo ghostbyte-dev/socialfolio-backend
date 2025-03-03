@@ -5,6 +5,7 @@ import { UserDto } from "../types/user.types.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { RouterContext } from "@oak/oak/router";
 import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
+import { getOrigin } from "../utils/getOrigin.ts";
 
 export class UserController {
   static async self(context: Context) {
@@ -132,14 +133,7 @@ export class UserController {
       const body = context.request.body;
       const form = await body.formData();
       const file = form.get("avatar") as File;
-      const protocol = context.request.headers.get("x-forwarded-proto");
-      const domain = context.request.url.host;
-      let origin;
-      if (protocol) {
-        origin = `${protocol}://${domain}`
-      } else {
-        origin = context.request.url.origin
-      }
+      const origin = getOrigin(context);
       const user: IUser = await UserService.uploadAvatar(
         file,
         userId,

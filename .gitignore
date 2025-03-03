@@ -1,6 +1,8 @@
 *.env
 public/avatars/*
 !public/avatars/.gitkeep
+public/images/*
+!public/images/.gitkeep
 
 /.idea/
 /.vscode/

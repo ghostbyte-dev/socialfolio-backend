@@ -2,6 +2,7 @@ import { ObjectId } from "mongoose";
 import Widget, { IWidget } from "../model/Widget.ts";
 import {
   CreateWidgetDto,
+  IImage,
   UpdateWidgetDto,
   WidgetDto,
   WidgetType,
@@ -11,6 +12,7 @@ import { HttpError } from "../utils/HttpError.ts";
 import { WidgetDataServiceFactory } from "./widgets/widgetdata.service.ts";
 import { WidgetDataDto } from "../types/widgetdata.types.ts";
 import mongoose from "mongoose";
+import { deleteImage, saveBase64Image } from "../utils/ImageUtils.ts";
 
 export class WidgetService {
   static async widgets(
@@ -40,9 +42,17 @@ export class WidgetService {
   static async createWidget(
     userId: ObjectId,
     createWidgetDto: CreateWidgetDto,
+    origin: string
   ): Promise<WidgetDto> {
     if (!Object.values(WidgetType).includes(createWidgetDto.type)) {
       throw new HttpError(400, "Wrong Widget Type");
+    }
+
+    if (createWidgetDto.type == WidgetType.Image) {
+      const imagePath = await saveBase64Image((createWidgetDto.data as IImage).image);
+      const url = origin + imagePath;
+
+      (createWidgetDto.data as IImage).image = url;
     }
 
     const newWidget: IWidget = await Widget.create({
@@ -68,6 +78,11 @@ export class WidgetService {
 
     if (widgetToDelete.user != userId) {
       throw new HttpError(401, "Unauthorized");
+    }
+
+    if (widgetToDelete.type == WidgetType.Image) {
+      const data: IImage = widgetToDelete.data as IImage;
+      await deleteImage(data.image);
     }
 
     await widgetToDelete.deleteOne();

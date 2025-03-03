@@ -40,7 +40,12 @@ export interface ICountry {
   countryName: string;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky | ICountry;
+export interface IImage {
+  image: string;
+  link: string | undefined;
+}
+
+export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky | ICountry | IImage;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -62,7 +67,8 @@ export enum WidgetType {
   KoFi = "kofi",
   Email = "email",
   Link = "link",
-  Country = "country"
+  Country = "country",
+  Image = "image"
 }
 
 export class WidgetDto {
@@ -166,6 +172,8 @@ export class CreateWidgetDto {
         return this.isBlueskyData(data);
       case WidgetType.Country:
         return this.isCountryData(data);
+      case WidgetType.Image:
+        return this.isImageData(data);
       default:
         return false;
     }
@@ -218,5 +226,10 @@ export class CreateWidgetDto {
   isCountryData(data: ICountry) {
     return typeof data === "object" && data != null &&
       typeof data.countryName === "string";
+  }
+
+  isImageData(data: IImage) {
+    return typeof data === "object" && data != null &&
+      typeof data.image === "string";
   }
 }
