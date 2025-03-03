@@ -2,7 +2,7 @@ import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import webp from "webp";
 import { ImageMagick, IMagickImage, initialize } from "imageMick";
-import { deleteImage } from "../utils/ImageUtils.ts";
+import { deleteImage, fileToWebpBuffer, resizeImage } from "../utils/ImageUtils.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -160,40 +160,16 @@ export class UserService {
   ): Promise<string> {
     const fileEnding = file.name.substring(file.name.lastIndexOf("."));
 
-    const resizedBuffer = await this.resizeImage(file);
-    const webp = await this.fileToWebpBuffer(resizedBuffer, fileEnding);
+    const stream = file.stream();
+    const buffer = (await stream.getReader().read()).value;
+    if (!buffer) throw new HttpError(500, "An unexpected error occured");
+    
+    const resizedBuffer = await resizeImage(buffer);
+    const webp = await fileToWebpBuffer(resizedBuffer, fileEnding);
 
     const uuid = crypto.randomUUID();
     const pathWithFile = "/public/" + path + uuid + ".webp";
     Deno.writeFile(Deno.cwd() + pathWithFile, webp);
     return pathWithFile;
-  }
-
-  private static async fileToWebpBuffer(
-    file: Uint8Array,
-    fileEnding: string,
-  ): Promise<Uint8Array> {
-    return await webp.buffer2webpbuffer(
-      file,
-      fileEnding,
-      "-q 100",
-      "./image.webp",
-    ) as Uint8Array;
-  }
-
-  private static async resizeImage(img: File): Promise<Uint8Array> {
-    const stream = img.stream();
-    const buffer = (await stream.getReader().read()).value;
-    if (!buffer) throw new HttpError(500, "An unexpected error occured");
-
-    await initialize();
-    return new Promise((resolve) =>
-      ImageMagick.read(buffer, (image: IMagickImage) => {
-        image.resize(400, 400);
-        image.write(
-          (data) => resolve(data),
-        );
-      })
-    );
   }
 }
