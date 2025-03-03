@@ -36,6 +36,7 @@ widgetSchema.pre("save", function (next) {
     case WidgetType.Mastodon:
     case WidgetType.Peertube:
     case WidgetType.NeoDb:
+    case WidgetType.BookyWyrm:
       (this.data as IFediverse).instance = urlParser(
         (this.data as IFediverse).instance,
       );

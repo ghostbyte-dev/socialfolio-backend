@@ -47,6 +47,7 @@ export enum WidgetType {
   Fediverse = "fediverse",
   Peertube = "peertube",
   Vernissage = "vernissage",
+  BookyWyrm = "bookwyrm",
   Matrix = "matrix",
   Bluesky = "bluesky",
   NeoDb = "neodb",
@@ -141,6 +142,7 @@ export class CreateWidgetDto {
       case WidgetType.Peertube:
       case WidgetType.Matrix:
       case WidgetType.NeoDb:
+      case WidgetType.BookyWyrm:
         return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
