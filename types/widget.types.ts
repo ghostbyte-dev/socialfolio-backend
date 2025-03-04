@@ -57,6 +57,7 @@ export enum WidgetType {
   Matrix = "matrix",
   Bluesky = "bluesky",
   RecordClub = "recordclub",
+  ListenBrainz = "listenbrainz",
   NeoDb = "neodb",
   Note = "note",
   Github = "github",
@@ -161,6 +162,7 @@ export class CreateWidgetDto {
       case WidgetType.Vernissage:
       case WidgetType.KoFi:
       case WidgetType.RecordClub:
+      case WidgetType.ListenBrainz:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
