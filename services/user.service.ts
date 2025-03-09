@@ -2,7 +2,7 @@ import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import webp from "webp";
 import { ImageMagick, IMagickImage, initialize } from "imageMick";
-import { deleteImage, fileToWebpBuffer, resizeImage } from "../utils/ImageUtils.ts";
+import { deleteImage, fileToWebpBuffer, resizeImage, saveBase64Image, saveImageFile } from "../utils/ImageUtils.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -119,7 +119,7 @@ export class UserService {
     }
     const oldAvatarUrl = user.avatarUrl;
     try {
-      const savedPath = await this.uploadImage(avatar, fileName);
+      const savedPath = await saveImageFile(avatar, "avatars");
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
@@ -154,7 +154,7 @@ export class UserService {
     return user;
   }
 
-  private static async uploadImage(
+  /*private static async uploadImage(
     file: File,
     path: string,
   ): Promise<string> {
@@ -171,5 +171,5 @@ export class UserService {
     const pathWithFile = "/public/" + path + uuid + ".webp";
     Deno.writeFile(Deno.cwd() + pathWithFile, webp);
     return pathWithFile;
-  }
+  }*/
 }

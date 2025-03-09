@@ -49,7 +49,7 @@ export class WidgetService {
     }
 
     if (createWidgetDto.type == WidgetType.Image) {
-      const imagePath = await saveBase64Image((createWidgetDto.data as IImage).image);
+      const imagePath = await saveBase64Image((createWidgetDto.data as IImage).image, "images");
       const url = origin + imagePath;
 
       (createWidgetDto.data as IImage).image = url;

@@ -3,7 +3,7 @@ import { HttpError } from "./HttpError.ts";
 import { ImageMagick, IMagickImage, initialize } from "imageMick";
 import webp from "webp";
 
-export async function saveBase64Image(base64String: string): Promise<string> {
+export async function saveBase64Image(base64String: string, folder: string): Promise<string> {
     const matches = base64String.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
     if (!matches) throw new Error("Invalid base64 image data");
 
@@ -13,21 +13,45 @@ export async function saveBase64Image(base64String: string): Promise<string> {
     const buffer = decodeBase64(base64Data);
 
     const resizedBuffer = await resizeImage(buffer);
+    console.log(extension)
     const webp = await fileToWebpBuffer(resizedBuffer, extension);
 
     const fileName = `${crypto.randomUUID()}.webp`;
-    const filePath = "/public/images/" + fileName;
+    const filePath = "/public/" + folder + "/" + fileName;
 
     await Deno.writeFile(Deno.cwd() + filePath, webp);
 
     return filePath;
 }
 
+export async function saveImageFile(
+  file: File,
+  folder: string,
+): Promise<string> {
+  const fileEnding = file.type.split('/').pop();
+  if (!fileEnding) {
+    throw new HttpError(500, "An error occured when saving image");
+  }
+
+  const stream = file.stream();
+  const buffer = (await stream.getReader().read()).value;
+  if (!buffer) throw new HttpError(500, "An unexpected error occured");
+  
+  const resizedBuffer = await resizeImage(buffer);
+  console.log(fileEnding)
+  const webp = await fileToWebpBuffer(resizedBuffer, fileEnding);
+
+  const uuid = crypto.randomUUID();
+  const pathWithFile = "/public/" + folder + "/" + uuid + ".webp";
+  console.log(pathWithFile)
+  Deno.writeFile(Deno.cwd() + pathWithFile, webp);
+  return pathWithFile;
+}
+
 
 export async function deleteImage(url: string) {
     const filePath = url.substring(url.lastIndexOf("public/"));
     try {
-        console.log(filePath);
         await Deno.remove(filePath);
     } catch (_error) {
         throw new HttpError(500, "Unable to delete image " + url);
