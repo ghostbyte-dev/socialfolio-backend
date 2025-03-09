@@ -1,8 +1,6 @@
 import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
-import webp from "webp";
-import { ImageMagick, IMagickImage, initialize } from "imageMick";
-import { deleteImage, fileToWebpBuffer, resizeImage, saveBase64Image, saveImageFile } from "../utils/ImageUtils.ts";
+import { deleteImage, saveImageFile } from "../utils/ImageUtils.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -109,10 +107,6 @@ export class UserService {
     id: string,
     originUrl: string,
   ): Promise<IUser> {
-    const uuid = crypto.randomUUID();
-    const path = "avatars/";
-    const fileName = path + uuid;
-
     const user = await User.findById(id);
     if (!user) {
       throw new HttpError(404, "Profile not found");

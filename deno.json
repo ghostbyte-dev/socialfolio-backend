@@ -1,7 +1,8 @@
 {
+  "nodeModulesDir": "auto",
   "tasks": {
-    "dev": "deno run --allow-net --allow-read --allow-sys --env-file=.env --allow-env --watch --allow-write --allow-run main.ts",
-    "start": "deno run --allow-read --allow-net --allow-sys --allow-write --allow-run --allow-env main.ts",
+    "dev": "deno run --allow-net --allow-read --allow-sys --env-file=.env --allow-env --watch --allow-write --allow-run --allow-ffi main.ts",
+    "start": "deno run --allow-read --allow-net --allow-sys --allow-write --allow-run --allow-env --allow-ffi main.ts",
     "hook": "deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts",
     "seed": "deno run --allow-net --allow-env --env-file=.env --allow-write seed.ts"
   },
@@ -11,9 +12,8 @@
     "cors": "https://deno.land/x/cors/mod.ts",
     "mongoose": "npm:mongoose@^8.10.0",
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
-    "webp": "npm:webp-converter@2.3.3",
     "redis": "npm:redis@^4.5",
-    "imageMick": "https://deno.land/x/imagemagick_deno@0.0.31/mod.ts",
-    "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts"
+    "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts",
+    "sharp": "npm:sharp@0.33.5"
   }
 }

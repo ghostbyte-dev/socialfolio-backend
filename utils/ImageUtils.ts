@@ -1,20 +1,17 @@
 import { decodeBase64 } from "jsr:@std/encoding/base64";
 import { HttpError } from "./HttpError.ts";
-import { ImageMagick, IMagickImage, initialize } from "imageMick";
-import webp from "webp";
+import sharp from "sharp";
 
 export async function saveBase64Image(base64String: string, folder: string): Promise<string> {
     const matches = base64String.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/);
     if (!matches) throw new Error("Invalid base64 image data");
 
-    const extension = matches[1];
     const base64Data = matches[2];
 
     const buffer = decodeBase64(base64Data);
 
     const resizedBuffer = await resizeImage(buffer);
-    console.log(extension)
-    const webp = await fileToWebpBuffer(resizedBuffer, extension);
+    const webp = await fileToWebpBuffer(resizedBuffer);
 
     const fileName = `${crypto.randomUUID()}.webp`;
     const filePath = "/public/" + folder + "/" + fileName;
@@ -38,8 +35,7 @@ export async function saveImageFile(
   if (!buffer) throw new HttpError(500, "An unexpected error occured");
   
   const resizedBuffer = await resizeImage(buffer);
-  console.log(fileEnding)
-  const webp = await fileToWebpBuffer(resizedBuffer, fileEnding);
+  const webp = await fileToWebpBuffer(resizedBuffer);
 
   const uuid = crypto.randomUUID();
   const pathWithFile = "/public/" + folder + "/" + uuid + ".webp";
@@ -59,24 +55,14 @@ export async function deleteImage(url: string) {
 }
 export async function fileToWebpBuffer(
     file: Uint8Array,
-    fileEnding: string,
   ): Promise<Uint8Array> {
-    return await webp.buffer2webpbuffer(
-      file,
-      fileEnding,
-      "-q 100",
-      "./image.webp",
-    ) as Uint8Array;
+    return await sharp(file)
+    .webp({ quality: 100 })
+    .toBuffer();
   }
 
 export async function resizeImage(buffer: Uint8Array): Promise<Uint8Array> {
-    await initialize();
-    return new Promise((resolve) =>
-      ImageMagick.read(buffer, (image: IMagickImage) => {
-        image.resize(400, 400);
-        image.write(
-          (data) => resolve(data),
-        );
-      })
-    );
+  return await sharp(buffer)
+  .resize(400, 400) // Skaliere das Bild auf 400x400 px
+  .toBuffer();
   }
