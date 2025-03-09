@@ -3,6 +3,7 @@ source production.env
 # Generate timestamp (format: YYYYMMDD_HHMMSS)
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
+PROJECT_DIR="/root/socialfolio-backend"
 # Define backup file name
 MONGO_BACKUP_FILE="backup_$TIMESTAMP.dump"
 PUBLIC_BACKUP_FILE="public_backup_$TIMESTAMP.tar.gz"
@@ -16,7 +17,7 @@ PUBLIC_BACKUP_FILE="public_backup_$TIMESTAMP.tar.gz"
 
 /usr/bin/docker exec mongo_db rm "/$MONGO_BACKUP_FILE"
 
-tar -czf /root/socialfolio_backup/$PUBLIC_BACKUP_FILE -C /path/to/socialfolio/public .
+tar -czf /root/socialfolio_backup/$PUBLIC_BACKUP_FILE -C "$PROJECT_DIR/public" .
 
 echo "Backup completed:"
 echo "  - MongoDB: /root/socialfolio_backup/$MONGO_BACKUP_FILE"
