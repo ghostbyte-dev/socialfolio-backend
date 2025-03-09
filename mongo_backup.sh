@@ -4,16 +4,20 @@ source production.env
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 # Define backup file name
-BACKUP_FILE="backup_$TIMESTAMP.dump"
+MONGO_BACKUP_FILE="backup_$TIMESTAMP.dump"
+PUBLIC_BACKUP_FILE="public_backup_$TIMESTAMP.tar.gz"
 
 # Backup MongoDB
 /usr/bin/docker exec mongo_db mongodump --username $MONGO_INITDB_ROOT_USERNAME \
  --password $MONGO_INITDB_ROOT_PASSWORD \
- --authenticationDatabase admin --db socialfolio --gzip --archive="/$BACKUP_FILE"
+ --authenticationDatabase admin --db socialfolio --gzip --archive="/$MONGO_BACKUP_FILE"
 
-/usr/bin/docker cp mongo_db:"/$BACKUP_FILE" /root/socialfolio_backup/
+/usr/bin/docker cp mongo_db:"/$MONGO_BACKUP_FILE" /root/socialfolio_backup/
 
-/usr/bin/docker exec mongo_db rm "/$BACKUP_FILE"
+/usr/bin/docker exec mongo_db rm "/$MONGO_BACKUP_FILE"
 
-echo "Backup completed: /root/socialfolio_backup/$BACKUP_FILE"
+tar -czf /root/socialfolio_backup/$PUBLIC_BACKUP_FILE -C /path/to/socialfolio/public .
 
+echo "Backup completed:"
+echo "  - MongoDB: /root/socialfolio_backup/$MONGO_BACKUP_FILE"
+echo "  - Public folder: /root/socialfolio_backup/$PUBLIC_BACKUP_FILE"
