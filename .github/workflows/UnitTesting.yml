@@ -13,8 +13,10 @@ jobs:
     steps:
       - name: Git Checkout Deno Module
         uses: actions/checkout@v2
-      - name: Use Deno Version ${{ matrix.deno-version }}
+      - name: Use Deno Version
         uses: denolib/setup-deno@v2
+        with:
+          deno-version: '2.2.1'
       - name: Lint Deno Module
         run: deno fmt --check
       - name: Test Deno Module
