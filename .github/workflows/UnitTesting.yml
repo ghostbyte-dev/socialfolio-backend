@@ -17,7 +17,9 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: "2.2.1"
-      - name: Lint Deno Module
+      - name: Check formatting Deno Module
         run: deno fmt --check
+      - name: Lint Deno Module
+        run: deno lint
       - name: Test Deno Module
         run: deno task test
