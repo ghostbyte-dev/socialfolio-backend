@@ -1,6 +1,6 @@
 import { decodeBase64 } from "jsr:@std/encoding/base64";
 import { HttpError } from "./HttpError.ts";
-import sharp from "sharp";
+import sharp from "npm:sharp@0.33.5";
 
 export class ImageService {
   static async saveBase64Image(
