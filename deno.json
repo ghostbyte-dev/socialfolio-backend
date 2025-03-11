@@ -15,6 +15,7 @@
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
     "redis": "npm:redis@^4.5",
     "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts",
+    "sharp": "npm:sharp@0.33.5",
     "sinon": "npm:sinon@19.0.2"
   }
 }

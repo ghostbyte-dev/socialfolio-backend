@@ -15,3 +15,6 @@ public/images/*
 
 deno.lock
 deno.lock.json
+
+/cov_profile
+lcov.info
