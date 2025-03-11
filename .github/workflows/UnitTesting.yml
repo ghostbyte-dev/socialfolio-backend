@@ -20,4 +20,4 @@ jobs:
       - name: Lint Deno Module
         run: deno fmt --check
       - name: Test Deno Module
-        run: deno task dev
+        run: deno task test
