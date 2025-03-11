@@ -16,7 +16,7 @@ jobs:
       - name: Use Deno Version
         uses: denolib/setup-deno@v2
         with:
-          deno-version: '2.2.1'
+          deno-version: "2.2.1"
       - name: Lint Deno Module
         run: deno fmt --check
       - name: Test Deno Module
