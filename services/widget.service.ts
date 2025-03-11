@@ -12,7 +12,7 @@ import { HttpError } from "../utils/HttpError.ts";
 import { WidgetDataServiceFactory } from "./widgets/widgetdata.service.ts";
 import { WidgetDataDto } from "../types/widgetdata.types.ts";
 import mongoose from "mongoose";
-import { deleteImage, saveBase64Image } from "../utils/ImageUtils.ts";
+import { ImageService } from "../utils/ImageUtils.ts";
 
 export class WidgetService {
   static async widgets(
@@ -49,7 +49,7 @@ export class WidgetService {
     }
 
     if (createWidgetDto.type == WidgetType.Image) {
-      const imagePath = await saveBase64Image(
+      const imagePath = await ImageService.saveBase64Image(
         (createWidgetDto.data as IImage).image,
         "images",
       );
@@ -85,7 +85,7 @@ export class WidgetService {
 
     if (widgetToDelete.type == WidgetType.Image) {
       const data: IImage = widgetToDelete.data as IImage;
-      await deleteImage(data.image);
+      await ImageService.deleteImage(data.image);
     }
 
     await widgetToDelete.deleteOne();
