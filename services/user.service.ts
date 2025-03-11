@@ -1,6 +1,6 @@
 import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
-import { deleteImage, saveImageFile } from "../utils/ImageUtils.ts";
+import { ImageService } from "../utils/ImageUtils.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -39,6 +39,7 @@ export class UserService {
     const profileWithUsername = await User.find({
       username: username,
     });
+
     if (profileWithUsername.length > 0) {
       throw new HttpError(400, "Username already exists");
     }
@@ -113,7 +114,8 @@ export class UserService {
     }
     const oldAvatarUrl = user.avatarUrl;
     try {
-      const savedPath = await saveImageFile(avatar, "avatars");
+      const savedPath = await ImageService.saveImageFile(avatar, "avatars");
+      console.log(savedPath)
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
@@ -123,7 +125,7 @@ export class UserService {
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
       try {
-        await deleteImage(oldAvatarUrl);
+        await ImageService.deleteImage(oldAvatarUrl);
       } catch (_error) {
         console.log("unable to delete image " + oldAvatarUrl);
       }
@@ -139,7 +141,11 @@ export class UserService {
     }
 
     if (user.avatarUrl && user.avatarUrl != "") {
-      await deleteImage(user.avatarUrl);
+      try {
+        await ImageService.deleteImage(user.avatarUrl);
+      } catch(e) {
+        console.error(e)
+      }
     }
 
     user.avatarUrl = undefined;
@@ -147,23 +153,4 @@ export class UserService {
     await user.save();
     return user;
   }
-
-  /*private static async uploadImage(
-    file: File,
-    path: string,
-  ): Promise<string> {
-    const fileEnding = file.name.substring(file.name.lastIndexOf("."));
-
-    const stream = file.stream();
-    const buffer = (await stream.getReader().read()).value;
-    if (!buffer) throw new HttpError(500, "An unexpected error occured");
-    
-    const resizedBuffer = await resizeImage(buffer);
-    const webp = await fileToWebpBuffer(resizedBuffer, fileEnding);
-
-    const uuid = crypto.randomUUID();
-    const pathWithFile = "/public/" + path + uuid + ".webp";
-    Deno.writeFile(Deno.cwd() + pathWithFile, webp);
-    return pathWithFile;
-  }*/
 }

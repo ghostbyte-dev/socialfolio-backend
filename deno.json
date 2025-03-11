@@ -4,7 +4,8 @@
     "dev": "deno run --allow-net --allow-read --allow-sys --env-file=.env --allow-env --watch --allow-write --allow-run --allow-ffi main.ts",
     "start": "deno run --allow-read --allow-net --allow-sys --allow-write --allow-run --allow-env --allow-ffi main.ts",
     "hook": "deno run --allow-read --allow-run --allow-write https://deno.land/x/deno_hooks@0.1.1/mod.ts",
-    "seed": "deno run --allow-net --allow-env --env-file=.env --allow-write seed.ts"
+    "seed": "deno run --allow-net --allow-env --env-file=.env --allow-write seed.ts",
+    "test": "deno test --allow-env --allow-read --allow-sys"
   },
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",
@@ -14,6 +15,7 @@
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
     "redis": "npm:redis@^4.5",
     "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts",
-    "sharp": "npm:sharp@0.33.5"
-  }
+    "sharp": "npm:sharp@0.33.5",
+    "sinon": "npm:sinon@19.0.2"
+    }
 }
