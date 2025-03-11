@@ -29,4 +29,4 @@ async function verifyJWT(token: string): Promise<JWTPayload | null> {
   }
 }
 
-export { createJWT, verifyJWT };
+export const JwtUtils =  { createJWT, verifyJWT };

@@ -1,11 +1,8 @@
 import User, { Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
-import { createJWT } from "../utils/jwt.ts";
+import { JwtUtils } from "../utils/jwt.ts";
 import * as bcrypt from "bcrypt";
-import {
-  sendPasswordResetEmail,
-  sendVerificationEmail,
-} from "../utils/sendEmail.ts";
+import { EmailUtils } from "../utils/sendEmail.ts";
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 20;
@@ -73,9 +70,9 @@ export class AuthService {
       createdAt: new Date(Date.now()),
     });
 
-    sendVerificationEmail(email, verificationCode);
+    EmailUtils.sendVerificationEmail(email, verificationCode);
 
-    return createJWT(newUser._id.toString(), newUser.email, newUser.username);
+    return JwtUtils.createJWT(newUser._id.toString(), newUser.email, newUser.username);
   }
 
   static async login(email: string, password: string): Promise<string> {
@@ -85,7 +82,7 @@ export class AuthService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new HttpError(401, "Invalid credentials");
 
-    return createJWT(user._id.toString(), user.email, user.username);
+    return  JwtUtils.createJWT(user._id.toString(), user.email, user.username);
   }
 
   static async verify(code: string) {
@@ -123,7 +120,7 @@ export class AuthService {
     );
 
     try {
-      await sendPasswordResetEmail(
+      await EmailUtils.sendPasswordResetEmail(
         email,
         resetToken,
         expirationTimeMinutes.toString() + " min",
@@ -168,15 +165,16 @@ export class AuthService {
     if (!user) {
       throw new HttpError(404, "User not found");
     }
+    console.log(user.id)
 
-    if (user.status == Status.Unverified) {
+    if (user.status != Status.Unverified) {
       throw new HttpError(400, "Already verified");
     }
 
     const verificationCode = crypto.randomUUID();
     user.verificationCode = verificationCode;
     try {
-      await sendVerificationEmail(user.email, verificationCode);
+      await EmailUtils.sendVerificationEmail(user.email, verificationCode);
     } catch (_error) {
       throw new HttpError(500, "An error occured sending the email.");
     }
