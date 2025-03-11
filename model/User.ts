@@ -4,7 +4,7 @@ export enum Status {
   Visible = "visible",
   Hidden = "hidden",
   Disabled = "disabled",
-  Unverified = "unverified"
+  Unverified = "unverified",
 }
 
 export interface IUser {
@@ -33,9 +33,7 @@ const userSchema = new Schema<IUser>({
   status: { type: String },
   passwordResetToken: { type: String },
   passwordResetExpiresTimestamp: { type: Date },
-},
-  { timestamps: true }
-);
+}, { timestamps: true });
 
 // Validations
 

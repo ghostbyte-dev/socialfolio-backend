@@ -1,7 +1,7 @@
 import { WidgetData } from "../../types/widgetdata.types.ts";
 import { MastodonService } from "./mastodon.service.ts";
 import { WidgetType } from "../../types/widget.types.ts";
-import { DefaultWidgetService } from "./defaultWidget.service.ts"
+import { DefaultWidgetService } from "./defaultWidget.service.ts";
 import { GithubService } from "./github.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
@@ -25,9 +25,9 @@ export class WidgetDataServiceFactory {
         >;
       default:
         return new DefaultWidgetService() as unknown as WidgetDataService<
-        TInput,
-        TOutput
-      >;
+          TInput,
+          TOutput
+        >;
     }
   }
 }

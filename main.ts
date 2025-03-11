@@ -22,7 +22,7 @@ router
   .use("/api/user", userRouter.routes())
   .use("/api/widgets", widgetRouter.routes())
   .use("/api/explore", exploreRouter.routes())
-  .use("/api/stats", statsRouter.routes())
+  .use("/api/stats", statsRouter.routes());
 
 app.use(oakCors());
 

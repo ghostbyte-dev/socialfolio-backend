@@ -45,7 +45,17 @@ export interface IImage {
   link: string | undefined;
 }
 
-export type IWidgetsData = IFediverse | INote | IUsername | ILocalTime | IFediverseWidget | IEmail | ILink | IBluesky | ICountry | IImage;
+export type IWidgetsData =
+  | IFediverse
+  | INote
+  | IUsername
+  | ILocalTime
+  | IFediverseWidget
+  | IEmail
+  | ILink
+  | IBluesky
+  | ICountry
+  | IImage;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -70,7 +80,7 @@ export enum WidgetType {
   Email = "email",
   Link = "link",
   Country = "country",
-  Image = "image"
+  Image = "image",
 }
 
 export class WidgetDto {
@@ -81,7 +91,7 @@ export class WidgetDto {
     public size: ISize,
     public priority: number,
     public data?: IWidgetsData,
-  ) { }
+  ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -100,8 +110,8 @@ export class UpdateWidgetDto {
     public variant?: number,
     public size?: ISize,
     public data?: IWidgetsData,
-    public priority?: number
-  ) { }
+    public priority?: number,
+  ) {}
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
@@ -112,7 +122,7 @@ export class UpdateWidgetDto {
       json.variant,
       json.size,
       json.data,
-      json.priority
+      json.priority,
     );
   }
 }
@@ -202,7 +212,7 @@ export class CreateWidgetDto {
   isFediverseWidgetData(data: IFediverseWidget) {
     return typeof data === "object" && data !== null &&
       typeof data.link === "string" &&
-      typeof data.fediverseHandle == "string"
+      typeof data.fediverseHandle == "string";
   }
 
   isLocalTimeData(data: ILocalTime) {

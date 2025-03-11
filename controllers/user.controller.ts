@@ -137,7 +137,7 @@ export class UserController {
       const user: IUser = await UserService.uploadAvatar(
         file,
         userId,
-        origin
+        origin,
       );
       const userDto = UserDto.fromUser(user);
       context.response.status = 200;

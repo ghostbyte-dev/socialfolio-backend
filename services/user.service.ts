@@ -29,7 +29,7 @@ export class UserService {
     }
 
     if (profile.status == Status.Disabled && profile.id != jwtUserId) {
-      throw new HttpError(400, "This Profile is disabled")
+      throw new HttpError(400, "This Profile is disabled");
     }
 
     return profile;
@@ -83,18 +83,20 @@ export class UserService {
     id: string,
     status: Status,
   ): Promise<IUser> {
-
     if (!Object.values(Status).includes(status)) {
-      throw new HttpError(400, "Invalid status type")
+      throw new HttpError(400, "Invalid status type");
     }
 
     const profile = await User.findById(id);
     if (!profile) {
-      throw new HttpError(404, "Profile not found")
+      throw new HttpError(404, "Profile not found");
     }
 
     if (profile.status == Status.Unverified) {
-      throw new HttpError(401, "Your Profile has to be verified to change your status")
+      throw new HttpError(
+        401,
+        "Your Profile has to be verified to change your status",
+      );
     }
 
     profile.status = status;
@@ -115,7 +117,7 @@ export class UserService {
     const oldAvatarUrl = user.avatarUrl;
     try {
       const savedPath = await ImageService.saveImageFile(avatar, "avatars");
-      console.log(savedPath)
+      console.log(savedPath);
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
@@ -143,8 +145,8 @@ export class UserService {
     if (user.avatarUrl && user.avatarUrl != "") {
       try {
         await ImageService.deleteImage(user.avatarUrl);
-      } catch(e) {
-        console.error(e)
+      } catch (e) {
+        console.error(e);
       }
     }
 

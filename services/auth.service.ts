@@ -9,7 +9,7 @@ import {
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 20;
-const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/
+const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
 const USERNMAME_BLACKLIST = [
   "explore",
   "auth",
@@ -19,41 +19,46 @@ const USERNMAME_BLACKLIST = [
   "credits",
   "imprint",
   "privacy",
-  "privacy-policy"
-]
+  "privacy-policy",
+];
 export class AuthService {
   static async register(
     email: string,
     username: string,
     password: string,
   ): Promise<string> {
-
-    username = username.trim()
+    username = username.trim();
     if (username.includes(" ")) {
-      throw new HttpError(401, "Username can not include Whitespaces")
+      throw new HttpError(401, "Username can not include Whitespaces");
     }
 
     if (username.length > USERNAME_MAX_LENGTH) {
-      throw new HttpError(401, `Username can not be longer than ${USERNAME_MAX_LENGTH} characters`)
+      throw new HttpError(
+        401,
+        `Username can not be longer than ${USERNAME_MAX_LENGTH} characters`,
+      );
     }
 
     if (username.length < USERNAME_MIN_LENGTH) {
-      throw new HttpError(401, `Username has to have a minimum length of ${USERNAME_MIN_LENGTH} characters`)
+      throw new HttpError(
+        401,
+        `Username has to have a minimum length of ${USERNAME_MIN_LENGTH} characters`,
+      );
     }
 
     if (!USERNAME_REGEX.test(username)) {
-      throw new HttpError(401, "invalid Username")
+      throw new HttpError(401, "invalid Username");
     }
 
     if (USERNMAME_BLACKLIST.includes(username)) {
       throw new HttpError(401, "This Username is not allowed");
     }
 
-    const controlUser = username.toLowerCase()
+    const controlUser = username.toLowerCase();
     const existingUsername = await User.findOne({ controlUser });
     if (existingUsername) throw new HttpError(401, "Username already exists");
 
-    email = email.toLowerCase().trim()
+    email = email.toLowerCase().trim();
     const existingEmail = await User.findOne({ email });
     if (existingEmail) throw new HttpError(401, "Email already exists");
 
@@ -65,7 +70,7 @@ export class AuthService {
       password: hashedPassword,
       status: Status.Unverified,
       verificationCode: verificationCode,
-      createdAt: new Date(Date.now())
+      createdAt: new Date(Date.now()),
     });
 
     sendVerificationEmail(email, verificationCode);
@@ -113,10 +118,16 @@ export class AuthService {
 
     user.passwordResetToken = hashedResetToken;
     const expirationTimeMinutes = 30;
-    user.passwordResetExpiresTimestamp = new Date(Date.now() + expirationTimeMinutes * 60 * 1000);
+    user.passwordResetExpiresTimestamp = new Date(
+      Date.now() + expirationTimeMinutes * 60 * 1000,
+    );
 
     try {
-      await sendPasswordResetEmail(email, resetToken, expirationTimeMinutes.toString() + " min");
+      await sendPasswordResetEmail(
+        email,
+        resetToken,
+        expirationTimeMinutes.toString() + " min",
+      );
     } catch (_error) {
       throw new HttpError(500, "failed to send email");
     }
@@ -155,19 +166,19 @@ export class AuthService {
   static async resendVerificationCode(userId: string) {
     const user = await User.findById(userId);
     if (!user) {
-      throw new HttpError(404, "User not found")
+      throw new HttpError(404, "User not found");
     }
 
     if (user.status == Status.Unverified) {
-      throw new HttpError(400, "Already verified")
+      throw new HttpError(400, "Already verified");
     }
 
     const verificationCode = crypto.randomUUID();
     user.verificationCode = verificationCode;
     try {
-      await sendVerificationEmail(user.email, verificationCode)
-    } catch(_error) {
-      throw new HttpError(500, "An error occured sending the email.")
+      await sendVerificationEmail(user.email, verificationCode);
+    } catch (_error) {
+      throw new HttpError(500, "An error occured sending the email.");
     }
 
     await user.save();

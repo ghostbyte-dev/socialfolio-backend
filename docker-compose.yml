@@ -21,7 +21,7 @@ services:
     container_name: mongo_db
     restart: always
     env_file:
-     - path: production.env
+      - path: production.env
     ports:
       - "27017:27017"
     volumes:
@@ -40,7 +40,7 @@ services:
     networks:
       - backend-network
     env_file:
-     - path: ./production.env
+      - path: ./production.env
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
 
 volumes:
@@ -49,6 +49,6 @@ volumes:
 
 networks:
   proxy-network:
-    external: true  # This allows Nginx Proxy Manager to route traffic to backend
+    external: true # This allows Nginx Proxy Manager to route traffic to backend
   backend-network:
-    driver: bridge  # Internal network for backend services
+    driver: bridge # Internal network for backend services

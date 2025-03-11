@@ -4,8 +4,7 @@ import { HttpError } from "../utils/HttpError.ts";
 import { Context } from "@oak/oak/context";
 
 export class StatsController {
-
-static async getStats(
+  static async getStats(
     context: Context,
   ) {
     try {

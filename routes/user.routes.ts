@@ -18,7 +18,7 @@ securedUserRouter.get("/self", UserController.self);
 securedUserRouter.put("/update/username", UserController.updateUsername);
 securedUserRouter.put("/update/description", UserController.updateDescription);
 securedUserRouter.put("/update/displayname", UserController.updateDisplayName);
-securedUserRouter.put("/update/status", UserController.updateStatus)
+securedUserRouter.put("/update/status", UserController.updateStatus);
 securedUserRouter.post("/uploadAvatar", UserController.uploadAvatar);
 securedUserRouter.delete("/avatar", UserController.deleteAvatar);
 

@@ -6,7 +6,7 @@ export class DefaultWidgetService
   implements WidgetDataService<IWidgetsData, WidgetData> {
   fetchData(input: IWidgetsData): Promise<WidgetData> {
     return new Promise((resolve) => {
-      resolve(input)
+      resolve(input);
     });
   }
 }

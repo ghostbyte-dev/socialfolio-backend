@@ -119,9 +119,9 @@ export class AuthController {
     const userId = context.state.user?.id;
     try {
       await AuthService.resendVerificationCode(userId);
-      context.response.status = 200
+      context.response.status = 200;
     } catch (error) {
-      HttpError.handleError(context, error)
+      HttpError.handleError(context, error);
     }
   }
 }

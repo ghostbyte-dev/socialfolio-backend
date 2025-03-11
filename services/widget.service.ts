@@ -42,14 +42,17 @@ export class WidgetService {
   static async createWidget(
     userId: ObjectId,
     createWidgetDto: CreateWidgetDto,
-    origin: string
+    origin: string,
   ): Promise<WidgetDto> {
     if (!Object.values(WidgetType).includes(createWidgetDto.type)) {
       throw new HttpError(400, "Wrong Widget Type");
     }
 
     if (createWidgetDto.type == WidgetType.Image) {
-      const imagePath = await saveBase64Image((createWidgetDto.data as IImage).image, "images");
+      const imagePath = await saveBase64Image(
+        (createWidgetDto.data as IImage).image,
+        "images",
+      );
       const url = origin + imagePath;
 
       (createWidgetDto.data as IImage).image = url;
@@ -136,7 +139,7 @@ export class WidgetService {
     }
     const updatedWidget = await Widget.findById(widgetId);
     if (!updatedWidget) {
-      throw new HttpError(500, "cant find widget")
+      throw new HttpError(500, "cant find widget");
     }
     updatedWidget.variant = widget.variant ?? updatedWidget.variant;
     updatedWidget.size = widget.size ?? updatedWidget.size;

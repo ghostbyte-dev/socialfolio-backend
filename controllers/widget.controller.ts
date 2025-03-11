@@ -58,7 +58,11 @@ export class WidgetController {
 
       const createWidgetDto = CreateWidgetDto
         .fromJson(await context.request.body.json());
-      const widget = await WidgetService.createWidget(userId, createWidgetDto, origin);
+      const widget = await WidgetService.createWidget(
+        userId,
+        createWidgetDto,
+        origin,
+      );
       context.response.status = 201;
       context.response.body = widget;
     } catch (error) {

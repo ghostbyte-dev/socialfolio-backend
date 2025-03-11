@@ -12,9 +12,12 @@ authRouter.post(VERIFY_ROUTE, AuthController.verify);
 authRouter.post("/password/request", AuthController.requestPasswordReset);
 authRouter.post("/password/reset", AuthController.resetPassword);
 
-const securedRouter = new Router()
+const securedRouter = new Router();
 securedRouter.use(authMiddleware);
-securedRouter.post("/resendVerifiationCode", AuthController.resendVerificationCode)
+securedRouter.post(
+  "/resendVerifiationCode",
+  AuthController.resendVerificationCode,
+);
 
-authRouter.use(securedRouter.routes())
+authRouter.use(securedRouter.routes());
 export default authRouter;

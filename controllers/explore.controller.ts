@@ -4,14 +4,16 @@ import { HttpError } from "../utils/HttpError.ts";
 import { Context } from "@oak/oak/context";
 
 export class ExploreController {
-
-static async getExploreProfiles(
+  static async getExploreProfiles(
     context: Context,
   ) {
-    const cursor: string | null = context.request.url.searchParams.get("cursor");
+    const cursor: string | null = context.request.url.searchParams.get(
+      "cursor",
+    );
     const limit: string | null = context.request.url.searchParams.get("limit");
     try {
-      const profiles: IExploreProfilesResponse = await ExploreService.getExploreProfiles(cursor, limit);
+      const profiles: IExploreProfilesResponse = await ExploreService
+        .getExploreProfiles(cursor, limit);
       context.response.status = 200;
       context.response.body = profiles;
     } catch (error) {
