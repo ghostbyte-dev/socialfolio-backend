@@ -6,7 +6,6 @@ import {
   assertNotEquals,
   assertRejects,
   assertStrictEquals,
-  assertThrows,
 } from "https://deno.land/std@0.106.0/testing/asserts.ts";
 import { JwtUtils } from "../utils/jwt.ts";
 import { EmailUtils } from "../utils/sendEmail.ts";
