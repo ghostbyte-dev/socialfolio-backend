@@ -72,7 +72,11 @@ export class AuthService {
 
     EmailUtils.sendVerificationEmail(email, verificationCode);
 
-    return JwtUtils.createJWT(newUser._id.toString(), newUser.email, newUser.username);
+    return JwtUtils.createJWT(
+      newUser._id.toString(),
+      newUser.email,
+      newUser.username,
+    );
   }
 
   static async login(email: string, password: string): Promise<string> {
@@ -82,7 +86,7 @@ export class AuthService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new HttpError(401, "Invalid credentials");
 
-    return  JwtUtils.createJWT(user._id.toString(), user.email, user.username);
+    return JwtUtils.createJWT(user._id.toString(), user.email, user.username);
   }
 
   static async verify(code: string) {
@@ -165,7 +169,7 @@ export class AuthService {
     if (!user) {
       throw new HttpError(404, "User not found");
     }
-    console.log(user.id)
+    console.log(user.id);
 
     if (user.status != Status.Unverified) {
       throw new HttpError(400, "Already verified");

@@ -11,7 +11,7 @@ export const EmailUtils = {
       "./utils/mailTemplates/verification.template.html",
     );
     content = content.replace(/{{verificationUrl}}/g, verificationUrl);
-  
+
     await this.sendEmail(to, content, "Verify your Profile");
   },
 
@@ -27,10 +27,10 @@ export const EmailUtils = {
     );
     content = content.replace(/{{RESET_LINK}}/g, verificationUrl);
     content = content.replace(/{{EXPIRATION_TIME}}/g, expirationTime);
-  
+
     await this.sendEmail(to, content, "Reset your password");
   },
-  
+
   async sendEmail(to: string, content: string, subject: string) {
     const emailPassword = Deno.env.get("EMAIL_PASSWORD");
     const email = Deno.env.get("EMAIL");
@@ -49,7 +49,7 @@ export const EmailUtils = {
         },
       },
     });
-  
+
     await client.send({
       from: email,
       to,
@@ -57,9 +57,7 @@ export const EmailUtils = {
       content: content,
       html: content,
     });
-  
-    await client.close();
-  }
- 
-}
 
+    await client.close();
+  },
+};
