@@ -1,5 +1,5 @@
 import { Context } from "@oak/oak/context";
-import { verifyJWT } from "./jwt.ts";
+import { JwtUtils } from "./jwt.ts";
 
 export const authMiddleware = async (
   context: Context,
@@ -12,7 +12,7 @@ export const authMiddleware = async (
     return;
   }
   try {
-    const jwtPayload = await verifyJWT(token);
+    const jwtPayload = await JwtUtils.verifyJWT(token);
 
     if (jwtPayload == null) {
       throw new Error("Invalid JWT");
@@ -38,7 +38,7 @@ export const getTokenPayloadMiddleware = async (
     await next();
   } else {
     try {
-      const jwtPayload = await verifyJWT(token);
+      const jwtPayload = await JwtUtils.verifyJWT(token);
 
       if (jwtPayload == null) {
         await next();

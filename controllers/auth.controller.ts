@@ -6,10 +6,10 @@ import {
 } from "../types/auth.types.ts";
 import { AuthService } from "../services/auth.service.ts";
 import { HttpError } from "../utils/HttpError.ts";
-import { verifyJWT } from "../utils/jwt.ts";
 import { UserService } from "../services/user.service.ts";
 import { RouterContext } from "@oak/oak/router";
 import { VERIFY_ROUTE } from "../routes/auth.routes.ts";
+import { JwtUtils } from "../utils/jwt.ts";
 
 export class AuthController {
   static async login(context: Context): Promise<void> {
@@ -19,7 +19,7 @@ export class AuthController {
         loginRequest.email,
         loginRequest.password,
       );
-      const jwtPayload = await verifyJWT(jwt);
+      const jwtPayload = await JwtUtils.verifyJWT(jwt);
       if (jwtPayload?.id == null) {
         throw new HttpError(500, "Invalid JWT");
       }
@@ -53,7 +53,7 @@ export class AuthController {
         registerRequest.password,
       );
 
-      const jwtPayload = await verifyJWT(jwt);
+      const jwtPayload = await JwtUtils.verifyJWT(jwt);
       if (jwtPayload?.id == null) {
         throw new HttpError(500, "Invalid JWT");
       }
