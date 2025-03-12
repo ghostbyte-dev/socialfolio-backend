@@ -88,7 +88,7 @@ export enum WidgetType {
   Link = "link",
   Country = "country",
   Image = "image",
-  Location = "location"
+  Location = "location",
 }
 
 export class WidgetDto {
@@ -153,7 +153,10 @@ export class CreateWidgetDto {
       throw new Error("Invalid JSON payload");
     }
 
-    if (json.type === WidgetType.Location && typeof json.data.location === 'string') {
+    if (
+      json.type === WidgetType.Location &&
+      typeof json.data.location === "string"
+    ) {
       json.data.lat = JSON.parse(json.data.location).lat;
       json.data.lon = JSON.parse(json.data.location).lon;
     }
@@ -202,8 +205,8 @@ export class CreateWidgetDto {
         return this.isCountryData(data);
       case WidgetType.Image:
         return this.isImageData(data);
-        case WidgetType.Location:
-          return this.isLocationData(data);
+      case WidgetType.Location:
+        return this.isLocationData(data);
       default:
         return false;
     }
