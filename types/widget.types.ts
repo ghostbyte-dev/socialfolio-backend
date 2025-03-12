@@ -45,6 +45,12 @@ export interface IImage {
   link: string | undefined;
 }
 
+export interface ILocation {
+  lon: number;
+  lat: number;
+  zoom: number;
+}
+
 export type IWidgetsData =
   | IFediverse
   | INote
@@ -55,7 +61,8 @@ export type IWidgetsData =
   | ILink
   | IBluesky
   | ICountry
-  | IImage;
+  | IImage
+  | ILocation;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -81,6 +88,7 @@ export enum WidgetType {
   Link = "link",
   Country = "country",
   Image = "image",
+  Location = "location"
 }
 
 export class WidgetDto {
@@ -144,6 +152,12 @@ export class CreateWidgetDto {
     if (!json || typeof json !== "object") {
       throw new Error("Invalid JSON payload");
     }
+
+    if (json.type === WidgetType.Location && typeof json.data.location === 'string') {
+      json.data.lat = JSON.parse(json.data.location).lat;
+      json.data.lon = JSON.parse(json.data.location).lon;
+    }
+
     return new CreateWidgetDto(
       json.type,
       json.variant,
@@ -188,6 +202,8 @@ export class CreateWidgetDto {
         return this.isCountryData(data);
       case WidgetType.Image:
         return this.isImageData(data);
+        case WidgetType.Location:
+          return this.isLocationData(data);
       default:
         return false;
     }
@@ -245,5 +261,13 @@ export class CreateWidgetDto {
   isImageData(data: IImage) {
     return typeof data === "object" && data != null &&
       typeof data.image === "string";
+  }
+
+  isLocationData(data: ILocation) {
+    console.log(data);
+    return typeof data === "object" && data != null &&
+      typeof data.lon === "string" &&
+      typeof data.lat === "string" &&
+      typeof data.zoom == "number";
   }
 }

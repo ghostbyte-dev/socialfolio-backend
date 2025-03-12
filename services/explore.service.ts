@@ -2,7 +2,7 @@ import {
   IExploreProfile,
   IExploreProfilesResponse,
 } from "../types/explore.types.ts";
-import User, { IUser, Status } from "../model/User.ts"; // Ensure you have IUser defined
+import User, { IUser, Status } from "../model/User.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import mongoose from "mongoose";
 import { FilterQuery } from "mongoose";
