@@ -51,6 +51,11 @@ export interface ILocation {
   zoom: number;
 }
 
+export interface IWeather {
+  lon: number;
+  lat: number;
+}
+
 export type IWidgetsData =
   | IFediverse
   | INote
@@ -62,7 +67,8 @@ export type IWidgetsData =
   | IBluesky
   | ICountry
   | IImage
-  | ILocation;
+  | ILocation
+  | IWeather;
 
 export enum WidgetType {
   Pixelfed = "pixelfed",
@@ -89,6 +95,7 @@ export enum WidgetType {
   Country = "country",
   Image = "image",
   Location = "location",
+  Weather = "weather"
 }
 
 export class WidgetDto {
@@ -99,7 +106,7 @@ export class WidgetDto {
     public size: ISize,
     public priority: number,
     public data?: IWidgetsData,
-  ) {}
+  ) { }
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -119,7 +126,7 @@ export class UpdateWidgetDto {
     public size?: ISize,
     public data?: IWidgetsData,
     public priority?: number,
-  ) {}
+  ) { }
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
@@ -154,7 +161,7 @@ export class CreateWidgetDto {
     }
 
     if (
-      json.type === WidgetType.Location &&
+      (json.type === WidgetType.Location || json.type == WidgetType.Weather) &&
       typeof json.data.location === "string"
     ) {
       json.data.lat = JSON.parse(json.data.location).lat;
@@ -207,6 +214,8 @@ export class CreateWidgetDto {
         return this.isImageData(data);
       case WidgetType.Location:
         return this.isLocationData(data);
+      case WidgetType.Weather:
+        return this.isWeatherData(data);
       default:
         return false;
     }
@@ -272,5 +281,12 @@ export class CreateWidgetDto {
       typeof data.lon === "string" &&
       typeof data.lat === "string" &&
       typeof data.zoom == "number";
+  }
+
+  isWeatherData(data: ILocation) {
+    console.log(data);
+    return typeof data === "object" && data != null &&
+      typeof data.lon === "string" &&
+      typeof data.lat === "string";
   }
 }

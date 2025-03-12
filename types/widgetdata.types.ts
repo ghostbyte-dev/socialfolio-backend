@@ -37,6 +37,13 @@ export interface MastodonData extends WidgetData {
   url: string;
 }
 
+export interface WeatherData extends WidgetData {
+  elevation: number;
+  current: {
+    weatherCode: number;
+  }
+}
+
 export interface GithubData extends WidgetData {
   username: string;
   name: string;
