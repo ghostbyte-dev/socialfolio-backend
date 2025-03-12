@@ -1,5 +1,5 @@
 import { redisClient } from "../../database.ts";
-import {  IWeather } from "../../types/widget.types.ts";
+import { IWeather } from "../../types/widget.types.ts";
 import { WeatherData } from "../../types/widgetdata.types.ts";
 import { WidgetDataService } from "./widgetdata.service.ts";
 
@@ -25,8 +25,8 @@ export class WeatherService
     const mastodonData: WeatherData = {
       elevation: weatherData.elevation,
       current: {
-        weatherCode: weatherData.current.weather_code
-      }
+        weatherCode: weatherData.current.weather_code,
+      },
     };
 
     await redisClient.setEx(
@@ -39,6 +39,6 @@ export class WeatherService
   }
 
   private getCacheKey(lat: number, lon: number): string {
-    return CACHE_WEATHER_KEY + "/" +  lat + "-" + lon;
+    return CACHE_WEATHER_KEY + "/" + lat + "-" + lon;
   }
 }

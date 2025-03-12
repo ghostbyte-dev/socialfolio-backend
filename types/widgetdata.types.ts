@@ -41,7 +41,7 @@ export interface WeatherData extends WidgetData {
   elevation: number;
   current: {
     weatherCode: number;
-  }
+  };
 }
 
 export interface GithubData extends WidgetData {

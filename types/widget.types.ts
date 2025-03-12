@@ -95,7 +95,7 @@ export enum WidgetType {
   Country = "country",
   Image = "image",
   Location = "location",
-  Weather = "weather"
+  Weather = "weather",
 }
 
 export class WidgetDto {
@@ -106,7 +106,7 @@ export class WidgetDto {
     public size: ISize,
     public priority: number,
     public data?: IWidgetsData,
-  ) { }
+  ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -126,7 +126,7 @@ export class UpdateWidgetDto {
     public size?: ISize,
     public data?: IWidgetsData,
     public priority?: number,
-  ) { }
+  ) {}
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
