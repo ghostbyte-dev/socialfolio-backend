@@ -39,6 +39,7 @@ export interface MastodonData extends WidgetData {
 
 export interface WeatherData extends WidgetData {
   elevation: number;
+  isDay: boolean;
   current: {
     weatherCode: number;
   };

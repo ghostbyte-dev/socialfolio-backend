@@ -17,7 +17,7 @@ export class WeatherService
     }
 
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${input.lat}&longitude=${input.lon}&current=weather_code`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${input.lat}&longitude=${input.lon}&current=weather_code,is_day`,
     );
 
     const weatherData = await res.json();
@@ -27,6 +27,7 @@ export class WeatherService
       current: {
         weatherCode: weatherData.current.weather_code,
       },
+      isDay: Boolean(weatherData.current.is_day)
     };
 
     await redisClient.setEx(
