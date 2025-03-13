@@ -96,6 +96,7 @@ export enum WidgetType {
   Image = "image",
   Location = "location",
   Weather = "weather",
+  GlassPhoto = "glassphoto"
 }
 
 export class WidgetDto {
@@ -106,7 +107,7 @@ export class WidgetDto {
     public size: ISize,
     public priority: number,
     public data?: IWidgetsData,
-  ) {}
+  ) { }
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -126,7 +127,7 @@ export class UpdateWidgetDto {
     public size?: ISize,
     public data?: IWidgetsData,
     public priority?: number,
-  ) {}
+  ) { }
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
@@ -197,6 +198,7 @@ export class CreateWidgetDto {
       case WidgetType.KoFi:
       case WidgetType.RecordClub:
       case WidgetType.ListenBrainz:
+      case WidgetType.GlassPhoto:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
