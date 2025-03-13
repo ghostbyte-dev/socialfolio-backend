@@ -32,7 +32,7 @@ export class WeatherService
 
     await redisClient.setEx(
       this.getCacheKey(input.lat, input.lon),
-      3600,
+      1800,
       JSON.stringify(mastodonData),
     );
 
