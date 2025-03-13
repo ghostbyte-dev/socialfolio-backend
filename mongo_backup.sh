@@ -1,5 +1,4 @@
-source production.env
-
+source /root/socialfolio-backend/production.env
 # Generate timestamp (format: YYYYMMDD_HHMMSS)
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
