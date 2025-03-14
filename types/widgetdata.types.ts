@@ -42,6 +42,7 @@ export interface WeatherData extends WidgetData {
   isDay: boolean;
   current: {
     weatherCode: number;
+    temperature: string;
   };
 }
 

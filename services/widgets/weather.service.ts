@@ -17,7 +17,7 @@ export class WeatherService
     }
 
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${input.lat}&longitude=${input.lon}&current=weather_code,is_day`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${input.lat}&longitude=${input.lon}&current=weather_code,is_day,temperature_2m`,
     );
 
     const weatherData = await res.json();
@@ -26,6 +26,7 @@ export class WeatherService
       elevation: weatherData.elevation,
       current: {
         weatherCode: weatherData.current.weather_code,
+        temperature: weatherData.current.temperature_2m + weatherData.current_units.temperature_2m
       },
       isDay: Boolean(weatherData.current.is_day)
     };
