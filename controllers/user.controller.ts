@@ -161,4 +161,15 @@ export class UserController {
       HttpError.handleError(context, error);
     }
   }
+
+  static async deleteAccount(context: Context) {
+    const userId = context.state.user.id;
+
+    try {
+      await UserService.deleteAccount(userId);
+      context.response.status = 200;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 }

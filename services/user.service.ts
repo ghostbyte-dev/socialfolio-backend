@@ -155,4 +155,16 @@ export class UserService {
     await user.save();
     return user;
   }
+
+  static async deleteAccount(userId: string) {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new HttpError(404, "Profile not found");
+    }
+
+    await User.findByIdAndDelete(userId)
+
+    await user.save();
+    return user;
+  }
 }

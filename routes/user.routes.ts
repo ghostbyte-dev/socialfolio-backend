@@ -21,6 +21,7 @@ securedUserRouter.put("/update/displayname", UserController.updateDisplayName);
 securedUserRouter.put("/update/status", UserController.updateStatus);
 securedUserRouter.post("/uploadAvatar", UserController.uploadAvatar);
 securedUserRouter.delete("/avatar", UserController.deleteAvatar);
+securedUserRouter.delete("/account", UserController.deleteAccount);
 
 const userRouter = new Router();
 userRouter.use(unsecuredUserRouter.routes());
