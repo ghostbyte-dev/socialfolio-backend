@@ -21,6 +21,7 @@ export class UserService {
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
+    console.log(profile.status);
     if (
       profile.status == Status.Unverified &&
       ((jwtUserId && jwtUserId != profile.id) || !jwtUserId)

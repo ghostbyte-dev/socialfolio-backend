@@ -5,6 +5,7 @@ const MONGO_URI = Deno.env.get("MONGO_URI") ?? "";
 const REDIS_URI = Deno.env.get("REDIS_URI") ?? "";
 
 async function connectDB() {
+  console.log("Mongo: " + MONGO_URI);
   try {
     await mongoose.connect(MONGO_URI);
     console.log("Database connected successfully");

@@ -374,7 +374,7 @@ Deno.test("AuthService.resetPassword", async (t) => {
 Deno.test("UserService.resendVerificationCode", async (t) => {
   let findById: sinon.SinonStub;
 
-  await t.step("should throw 404 if user is not found", async () => {
+  await t.step("should throw 404 if found", async () => {
     findById = sinon.stub(User, "findById").resolves(null);
 
     try {

@@ -15,4 +15,16 @@ export class StatsController {
       HttpError.handleError(context, error);
     }
   }
+
+   static async getAllWidgetStats(
+    context: Context,
+  ) {
+    try {
+      const stats = await StatsService.getAllWidgetStats();
+      context.response.status = 200;
+      context.response.body = stats;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
 }

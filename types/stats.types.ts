@@ -11,3 +11,8 @@ export interface IStatsWidget {
   mostUsedVariant: number;
   count: number;
 }
+
+export interface IStatsWidgetWithoutVariant {
+  type: WidgetType;
+  count: number;
+}
