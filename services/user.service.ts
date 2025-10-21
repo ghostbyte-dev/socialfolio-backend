@@ -1,4 +1,5 @@
 import User, { IUser, Status } from "../model/User.ts";
+import Widget from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { ImageService } from "../utils/ImageUtils.ts";
 
@@ -158,14 +159,9 @@ export class UserService {
   }
 
   static async deleteAccount(userId: string) {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new HttpError(404, "Profile not found");
-    }
-
-    await User.findByIdAndDelete(userId)
-
-    await user.save();
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) throw new HttpError(404, "Profile not found");
+    await Widget.deleteMany({ user: user._id });
     return user;
   }
 }
