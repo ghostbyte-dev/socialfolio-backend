@@ -96,7 +96,12 @@ export enum WidgetType {
   Image = "image",
   Location = "location",
   Weather = "weather",
-  GlassPhoto = "glassphoto"
+  GlassPhoto = "glassphoto",
+  Instagram = "instagram",
+  SpotifyAccount = "spotify_account",
+  Linkedin = "linkedin",
+  Reddit = "reddit",
+  Strava = "strava"
 }
 
 export class WidgetDto {
@@ -199,6 +204,11 @@ export class CreateWidgetDto {
       case WidgetType.RecordClub:
       case WidgetType.ListenBrainz:
       case WidgetType.GlassPhoto:
+      case WidgetType.Instagram:
+      case WidgetType.SpotifyAccount:
+      case WidgetType.Linkedin:
+      case WidgetType.Reddit:
+      case WidgetType.Strava:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
