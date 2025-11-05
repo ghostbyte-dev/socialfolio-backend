@@ -21,3 +21,5 @@ tar -czf /root/socialfolio_backup/$PUBLIC_BACKUP_FILE -C "$PROJECT_DIR/public" .
 echo "Backup completed:"
 echo "  - MongoDB: /root/socialfolio_backup/$MONGO_BACKUP_FILE"
 echo "  - Public folder: /root/socialfolio_backup/$PUBLIC_BACKUP_FILE"
+find /root/socialfolio_backup -type f -mtime +14 -delete
+echo "remove old backup"
