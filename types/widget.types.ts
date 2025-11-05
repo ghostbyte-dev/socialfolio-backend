@@ -98,7 +98,6 @@ export enum WidgetType {
   Weather = "weather",
   GlassPhoto = "glassphoto",
   Instagram = "instagram",
-  SpotifyAccount = "spotify_account",
   Linkedin = "linkedin",
   Reddit = "reddit",
   Strava = "strava"
@@ -205,7 +204,6 @@ export class CreateWidgetDto {
       case WidgetType.ListenBrainz:
       case WidgetType.GlassPhoto:
       case WidgetType.Instagram:
-      case WidgetType.SpotifyAccount:
       case WidgetType.Linkedin:
       case WidgetType.Reddit:
       case WidgetType.Strava:
