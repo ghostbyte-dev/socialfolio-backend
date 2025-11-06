@@ -109,7 +109,12 @@ export enum WidgetType {
   Youtube = "youtube",
   Telegram = "telegram",
   Socialfolio = "socialfolio",
-  Gitlab = "gitlab"
+  Gitlab = "gitlab",
+  Dribbble = "dribbble",
+  Patreon = "patreon",
+  PayPal = "paypal",
+  ProductHunt = "producthunt",
+  Openstreetmap = "openstreetmap"
 }
 
 export class WidgetDto {
@@ -225,6 +230,11 @@ export class CreateWidgetDto {
       case WidgetType.Youtube:
       case WidgetType.Telegram:
       case WidgetType.Socialfolio:
+      case WidgetType.Dribbble:
+      case WidgetType.Patreon:
+      case WidgetType.PayPal:
+      case WidgetType.ProductHunt:
+      case WidgetType.Openstreetmap:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
