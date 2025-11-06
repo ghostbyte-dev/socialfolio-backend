@@ -100,7 +100,9 @@ export enum WidgetType {
   Instagram = "instagram",
   Linkedin = "linkedin",
   Reddit = "reddit",
-  Strava = "strava"
+  Strava = "strava",
+  Treads = "threads",
+  Loops = "loops"
 }
 
 export class WidgetDto {
@@ -207,6 +209,8 @@ export class CreateWidgetDto {
       case WidgetType.Linkedin:
       case WidgetType.Reddit:
       case WidgetType.Strava:
+      case WidgetType.Treads:
+      case WidgetType.Loops:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
