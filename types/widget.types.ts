@@ -102,7 +102,14 @@ export enum WidgetType {
   Reddit = "reddit",
   Strava = "strava",
   Treads = "threads",
-  Loops = "loops"
+  Loops = "loops",
+  Facebook = "facebook",
+  X = "x",
+  Pinterest = "pinterest",
+  Youtube = "youtube",
+  Telegram = "telegram",
+  Socialfolio = "socialfolio",
+  Gitlab = "gitlab"
 }
 
 export class WidgetDto {
@@ -193,6 +200,7 @@ export class CreateWidgetDto {
       case WidgetType.Matrix:
       case WidgetType.NeoDb:
       case WidgetType.BookyWyrm:
+      case WidgetType.Gitlab:
         return this.isFediverseData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
@@ -211,6 +219,12 @@ export class CreateWidgetDto {
       case WidgetType.Strava:
       case WidgetType.Treads:
       case WidgetType.Loops:
+      case WidgetType.Facebook:
+      case WidgetType.X:
+      case WidgetType.Pinterest:
+      case WidgetType.Youtube:
+      case WidgetType.Telegram:
+      case WidgetType.Socialfolio:
         return this.isUsernameData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
