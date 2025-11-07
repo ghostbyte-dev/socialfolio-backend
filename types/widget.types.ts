@@ -62,7 +62,7 @@ export interface IId {
 }
 
 export interface ISignal {
-  url: string;
+  link: string;
 }
 
 export type IWidgetsData =
@@ -350,6 +350,6 @@ export class CreateWidgetDto {
 
   isSignalData(data: ISignal) {
     return typeof data === "object" && data != null &&
-      typeof data.url === "string";
+      typeof data.link === "string";
   }
 }
