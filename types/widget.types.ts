@@ -56,6 +56,10 @@ export interface IWeather {
   lat: number;
 }
 
+export interface IId {
+  id: string;
+}
+
 export type IWidgetsData =
   | IFediverse
   | INote
@@ -114,7 +118,9 @@ export enum WidgetType {
   Patreon = "patreon",
   PayPal = "paypal",
   ProductHunt = "producthunt",
-  Openstreetmap = "openstreetmap"
+  Openstreetmap = "openstreetmap",
+  Signal = "signal",
+  Threema = "threema"
 }
 
 export class WidgetDto {
@@ -243,6 +249,7 @@ export class CreateWidgetDto {
       case WidgetType.Email:
         return this.isEmailData(data);
       case WidgetType.Link:
+      case WidgetType.Signal:
         return this.isLinkData(data);
       case WidgetType.Bluesky:
         return this.isBlueskyData(data);
@@ -254,6 +261,8 @@ export class CreateWidgetDto {
         return this.isLocationData(data);
       case WidgetType.Weather:
         return this.isWeatherData(data);
+      case WidgetType.Threema:
+        return this.isIdData(data)
       default:
         return false;
     }
@@ -326,5 +335,10 @@ export class CreateWidgetDto {
     return typeof data === "object" && data != null &&
       typeof data.lon === "string" &&
       typeof data.lat === "string";
+  }
+
+  isIdData(data: IId) {
+    return typeof data === "object" && data != null &&
+      typeof data.id === "string";
   }
 }
