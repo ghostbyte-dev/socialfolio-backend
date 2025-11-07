@@ -1,3 +1,4 @@
+import { cookieMapHeadersInitSymbol } from "jsr:@oak/commons@1/cookie_map";
 import { ISize, IWidget } from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 
@@ -58,6 +59,10 @@ export interface IWeather {
 
 export interface IId {
   id: string;
+}
+
+export interface ISignal {
+  url: string;
 }
 
 export type IWidgetsData =
@@ -249,7 +254,6 @@ export class CreateWidgetDto {
       case WidgetType.Email:
         return this.isEmailData(data);
       case WidgetType.Link:
-      case WidgetType.Signal:
         return this.isLinkData(data);
       case WidgetType.Bluesky:
         return this.isBlueskyData(data);
@@ -262,7 +266,9 @@ export class CreateWidgetDto {
       case WidgetType.Weather:
         return this.isWeatherData(data);
       case WidgetType.Threema:
-        return this.isIdData(data)
+        return this.isIdData(data);
+      case WidgetType.Signal:
+        return this.isSignalData(data);
       default:
         return false;
     }
@@ -340,5 +346,10 @@ export class CreateWidgetDto {
   isIdData(data: IId) {
     return typeof data === "object" && data != null &&
       typeof data.id === "string";
+  }
+
+  isSignalData(data: ISignal) {
+    return typeof data === "object" && data != null &&
+      typeof data.url === "string";
   }
 }
