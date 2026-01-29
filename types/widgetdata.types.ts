@@ -46,6 +46,10 @@ export interface WeatherData extends WidgetData {
   };
 }
 
+export interface ApodData extends WidgetData {
+  url: string;
+}
+
 export interface GithubData extends WidgetData {
   username: string;
   name: string;

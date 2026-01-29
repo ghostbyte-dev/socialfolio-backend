@@ -1,4 +1,3 @@
-import { cookieMapHeadersInitSymbol } from "jsr:@oak/commons@1/cookie_map";
 import { ISize, IWidget } from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 
@@ -125,7 +124,8 @@ export enum WidgetType {
   ProductHunt = "producthunt",
   Openstreetmap = "openstreetmap",
   Signal = "signal",
-  Threema = "threema"
+  Threema = "threema",
+  Apod = "apod"
 }
 
 export class WidgetDto {
@@ -269,6 +269,7 @@ export class CreateWidgetDto {
         return this.isIdData(data);
       case WidgetType.Signal:
         return this.isSignalData(data);
+      case WidgetType.Apod: return true;
       default:
         return false;
     }

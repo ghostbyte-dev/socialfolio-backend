@@ -4,6 +4,7 @@ import { WidgetType } from "../../types/widget.types.ts";
 import { DefaultWidgetService } from "./defaultWidget.service.ts";
 import { GithubService } from "./github.service.ts";
 import { WeatherService } from "./weather.service.ts";
+import { ApodService } from "./apod.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
   fetchData(input: TInput): Promise<TOutput>;
@@ -26,6 +27,11 @@ export class WidgetDataServiceFactory {
         >;
       case WidgetType.Weather:
         return new WeatherService() as unknown as WidgetDataService<
+          TInput,
+          TOutput
+        >;
+      case WidgetType.Apod:
+        return new ApodService() as unknown as WidgetDataService<
           TInput,
           TOutput
         >;
