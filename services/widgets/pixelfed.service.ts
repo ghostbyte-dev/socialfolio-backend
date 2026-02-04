@@ -14,7 +14,6 @@ export class PixelfedService
     if (!accountId) {
       throw new Error("You have to enter your Account Id for this variant");
     }
-
     const cachedData = await redisClient.get(
       this.getCacheKey(baseUrl, accountId),
     );
@@ -27,16 +26,18 @@ export class PixelfedService
       const res = await fetch(
         `${baseUrl}/api/pixelfed/v1/accounts/${accountId}/statuses`,
       );
-      const json = await res.json();
+      const posts = await res.json();
       // deno-lint-ignore no-explicit-any
-      const posts: PixelfedPost[] = json.map((post: any) => ({
+      const mediaUrls: PixelfedPost[] = posts.filter((post: any) =>
+        post.media_attachments[0]?.url
+      // deno-lint-ignore no-explicit-any
+      ).map((post: any) => ({
         id: post.id,
-        url: post.url,
+        url: post.media_attachments[0].url,
       }));
-      {
-        posts;
-      }
-      pixelfedData = { posts };
+      pixelfedData = {
+        posts: mediaUrls,
+      };
       await redisClient.setEx(
         this.getCacheKey(baseUrl, accountId),
         86400,
