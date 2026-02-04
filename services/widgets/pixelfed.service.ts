@@ -28,6 +28,7 @@ export class PixelfedService
         `${baseUrl}/api/pixelfed/v1/accounts/${accountId}/statuses`,
       );
       const json = await res.json();
+      // deno-lint-ignore no-explicit-any
       const posts: PixelfedPost[] = json.map((post: any) => ({
         id: post.id,
         url: post.url,
