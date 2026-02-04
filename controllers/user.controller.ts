@@ -39,8 +39,14 @@ export class UserController {
       const user: IUser = await UserService.getByUsername(username, userId);
       const userDto = UserDto.fromUser(user);
 
-      const bot = isBot(context);
-      ViewService.recordView(user._id, UserController.getClientIp(context));
+      if (!userId || userId != user._id.toString()) {
+
+        const bot = isBot(context);
+        if (!bot) {
+          console.log("record View", user._id.toString())
+          ViewService.recordView(user._id, UserController.getClientIp(context));
+        }
+      }
 
       context.response.status = 200;
       context.response.body = userDto;

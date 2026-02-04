@@ -7,7 +7,6 @@ export class ViewService {
     const hash = this.hashIpAndProfileId(ip, profileId);
     const data = await redisClient.get(`view_${hash}`);
     if (data === null) {
-      console.log(hash, "save");
       await View.create({
         timestamp: new Date(),
         profileId: profileId,
