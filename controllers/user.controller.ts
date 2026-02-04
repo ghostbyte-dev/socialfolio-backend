@@ -45,6 +45,8 @@ export class UserController {
         if (!bot) {
           console.log("record View", user._id.toString())
           ViewService.recordView(user._id, UserController.getClientIp(context));
+        } else {
+          console.warn("BOT");
         }
       }
 
