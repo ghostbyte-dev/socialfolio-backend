@@ -46,7 +46,6 @@ export class UserController {
             "view",
           );
           if (isView) {
-            console.log("record View", user._id.toString());
             ViewService.recordView(user._id, UserController.getClientIp(context));
           }
         } else {

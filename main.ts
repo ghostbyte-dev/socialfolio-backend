@@ -20,6 +20,10 @@ const requestCounter = meter.createCounter("http_requests_total", {
   description: "Total number of HTTP requests",
 });
 
+export const botRequestCounter = meter.createCounter("http_bot_requests_total", {
+  description: "Total number of detected bot/automated requests",
+});
+
 
 connectDB();
 connectRedis();
