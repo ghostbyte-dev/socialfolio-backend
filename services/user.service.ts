@@ -1,7 +1,13 @@
+import { RouterContext } from "@oak/oak/router";
 import User, { IUser, Status } from "../model/User.ts";
 import Widget from "../model/Widget.ts";
 import { HttpError } from "../utils/HttpError.ts";
 import { ImageService } from "../utils/ImageUtils.ts";
+import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
+import { UserDto } from "../types/user.types.ts";
+import { isBot } from "../utils/isBot.ts";
+import { ViewService } from "./view.service.ts";
+import { getClientIp } from "../utils/getClientIp.ts";
 
 export class UserService {
   static async getById(id: string): Promise<IUser> {
@@ -15,7 +21,8 @@ export class UserService {
   static async getByUsername(
     username: string,
     jwtUserId: string | undefined,
-  ): Promise<IUser> {
+    context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
+  ): Promise<UserDto> {
     const profile = await User.findOne({
       username: { $regex: new RegExp(`^${username}$`, "i") },
     });
@@ -33,7 +40,21 @@ export class UserService {
       throw new HttpError(400, "This Profile is disabled");
     }
 
-    return profile;
+    const profileViews = await ViewService.getViewsOfProfile(profile._id);
+
+    if (!jwtUserId || jwtUserId != profile._id.toString()) {
+      const bot = isBot(context);
+      if (!bot) {
+        const isView: string | null = context.request.url.searchParams.get(
+          "view",
+        );
+        if (isView) {
+          ViewService.recordView(profile._id, getClientIp(context));
+        }
+      }
+    }
+
+    return UserDto.fromUser(profile, profileViews);
   }
 
   static async updateUsername(id: string, username: string): Promise<IUser> {
@@ -122,7 +143,7 @@ export class UserService {
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
-    // deno-lint-ignore no-explicit-any
+      // deno-lint-ignore no-explicit-any
     } catch (error: any) {
       console.log(error);
       if (error.message) {

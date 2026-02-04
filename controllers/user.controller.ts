@@ -36,34 +36,12 @@ export class UserController {
     }
 
     try {
-      const user: IUser = await UserService.getByUsername(username, userId);
-      const userDto = UserDto.fromUser(user);
-
-      if (!userId || userId != user._id.toString()) {
-        const bot = isBot(context);
-        if (!bot) {
-          const isView: string | null = context.request.url.searchParams.get(
-            "view",
-          );
-          if (isView) {
-            ViewService.recordView(user._id, UserController.getClientIp(context));
-          }
-        }
-      }
-
+      const userDto: UserDto = await UserService.getByUsername(username, userId, context);
       context.response.status = 200;
       context.response.body = userDto;
     } catch (error) {
       HttpError.handleError(context, error);
     }
-  }
-
-  static getClientIp(context: RouterContext<typeof GET_BY_USERNAME_ROUTE>) {
-    const forwarded = context.request.headers.get("x-forwarded-for");
-    if (forwarded) {
-      return forwarded.split(",")[0].trim();
-    }
-    return context.request.ip;
   }
 
   static async updateUsername(context: Context) {
