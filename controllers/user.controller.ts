@@ -7,6 +7,7 @@ import { RouterContext } from "@oak/oak/router";
 import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
 import { getOrigin } from "../utils/getOrigin.ts";
 import { ViewService } from "../services/view.service.ts";
+import { isBot } from "../utils/isBot.ts";
 
 export class UserController {
   static async self(context: Context) {
@@ -37,6 +38,8 @@ export class UserController {
     try {
       const user: IUser = await UserService.getByUsername(username, userId);
       const userDto = UserDto.fromUser(user);
+
+      const bot = isBot(context);
       ViewService.recordView(user._id, UserController.getClientIp(context));
 
       context.response.status = 200;
@@ -48,7 +51,6 @@ export class UserController {
 
   static getClientIp(context: RouterContext<typeof GET_BY_USERNAME_ROUTE>) {
     const forwarded = context.request.headers.get("x-forwarded-for");
-    console.log(forwarded, "forwarded ip");
     if (forwarded) {
       return forwarded.split(",")[0].trim();
     }
