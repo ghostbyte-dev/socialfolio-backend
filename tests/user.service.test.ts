@@ -24,7 +24,7 @@ Deno.test("UserService.getByUsername", async (t) => {
     findOneStub = sinon.stub(User, "findOne").resolves(testUser);
 
     try {
-      const user = await UserService.getByUsername("testuser", userId);
+      const user = await UserService.getByUsername("testuser", userId, undefined);
       assertEquals(user.username, "testuser");
     } finally {
       findOneStub.restore();
@@ -40,7 +40,7 @@ Deno.test("UserService.getByUsername", async (t) => {
     findOneStub = sinon.stub(User, "findOne").resolves(testUser);
 
     try {
-      const user = await UserService.getByUsername("testuser", userId);
+      const user = await UserService.getByUsername("testuser", userId, undefined);
       assertEquals(user.username, "testuser");
     } finally {
       findOneStub.restore();
@@ -58,7 +58,7 @@ Deno.test("UserService.getByUsername", async (t) => {
 
     try {
       await assertRejects(
-        async () => await UserService.getByUsername("testuser", anotherUserId),
+        async () => await UserService.getByUsername("testuser", anotherUserId, undefined),
         HttpError,
         "This Profile is not verified yet",
       );
@@ -77,7 +77,7 @@ Deno.test("UserService.getByUsername", async (t) => {
     findOneStub = sinon.stub(User, "findOne").resolves(testUser);
 
     try {
-      const user = await UserService.getByUsername("testuser", userId);
+      const user = await UserService.getByUsername("testuser", userId, undefined);
       assertEquals(user.username, "testuser");
     } finally {
       findOneStub.restore();
@@ -95,7 +95,7 @@ Deno.test("UserService.getByUsername", async (t) => {
 
     try {
       await assertRejects(
-        async () => await UserService.getByUsername("testuser", anotherUserId),
+        async () => await UserService.getByUsername("testuser", anotherUserId, undefined),
         HttpError,
         "disabled",
       );
@@ -109,7 +109,7 @@ Deno.test("UserService.getByUsername", async (t) => {
 
     try {
       await assertRejects(
-        () => UserService.getByUsername("testuser", userId),
+        () => UserService.getByUsername("testuser", userId, undefined),
         HttpError,
         "Profile not found",
       );
