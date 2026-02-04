@@ -11,8 +11,8 @@ export class ViewService {
       NX: true,
       EX: 86400,
     });
-    
-    console.log("new view", isNewView);
+
+    console.log("new view", isNewView, ip);
     if (isNewView === "OK") {
         console.log("save view")
       await View.create({
