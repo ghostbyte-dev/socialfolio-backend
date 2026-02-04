@@ -28,17 +28,22 @@ export class PixelfedService
         `${baseUrl}/api/pixelfed/v1/accounts/${accountId}/statuses`,
       );
       const json = await res.json();
-      const posts: PixelfedPost[] = json.map((post: any) => ({id: post.id, url: post.url}))
-       {posts}
-      pixelfedData = {posts};
+      const posts: PixelfedPost[] = json.map((post: any) => ({
+        id: post.id,
+        url: post.url,
+      }));
+      {
+        posts;
+      }
+      pixelfedData = { posts };
       await redisClient.setEx(
         this.getCacheKey(baseUrl, accountId),
         86400,
         JSON.stringify(pixelfedData),
       );
-    } catch(_e) {
-      throw new Error("Unable to fetch Pixelfed Posts")
-    } 
+    } catch (_e) {
+      throw new Error("Unable to fetch Pixelfed Posts");
+    }
 
     return pixelfedData;
   }

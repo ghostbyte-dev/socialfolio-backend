@@ -288,7 +288,9 @@ export class CreateWidgetDto {
   }
 
   isPixelfedData(data: IPixelfed) {
-    return this.isFediverseData(data) && (typeof data.accountId === "string" || typeof data.accountId === "undefined");
+    return this.isFediverseData(data) &&
+      (typeof data.accountId === "string" ||
+        typeof data.accountId === "undefined");
   }
 
   isNoteData(data: INote) {

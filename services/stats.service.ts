@@ -1,6 +1,10 @@
 import User, { Status } from "../model/User.ts";
 import Widget from "../model/Widget.ts";
-import { IStats, IStatsWidget, IStatsWidgetWithoutVariant } from "../types/stats.types.ts";
+import {
+  IStats,
+  IStatsWidget,
+  IStatsWidgetWithoutVariant,
+} from "../types/stats.types.ts";
 import { WidgetType } from "../types/widget.types.ts";
 
 export class StatsService {
@@ -99,19 +103,23 @@ export class StatsService {
           totalCount: { $sum: 1 }, // Count total widgets per type
         },
       },
-      { $sort: { totalCount: -1 } }, // 
+      { $sort: { totalCount: -1 } }, //
     ]);
 
     const allWidgetTypes = Object.values(WidgetType);
-    const widgets: IStatsWidgetWithoutVariant[] = allWidgetTypes.map((type: WidgetType) => {
-      const widgetWithCount = topWidgetTypesWithTopVariant.find((widget) => widget._id == type);
-      return {
-        type: type,
-        count: widgetWithCount?.totalCount ?? 0
-      };
-    });
+    const widgets: IStatsWidgetWithoutVariant[] = allWidgetTypes.map(
+      (type: WidgetType) => {
+        const widgetWithCount = topWidgetTypesWithTopVariant.find((widget) =>
+          widget._id == type
+        );
+        return {
+          type: type,
+          count: widgetWithCount?.totalCount ?? 0,
+        };
+      },
+    );
 
-    widgets.sort((a,b) => b.count - a.count);
+    widgets.sort((a, b) => b.count - a.count);
 
     return widgets;
   }

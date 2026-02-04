@@ -26,9 +26,10 @@ export class WeatherService
       elevation: weatherData.elevation,
       current: {
         weatherCode: weatherData.current.weather_code,
-        temperature: weatherData.current.temperature_2m + weatherData.current_units.temperature_2m
+        temperature: weatherData.current.temperature_2m +
+          weatherData.current_units.temperature_2m,
       },
-      isDay: Boolean(weatherData.current.is_day)
+      isDay: Boolean(weatherData.current.is_day),
     };
 
     await redisClient.setEx(

@@ -4,8 +4,7 @@ import { WidgetDataService } from "./widgetdata.service.ts";
 
 const CACHE_APOD_KEY = "apod:";
 
-export class ApodService
-  implements WidgetDataService<null, ApodData> {
+export class ApodService implements WidgetDataService<null, ApodData> {
   async fetchData(): Promise<ApodData> {
     const cachedData = await redisClient.get(
       this.getCacheKey(),
@@ -23,7 +22,7 @@ export class ApodService
     const data = await res.json();
 
     const apodData: ApodData = {
-      url: data.url
+      url: data.url,
     };
 
     await redisClient.setEx(
@@ -36,7 +35,7 @@ export class ApodService
   }
 
   private getCacheKey(): string {
-  const dateStr = new Date().toISOString().split('T')[0]; 
-  return `${CACHE_APOD_KEY}:${dateStr}`;
+    const dateStr = new Date().toISOString().split("T")[0];
+    return `${CACHE_APOD_KEY}:${dateStr}`;
   }
 }

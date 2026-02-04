@@ -16,7 +16,7 @@ export class StatsController {
     }
   }
 
-   static async getAllWidgetStats(
+  static async getAllWidgetStats(
     context: Context,
   ) {
     try {

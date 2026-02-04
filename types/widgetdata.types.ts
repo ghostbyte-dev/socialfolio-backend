@@ -38,7 +38,7 @@ export interface MastodonData extends WidgetData {
 }
 
 export interface PixelfedData extends WidgetData {
-  posts: PixelfedPost[]
+  posts: PixelfedPost[];
 }
 
 export interface PixelfedPost {
