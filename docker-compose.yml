@@ -12,6 +12,7 @@ services:
     environment:
       - OTEL_DENO=true
       - OTEL_SERVICE_NAME=socialfolio-api
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-lgtm:4318
     depends_on:
       - mongo
       - redis
