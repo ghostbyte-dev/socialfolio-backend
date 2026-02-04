@@ -48,7 +48,7 @@ export class UserController {
 
   static getClientIp(context: RouterContext<typeof GET_BY_USERNAME_ROUTE>) {
     const forwarded = context.request.headers.get("x-forwarded-for");
-    console.log(forwarded);
+    console.log(forwarded, "forwarded ip");
     if (forwarded) {
       return forwarded.split(",")[0].trim();
     }
