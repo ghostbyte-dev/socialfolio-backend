@@ -37,13 +37,22 @@ export class UserController {
     try {
       const user: IUser = await UserService.getByUsername(username, userId);
       const userDto = UserDto.fromUser(user);
-      ViewService.recordView(user._id, context.request.ip);
+      ViewService.recordView(user._id, UserController.getClientIp(context));
 
       context.response.status = 200;
       context.response.body = userDto;
     } catch (error) {
       HttpError.handleError(context, error);
     }
+  }
+
+  static getClientIp(context: RouterContext<typeof GET_BY_USERNAME_ROUTE>) {
+    const forwarded = context.request.headers.get("x-forwarded-for");
+    console.log(forwarded);
+    if (forwarded) {
+      return forwarded.split(",")[0].trim();
+    }
+    return context.request.ip;
   }
 
   static async updateUsername(context: Context) {

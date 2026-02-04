@@ -4,7 +4,7 @@ import View from "../model/View.ts";
 
 export class ViewService {
   static async recordView(profileId: string, ip: string) {
-    console.log(ip);
+    console.log(ip, "view");
     const hash = this.hashIpAndProfileId(ip, profileId);
     const data = await redisClient.get(`view_${hash}`);
     if (data === null) {
