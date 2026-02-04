@@ -5,18 +5,20 @@ import View from "../model/View.ts";
 export class ViewService {
   static async recordView(profileId: string, ip: string) {
     const hash = this.hashIpAndProfileId(ip, profileId);
-    const data = await redisClient.get(`view_${hash}`);
-    if (data === null) {
+    const redisKey = `view_v2_${hash}`;
+
+    const isNewView = await redisClient.set(redisKey, "1", {
+      NX: true,
+      EX: 86400,
+    });
+    
+    console.log("new view", isNewView);
+    if (isNewView === "OK") {
+        console.log("save view")
       await View.create({
         timestamp: new Date(),
         profileId: profileId,
       });
-      await redisClient.set(`view_${hash}`, "1");
-      await redisClient.setEx(
-        `view_${hash}`,
-        68400,
-        "1",
-      );
     }
   }
 
