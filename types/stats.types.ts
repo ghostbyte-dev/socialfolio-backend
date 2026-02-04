@@ -3,6 +3,7 @@ import { WidgetType } from "./widget.types.ts";
 export interface IStats {
   userCount: number;
   widgetCount: number;
+  viewsCount: number;
   mostUsedWidgets: IStatsWidget[];
 }
 

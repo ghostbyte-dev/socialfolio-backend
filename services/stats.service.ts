@@ -1,4 +1,5 @@
 import User, { Status } from "../model/User.ts";
+import View from "../model/View.ts";
 import Widget from "../model/Widget.ts";
 import {
   IStats,
@@ -13,6 +14,11 @@ export class StatsService {
       $or: [{ status: Status.Visible }, { status: Status.Hidden }],
     });
 
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const viewsCount = await View.countDocuments({
+      timestamp: { $gte: startOfToday },
+    });
     const widgetCount = await Widget.countDocuments({
       user: {
         $in: await User.find({
@@ -89,6 +95,7 @@ export class StatsService {
     const stats: IStats = {
       userCount,
       widgetCount,
+      viewsCount,
       mostUsedWidgets: formattedStats,
     };
 

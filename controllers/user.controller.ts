@@ -6,6 +6,7 @@ import { HttpError } from "../utils/HttpError.ts";
 import { RouterContext } from "@oak/oak/router";
 import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
 import { getOrigin } from "../utils/getOrigin.ts";
+import { ViewService } from "../services/view.service.ts";
 
 export class UserController {
   static async self(context: Context) {
@@ -25,6 +26,11 @@ export class UserController {
     context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
   ) {
     const userId: string | undefined = context.state.user?.id;
+    if (!userId) {
+      context.response.status = 500;
+      context.response.body = { message: "An unexpected error occured" };
+      return;
+    }
     const username = context.params.username;
     if (!username) {
       context.response.status = 400;
@@ -35,6 +41,9 @@ export class UserController {
     try {
       const user: IUser = await UserService.getByUsername(username, userId);
       const userDto = UserDto.fromUser(user);
+      
+      ViewService.recordView(userId, context.request.ip);
+
       context.response.status = 200;
       context.response.body = userDto;
     } catch (error) {
