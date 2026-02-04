@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { redisClient } from "../database.ts";
 import View from "../model/View.ts";
+import { uniqueProfileClicks } from "../main.ts";
 
 export class ViewService {
   static async recordView(profileId: string, ip: string) {
@@ -17,6 +18,7 @@ export class ViewService {
         timestamp: new Date(),
         profileId: profileId,
       });
+      uniqueProfileClicks.add(1);
     }
   }
 

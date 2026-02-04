@@ -24,6 +24,10 @@ export const botRequestCounter = meter.createCounter("http_bot_requests_total", 
   description: "Total number of detected bot/automated requests",
 });
 
+export const uniqueProfileClicks = meter.createCounter("http_unique_profile_clicks", {
+  description: "Total number of unique profile clicks",
+});
+
 
 connectDB();
 connectRedis();
