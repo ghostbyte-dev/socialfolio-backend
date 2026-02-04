@@ -48,8 +48,6 @@ export class UserController {
           if (isView) {
             ViewService.recordView(user._id, UserController.getClientIp(context));
           }
-        } else {
-          console.warn("BOT");
         }
       }
 
