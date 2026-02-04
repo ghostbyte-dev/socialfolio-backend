@@ -1,7 +1,7 @@
 import { RouterContext } from "@oak/oak/router";
 import { GET_BY_USERNAME_ROUTE } from "../routes/user.routes.ts";
 const BOT_UA_REGEX =
-  /(bot|crawler|spider|crawling|googlebot|bingbot|yandex|duckduckbot|baiduspider|facebookexternalhit|twitterbot|slackbot|discordbot)/i;
+  /(bot|crawler|spider|crawling|googlebot|bingbot|yandex|duckduckbot|baiduspider|facebookexternalhit|twitterbot|slackbot|discordbot|node)/i;
 
 export const isBot = (
   context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
