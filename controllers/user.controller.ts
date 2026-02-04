@@ -40,11 +40,15 @@ export class UserController {
       const userDto = UserDto.fromUser(user);
 
       if (!userId || userId != user._id.toString()) {
-
         const bot = isBot(context);
         if (!bot) {
-          console.log("record View", user._id.toString())
-          ViewService.recordView(user._id, UserController.getClientIp(context));
+          const isView: string | null = context.request.url.searchParams.get(
+            "view",
+          );
+          if (isView) {
+            console.log("record View", user._id.toString());
+            ViewService.recordView(user._id, UserController.getClientIp(context));
+          }
         } else {
           console.warn("BOT");
         }
