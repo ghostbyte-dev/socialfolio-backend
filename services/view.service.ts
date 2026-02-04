@@ -29,4 +29,13 @@ export class ViewService {
       .update(`${ip}-${profileId}-${salt}`)
       .digest("hex");
   }
+
+  static async getViewsOfProfile(profileId: string): Promise<number> {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const viewsCount = await View.countDocuments({
+      profileId: profileId,
+      timestamp: { $gte: twentyFourHoursAgo },
+    });
+    return viewsCount;
+  }
 }

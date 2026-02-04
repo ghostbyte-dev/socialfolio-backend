@@ -14,10 +14,9 @@ export class StatsService {
       $or: [{ status: Status.Visible }, { status: Status.Hidden }],
     });
 
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const viewsCount = await View.countDocuments({
-      timestamp: { $gte: startOfToday },
+      timestamp: { $gte: twentyFourHoursAgo },
     });
     const widgetCount = await Widget.countDocuments({
       user: {
