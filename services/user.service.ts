@@ -21,7 +21,7 @@ export class UserService {
   static async getByUsername(
     username: string,
     jwtUserId: string | undefined,
-    context: RouterContext<typeof GET_BY_USERNAME_ROUTE>,
+    context: RouterContext<typeof GET_BY_USERNAME_ROUTE> | undefined,
   ): Promise<UserDto> {
     const profile = await User.findOne({
       username: { $regex: new RegExp(`^${username}$`, "i") },
@@ -42,14 +42,16 @@ export class UserService {
 
     const profileViews = await ViewService.getViewsOfProfile(profile._id);
 
-    if (!jwtUserId || jwtUserId != profile._id.toString()) {
-      const bot = isBot(context);
-      if (!bot) {
-        const isView: string | null = context.request.url.searchParams.get(
-          "view",
-        );
-        if (isView) {
-          ViewService.recordView(profile._id, getClientIp(context));
+    if (context) {
+      if (!jwtUserId || jwtUserId != profile._id.toString()) {
+        const bot = isBot(context);
+        if (!bot) {
+          const isView: string | null = context.request.url.searchParams.get(
+            "view",
+          );
+          if (isView) {
+            ViewService.recordView(profile._id, getClientIp(context));
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Schema } from "mongoose";
 import Widget, { IWidget } from "../model/Widget.ts";
 import {
   CreateWidgetDto,
@@ -19,9 +19,9 @@ export class WidgetService {
     username: string,
     jwtUserId: string | undefined,
   ): Promise<WidgetDto[]> {
-    const user = await UserService.getByUsername(username, jwtUserId);
+    const user = await UserService.getByUsername(username, jwtUserId, undefined);
     const widgets: IWidget[] = await Widget.find({
-      user: user._id,
+      user: user.id
     });
     widgets.sort((a: IWidget, b: IWidget) => b.priority - a.priority);
     return widgets.map((widget) => WidgetDto.fromWidget(widget));
