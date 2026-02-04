@@ -1,0 +1,5 @@
+# .dockerignore
+lgtm/
+public/
+production.env
+.git

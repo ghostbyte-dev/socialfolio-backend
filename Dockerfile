@@ -14,4 +14,4 @@ RUN deno cache main.ts
 EXPOSE 8000
 
 # Command to run the Deno backend
-CMD ["task", "start"]
+CMD ["run", "--unstable-otel", "-A", "main.ts"]

@@ -9,11 +9,29 @@ services:
     env_file:
       - path: production.env
         required: true
+    environment:
+      - OTEL_DENO=true
+      - OTEL_SERVICE_NAME=socialfolio-api
     depends_on:
       - mongo
       - redis
     networks:
       - proxy-network
+      - backend-network
+
+  otel-lgtm:
+    image: docker.io/grafana/otel-lgtm:0.8.1
+    container_name: monitoring_lgtm
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./lgtm/grafana:/data/grafana
+      - ./lgtm/prometheus:/data/prometheus
+      - ./lgtm/loki:/data/loki
+    environment:
+      - GF_PATHS_DATA=/data/grafana
+    networks:
       - backend-network
 
   mongo:
