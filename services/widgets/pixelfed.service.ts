@@ -3,7 +3,7 @@ import { IPixelfed } from "../../types/widget.types.ts";
 import { PixelfedData, PixelfedPost } from "../../types/widgetdata.types.ts";
 import { WidgetDataService } from "./widgetdata.service.ts";
 
-const CACHE_PIXELFED_KEY = "pixelfed:";
+const CACHE_PIXELFED_KEY = "pixelfed_v2:";
 
 export class PixelfedService
   implements WidgetDataService<IPixelfed, PixelfedData> {
