@@ -37,6 +37,15 @@ export interface MastodonData extends WidgetData {
   url: string;
 }
 
+export interface PixelfedData extends WidgetData {
+  posts: PixelfedPost[]
+}
+
+export interface PixelfedPost {
+  id: string;
+  url: string;
+}
+
 export interface WeatherData extends WidgetData {
   elevation: number;
   isDay: boolean;

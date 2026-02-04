@@ -5,6 +5,7 @@ import { DefaultWidgetService } from "./defaultWidget.service.ts";
 import { GithubService } from "./github.service.ts";
 import { WeatherService } from "./weather.service.ts";
 import { ApodService } from "./apod.service.ts";
+import { PixelfedService } from "./pixelfed.service.ts";
 
 export interface WidgetDataService<TInput, TOutput extends WidgetData> {
   fetchData(input: TInput): Promise<TOutput>;
@@ -17,6 +18,11 @@ export class WidgetDataServiceFactory {
     switch (type) {
       case WidgetType.Mastodon:
         return new MastodonService() as unknown as WidgetDataService<
+          TInput,
+          TOutput
+        >;
+      case WidgetType.Pixelfed:
+        return new PixelfedService() as unknown as WidgetDataService<
           TInput,
           TOutput
         >;

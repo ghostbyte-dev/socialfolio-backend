@@ -6,6 +6,10 @@ export interface IFediverse {
   username: string;
 }
 
+export interface IPixelfed extends IFediverse {
+  accountId?: string;
+}
+
 export interface IBluesky {
   handle: string;
 }
@@ -125,7 +129,7 @@ export enum WidgetType {
   Openstreetmap = "openstreetmap",
   Signal = "signal",
   Threema = "threema",
-  Apod = "apod"
+  Apod = "apod",
 }
 
 export class WidgetDto {
@@ -136,7 +140,7 @@ export class WidgetDto {
     public size: ISize,
     public priority: number,
     public data?: IWidgetsData,
-  ) { }
+  ) {}
 
   static fromWidget(widget: IWidget): WidgetDto {
     return new WidgetDto(
@@ -156,7 +160,7 @@ export class UpdateWidgetDto {
     public size?: ISize,
     public data?: IWidgetsData,
     public priority?: number,
-  ) { }
+  ) {}
 
   // deno-lint-ignore no-explicit-any
   static fromJson(json: any): UpdateWidgetDto {
@@ -209,7 +213,6 @@ export class CreateWidgetDto {
   // deno-lint-ignore no-explicit-any
   isValidData(type: WidgetType, data: any): boolean {
     switch (type) {
-      case WidgetType.Pixelfed:
       case WidgetType.Mastodon:
       case WidgetType.Lemmy:
       case WidgetType.Peertube:
@@ -218,6 +221,8 @@ export class CreateWidgetDto {
       case WidgetType.BookyWyrm:
       case WidgetType.Gitlab:
         return this.isFediverseData(data);
+      case WidgetType.Pixelfed:
+        return this.isPixelfedData(data);
       case WidgetType.Note:
         return this.isNoteData(data);
       case WidgetType.Liberapay:
@@ -269,7 +274,8 @@ export class CreateWidgetDto {
         return this.isIdData(data);
       case WidgetType.Signal:
         return this.isSignalData(data);
-      case WidgetType.Apod: return true;
+      case WidgetType.Apod:
+        return true;
       default:
         return false;
     }
@@ -279,6 +285,10 @@ export class CreateWidgetDto {
     return typeof data === "object" && data !== null &&
       typeof data.instance === "string" &&
       typeof data.username === "string";
+  }
+
+  isPixelfedData(data: IPixelfed) {
+    return this.isFediverseData(data) && (typeof data.accountId === "string" || typeof data.accountId === "undefined");
   }
 
   isNoteData(data: INote) {
