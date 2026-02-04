@@ -169,7 +169,6 @@ export class AuthService {
     if (!user) {
       throw new HttpError(404, "User not found");
     }
-    console.log(user.id);
 
     if (user.status != Status.Unverified) {
       throw new HttpError(400, "Already verified");

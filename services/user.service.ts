@@ -22,7 +22,6 @@ export class UserService {
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
-    console.log(profile.status);
     if (
       profile.status == Status.Unverified &&
       ((jwtUserId && jwtUserId != profile.id) || !jwtUserId)
@@ -123,14 +122,22 @@ export class UserService {
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
-    } catch (_error) {
-      console.log(_error);
+    // deno-lint-ignore no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      if (error.message) {
+        console.error(error.message);
+      }
       throw new HttpError(500, "Unable to save new avatar");
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
       try {
         await ImageService.deleteImage(oldAvatarUrl);
-      } catch (_error) {
+        // deno-lint-ignore no-explicit-any
+      } catch (error: any) {
+        if (error.message) {
+          console.error(error.message);
+        }
         console.log("unable to delete image " + oldAvatarUrl);
       }
     }
