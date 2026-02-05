@@ -49,12 +49,10 @@ export class WidgetService {
       undefined,
       undefined,
     );
-    console.log("mastodon widget service", user.id)
     const mastodonWidgets = await Widget.find({
       type: WidgetType.Mastodon,
       user: user.id
     });
-    console.log("mastodon widgets", mastodonWidgets.length)
     if (!mastodonWidgets || mastodonWidgets.length === 0) {
       throw new HttpError(404, "No mastodon widget found");
     }

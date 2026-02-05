@@ -54,7 +54,6 @@ export class WidgetController {
 
   static async getMastodonWidget(context: RouterContext<typeof GET_WIDGET_MASTODON>) {
     const { username } = context.params;
-    console.log("mastodon widget", username)
     if (username == null) {
       context.response.status = 400;
       context.response.body = { message: "Username is required" };
@@ -63,7 +62,6 @@ export class WidgetController {
 
     try {
       const widgets = await WidgetService.getMastodonWidgets(username);
-      console.log(widgets[0]?.type);
       context.response.status = 200;
       context.response.body = widgets;
     } catch (error) {
