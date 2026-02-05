@@ -1,4 +1,5 @@
 import {
+  ExploreFilter,
   IExploreProfile,
   IExploreProfilesResponse,
 } from "../types/explore.types.ts";
@@ -11,6 +12,7 @@ export class ExploreService {
   static async getExploreProfiles(
     cursor: string | null,
     limit: string | null,
+    filter: ExploreFilter,
   ): Promise<IExploreProfilesResponse> {
     const parsedLimit = parseInt(limit as string, 10);
 
@@ -20,9 +22,9 @@ export class ExploreService {
       query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };
     }
 
-    const profiles = await User.find(query).sort({ _id: -1 }).limit(
-      parsedLimit,
-    );
+    const profiles = filter === ExploreFilter.LATEST
+      ? await this.getProfilesLatest(query, parsedLimit)
+      : await this.getProfilesPopular(query, parsedLimit);
 
     if (!profiles) {
       throw new HttpError(404, "No profiles found");
@@ -45,5 +47,43 @@ export class ExploreService {
       profiles: exploreProfiles,
     };
     return response;
+  }
+
+  static async getProfilesLatest(
+    query: FilterQuery<IUser>,
+    parsedLimit: number,
+  ): Promise<IUser[]> {
+    const profiles = await User.find(query).sort({ _id: -1 }).limit(
+      parsedLimit,
+    );
+    return profiles;
+  }
+
+  static async getProfilesPopular(
+    query: FilterQuery<IUser>,
+    parsedLimit: number,
+  ): Promise<IUser[]> {
+    const profiles = await User.aggregate([
+      { $match: query },
+      {
+        $lookup: {
+          from: "views",
+          localField: "_id",
+          foreignField: "profileId",
+          as: "viewData",
+        },
+      },
+      {
+        $addFields: {
+          viewCount: { $size: "$viewData" },
+        },
+      },
+      { $sort: { viewCount: -1 } },
+
+      { $limit: parsedLimit },
+
+      { $project: { viewData: 0 } },
+    ]);
+    return profiles;
   }
 }

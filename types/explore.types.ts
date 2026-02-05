@@ -11,3 +11,8 @@ export interface IExploreProfilesResponse {
   nextCursor: string | null;
   profiles: IExploreProfile[];
 }
+
+export enum ExploreFilter {
+  LATEST="latest",
+  POPUPLAR="popular"
+}
