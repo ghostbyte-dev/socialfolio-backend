@@ -18,13 +18,9 @@ export class ExploreService {
 
     const query: FilterQuery<IUser> = { status: Status.Visible };
 
-    if (cursor && mongoose.isValidObjectId(cursor as string)) {
-      query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };
-    }
-
     const profiles = filter === ExploreOrder.LATEST
-      ? await this.getProfilesLatest(query, parsedLimit)
-      : await this.getProfilesPopular(query, parsedLimit);
+      ? await this.getProfilesLatest(query, parsedLimit, cursor)
+      : await this.getProfilesPopular(query, parsedLimit, cursor);
 
     if (!profiles) {
       throw new HttpError(404, "No profiles found");
@@ -52,7 +48,12 @@ export class ExploreService {
   static async getProfilesLatest(
     query: FilterQuery<IUser>,
     parsedLimit: number,
+    cursor: string | null,
   ): Promise<IUser[]> {
+    if (cursor && mongoose.isValidObjectId(cursor as string)) {
+      query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };
+    }
+
     const profiles = await User.find(query).sort({ _id: -1 }).limit(
       parsedLimit,
     );
@@ -62,7 +63,30 @@ export class ExploreService {
   static async getProfilesPopular(
     query: FilterQuery<IUser>,
     parsedLimit: number,
+    cursor: string | null,
   ): Promise<IUser[]> {
+    let viewCountThreshold = Infinity;
+    let cursorId: mongoose.Types.ObjectId | null = null;
+
+    if (cursor && mongoose.isValidObjectId(cursor)) {
+      cursorId = new mongoose.Types.ObjectId(cursor);
+      const pivot = await User.aggregate([
+        { $match: { _id: cursorId } },
+        {
+          $lookup: {
+            from: "views",
+            localField: "_id",
+            foreignField: "profileId",
+            as: "v",
+          },
+        },
+        { $addFields: { count: { $size: "$v" } } },
+      ]);
+      if (pivot.length > 0) {
+        viewCountThreshold = pivot[0].count;
+      }
+    }
+
     const profiles = await User.aggregate([
       { $match: query },
       {
@@ -78,6 +102,16 @@ export class ExploreService {
           viewCount: { $size: "$viewData" },
         },
       },
+      ...(cursorId
+        ? [{
+          $match: {
+            $or: [
+              { viewCount: { $lt: viewCountThreshold } },
+              { viewCount: viewCountThreshold, _id: { $lt: cursorId } },
+            ],
+          },
+        }]
+        : []),
       { $sort: { viewCount: -1, _id: -1 } },
 
       { $limit: parsedLimit },
