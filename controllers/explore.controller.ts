@@ -1,6 +1,6 @@
 import { ExploreService } from "../services/explore.service.ts";
 import {
-  ExploreFilter,
+  ExploreOrder,
   IExploreProfilesResponse,
 } from "../types/explore.types.ts";
 import { HttpError } from "../utils/HttpError.ts";
@@ -14,13 +14,13 @@ export class ExploreController {
       "cursor",
     );
     const limit: string | null = context.request.url.searchParams.get("limit");
-    const rawFilter = context.request.url.searchParams.get("filter");
+    const rawFilter = context.request.url.searchParams.get("order");
 
     // Check if the raw string exists in the enum's values
-    const filter: ExploreFilter =
-      Object.values(ExploreFilter).includes(rawFilter as ExploreFilter)
-        ? (rawFilter as ExploreFilter)
-        : ExploreFilter.LATEST;
+    const filter: ExploreOrder =
+      Object.values(ExploreOrder).includes(rawFilter as ExploreOrder)
+        ? (rawFilter as ExploreOrder)
+        : ExploreOrder.LATEST;
 
     try {
       const profiles: IExploreProfilesResponse = await ExploreService

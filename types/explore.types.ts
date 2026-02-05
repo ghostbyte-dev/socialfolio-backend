@@ -12,7 +12,7 @@ export interface IExploreProfilesResponse {
   profiles: IExploreProfile[];
 }
 
-export enum ExploreFilter {
+export enum ExploreOrder {
   LATEST="latest",
   POPUPLAR="popular"
 }

@@ -1,5 +1,5 @@
 import {
-  ExploreFilter,
+  ExploreOrder,
   IExploreProfile,
   IExploreProfilesResponse,
 } from "../types/explore.types.ts";
@@ -12,7 +12,7 @@ export class ExploreService {
   static async getExploreProfiles(
     cursor: string | null,
     limit: string | null,
-    filter: ExploreFilter,
+    filter: ExploreOrder,
   ): Promise<IExploreProfilesResponse> {
     const parsedLimit = parseInt(limit as string, 10);
 
@@ -22,7 +22,7 @@ export class ExploreService {
       query._id = { $lt: new mongoose.Types.ObjectId(cursor as string) };
     }
 
-    const profiles = filter === ExploreFilter.LATEST
+    const profiles = filter === ExploreOrder.LATEST
       ? await this.getProfilesLatest(query, parsedLimit)
       : await this.getProfilesPopular(query, parsedLimit);
 
