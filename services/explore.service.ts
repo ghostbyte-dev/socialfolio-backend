@@ -67,33 +67,55 @@ export class ExploreService {
   ): Promise<IUser[]> {
     let viewCountThreshold = Infinity;
     let cursorId: mongoose.Types.ObjectId | null = null;
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
     if (cursor && mongoose.isValidObjectId(cursor)) {
       cursorId = new mongoose.Types.ObjectId(cursor);
       const pivot = await User.aggregate([
         { $match: { _id: cursorId } },
         {
-          $lookup: {
-            from: "views",
-            localField: "_id",
-            foreignField: "profileId",
-            as: "v",
-          },
+        $lookup: {
+          from: "views",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$profileId", "$$userId"] },
+                    { $gte: ["$timestamp", twentyFourHoursAgo] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "viewData",
         },
-        { $addFields: { count: { $size: "$v" } } },
+      },
+        { $addFields: { count: { $size: "$viewData" } } },
       ]);
       if (pivot.length > 0) {
         viewCountThreshold = pivot[0].count;
       }
     }
-
     const profiles = await User.aggregate([
       { $match: query },
       {
         $lookup: {
           from: "views",
-          localField: "_id",
-          foreignField: "profileId",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$profileId", "$$userId"] },
+                    { $gte: ["$timestamp", twentyFourHoursAgo] },
+                  ],
+                },
+              },
+            },
+          ],
           as: "viewData",
         },
       },
