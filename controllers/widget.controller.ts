@@ -63,6 +63,7 @@ export class WidgetController {
 
     try {
       const widgets = await WidgetService.getMastodonWidgets(username);
+      console.log(widgets[0]?.type);
       context.response.status = 200;
       context.response.body = widgets;
     } catch (error) {
