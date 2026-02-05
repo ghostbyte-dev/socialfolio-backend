@@ -78,7 +78,7 @@ export class ExploreService {
           viewCount: { $size: "$viewData" },
         },
       },
-      { $sort: { viewCount: -1 } },
+      { $sort: { viewCount: -1, _id: -1 } },
 
       { $limit: parsedLimit },
 
