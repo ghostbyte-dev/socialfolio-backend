@@ -57,7 +57,7 @@ export class ImageService {
 
   private static async processImage(buffer: Uint8Array): Promise<Uint8Array> {
     return await sharp(buffer)
-      .resize(400, 400)
+      .resize(500, 500)
       .webp({ quality: 90 })
       .toBuffer();
   }
