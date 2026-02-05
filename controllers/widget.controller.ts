@@ -3,6 +3,7 @@ import { WidgetService } from "../services/widget.service.ts";
 import {
   CHANGE_WIDGET_PRIORITY,
   DELETE_WIDGET_ROUTE,
+  GET_WIDGET_MASTODON,
   GET_WIDGET_ROUTE,
   GET_WIDGETS_ROUTE,
   UPDATE_WIDGET_ROUTE,
@@ -45,6 +46,25 @@ export class WidgetController {
       const widget = await WidgetService.getWidget(id);
       context.response.status = 200;
       context.response.body = widget;
+    } catch (error) {
+      HttpError.handleError(context, error);
+    }
+  }
+
+
+  static async getMastodonWidget(context: RouterContext<typeof GET_WIDGET_MASTODON>) {
+    const { username } = context.params;
+    console.log("mastodon widget", username)
+    if (username == null) {
+      context.response.status = 400;
+      context.response.body = { message: "Username is required" };
+      return;
+    }
+
+    try {
+      const widgets = await WidgetService.getMastodonWidgets(username);
+      context.response.status = 200;
+      context.response.body = widgets;
     } catch (error) {
       HttpError.handleError(context, error);
     }

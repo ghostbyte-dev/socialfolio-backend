@@ -19,9 +19,13 @@ export class WidgetService {
     username: string,
     jwtUserId: string | undefined,
   ): Promise<WidgetDto[]> {
-    const user = await UserService.getByUsername(username, jwtUserId, undefined);
+    const user = await UserService.getByUsername(
+      username,
+      jwtUserId,
+      undefined,
+    );
     const widgets: IWidget[] = await Widget.find({
-      user: user.id
+      user: user.id,
     });
     widgets.sort((a: IWidget, b: IWidget) => b.priority - a.priority);
     return widgets.map((widget) => WidgetDto.fromWidget(widget));
@@ -37,6 +41,25 @@ export class WidgetService {
     const data = await service.fetchData(widget.data);
 
     return WidgetDataDto.fromWidgetData(widget, data);
+  }
+
+  static async getMastodonWidgets(username: string): Promise<WidgetDto[]> {
+    const user = await UserService.getByUsername(
+      username,
+      undefined,
+      undefined,
+    );
+    console.log("mastodon widget service", user.id)
+    const mastodonWidgets = await Widget.find({
+      type: WidgetType.Mastodon,
+      user: user.id
+    });
+    console.log("mastodon widgets", mastodonWidgets.length)
+    if (!mastodonWidgets || mastodonWidgets.length === 0) {
+      throw new HttpError(404, "No mastodon widget found");
+    }
+    const mastodonWidgetsDtos = mastodonWidgets.map((mastodonWidget) => WidgetDto.fromWidget(mastodonWidget));
+    return mastodonWidgetsDtos;
   }
 
   static async createWidget(

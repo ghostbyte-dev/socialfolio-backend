@@ -10,6 +10,8 @@ unsecuredWidgetRouter.use(getTokenPayloadMiddleware);
 
 export const GET_WIDGETS_ROUTE = "/:username/all";
 unsecuredWidgetRouter.get(GET_WIDGETS_ROUTE, WidgetController.widgets);
+export const GET_WIDGET_MASTODON = "/:username/mastodon";
+unsecuredWidgetRouter.get(GET_WIDGET_MASTODON, WidgetController.getMastodonWidget);
 export const GET_WIDGET_ROUTE = "/:id";
 unsecuredWidgetRouter.get(GET_WIDGET_ROUTE, WidgetController.getWidget);
 
