@@ -4,7 +4,7 @@ import View from "../model/View.ts";
 import { uniqueProfileClicks } from "../main.ts";
 
 export class ViewService {
-  static async recordView(profileId: string, ip: string) {
+  static async recordView(profileId: string, ip: string, userAgent: string | null) {
     const hash = this.hashIpAndProfileId(ip, profileId);
     const redisKey = `view_v2_${hash}`;
 
@@ -18,7 +18,10 @@ export class ViewService {
         timestamp: new Date(),
         profileId: profileId,
       });
-      uniqueProfileClicks.add(1);
+      uniqueProfileClicks.add(1, {
+        agent: userAgent?.split('/')[0] ?? "",
+        agentFull: userAgent ?? ""
+      });
     }
   }
 

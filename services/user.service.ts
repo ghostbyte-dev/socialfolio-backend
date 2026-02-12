@@ -50,7 +50,8 @@ export class UserService {
             "view",
           );
           if (isView) {
-            ViewService.recordView(profile._id, getClientIp(context));
+            const userAgent = context.request.headers.get("user-agent");
+            ViewService.recordView(profile._id, getClientIp(context), userAgent);
           }
         }
       }
