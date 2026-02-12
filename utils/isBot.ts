@@ -14,8 +14,7 @@ export const isBot = (
   }
   if (userAgent === "node") {
     botRequestCounter.add(1, { agent: "node" });
-
-    return false;
+    return true;
   }
 
   const isBot = uaParserIsBot(userAgent);

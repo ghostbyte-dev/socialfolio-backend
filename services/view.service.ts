@@ -2,10 +2,14 @@ import crypto from "node:crypto";
 import { redisClient } from "../database.ts";
 import View from "../model/View.ts";
 import { uniqueProfileClicks } from "../main.ts";
-import { UAParser} from 'ua-parser-js';
+import { UAParser } from "ua-parser-js";
 
 export class ViewService {
-  static async recordView(profileId: string, ip: string, userAgent: string | null) {
+  static async recordView(
+    profileId: string,
+    ip: string,
+    userAgent: string | null,
+  ) {
     const hash = this.hashIpAndProfileId(ip, profileId);
     const redisKey = `view_v2_${hash}`;
 
@@ -20,15 +24,17 @@ export class ViewService {
         profileId: profileId,
       });
 
-      let browser = "unknown";
+      let browser = null;
       if (userAgent) {
         const uaParser = new UAParser(userAgent);
-        browser = uaParser.getBrowser().name ?? "unknown";
+        browser = uaParser.getBrowser().name ?? null;
       }
-      uniqueProfileClicks.add(1, {
-        agent: browser,
-        agentFull: userAgent ?? "unknown"
-      });
+      if (browser != null) {
+        uniqueProfileClicks.add(1, {
+          agent: browser,
+          agentFull: userAgent ?? "unknown",
+        });
+      }
     }
   }
 
