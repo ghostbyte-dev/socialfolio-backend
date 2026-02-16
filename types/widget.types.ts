@@ -342,7 +342,6 @@ export class CreateWidgetDto {
   }
 
   isLocationData(data: ILocation) {
-    console.log(data);
     return typeof data === "object" && data != null &&
       typeof data.lon === "string" &&
       typeof data.lat === "string" &&
@@ -350,7 +349,6 @@ export class CreateWidgetDto {
   }
 
   isWeatherData(data: ILocation) {
-    console.log(data);
     return typeof data === "object" && data != null &&
       typeof data.lon === "string" &&
       typeof data.lat === "string";

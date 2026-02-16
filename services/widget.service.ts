@@ -78,7 +78,6 @@ export class WidgetService {
 
       (createWidgetDto.data as IImage).image = url;
     }
-    console.log(createWidgetDto.data);
 
     const newWidget: IWidget = await Widget.create({
       user: userId,

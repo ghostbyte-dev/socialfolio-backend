@@ -33,11 +33,8 @@ export class AuthController {
       );
 
       context.response.status = 200;
-      console.log("success");
       context.response.body = authResponse;
     } catch (error) {
-      console.log("error");
-
       HttpError.handleError(context, error);
     }
   }

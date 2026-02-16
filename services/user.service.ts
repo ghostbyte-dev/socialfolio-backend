@@ -51,7 +51,11 @@ export class UserService {
           );
           if (isView) {
             const userAgent = context.request.headers.get("user-agent");
-            ViewService.recordView(profile._id, getClientIp(context), userAgent);
+            ViewService.recordView(
+              profile._id,
+              getClientIp(context),
+              userAgent,
+            );
           }
         }
       }
@@ -142,16 +146,16 @@ export class UserService {
     const oldAvatarUrl = user.avatarUrl;
     try {
       const savedPath = await ImageService.saveImageFile(avatar, "avatars");
-      console.log(savedPath);
       const url = originUrl + savedPath;
       user.avatarUrl = url;
       await user.save();
       // deno-lint-ignore no-explicit-any
     } catch (error: any) {
-      console.log(error);
+      console.error("Upload Avatar");
       if (error.message) {
         console.error(error.message);
       }
+      console.error(error);
       throw new HttpError(500, "Unable to save new avatar");
     }
     if (oldAvatarUrl && oldAvatarUrl != "") {
@@ -162,7 +166,7 @@ export class UserService {
         if (error.message) {
           console.error(error.message);
         }
-        console.log("unable to delete image " + oldAvatarUrl);
+        console.error("unable to delete image " + oldAvatarUrl);
       }
     }
 

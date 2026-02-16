@@ -11,12 +11,16 @@ export class HttpError extends Error {
 
   static handleError(context: Context, error: unknown) {
     if (error instanceof this) {
+      console.error("Error: ", error.message);
       context.response.status = error.status;
       context.response.body = { message: error.message };
     } else if (error instanceof Error) {
+      console.error("Error: ", error.message);
       context.response.status = 500;
       context.response.body = { message: error.message };
     } else {
+      console.error("Unexpected Error");
+      console.error(error);
       context.response.status = 500;
       context.response.body = { message: "An unknown error occurred" };
     }
