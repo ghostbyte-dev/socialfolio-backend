@@ -22,6 +22,10 @@ export interface IUsername {
   username: string;
 }
 
+export interface IYouTube {
+  handle: string;
+}
+
 export interface IFediverseWidget {
   link: string;
   fediverseHandle: string;
@@ -243,7 +247,6 @@ export class CreateWidgetDto {
       case WidgetType.Facebook:
       case WidgetType.X:
       case WidgetType.Pinterest:
-      case WidgetType.Youtube:
       case WidgetType.Telegram:
       case WidgetType.Socialfolio:
       case WidgetType.Dribbble:
@@ -252,6 +255,8 @@ export class CreateWidgetDto {
       case WidgetType.ProductHunt:
       case WidgetType.Openstreetmap:
         return this.isUsernameData(data);
+      case WidgetType.Youtube:
+        return this.isYoutubeData(data);
       case WidgetType.LocalTime:
         return this.isLocalTimeData(data);
       case WidgetType.Fediverse:
@@ -301,6 +306,11 @@ export class CreateWidgetDto {
   isUsernameData(data: IUsername) {
     return typeof data === "object" && data !== null &&
       typeof data.username === "string";
+  }
+
+  isYoutubeData(data: IYouTube) {
+        return typeof data === "object" && data !== null &&
+      typeof data.handle === "string";
   }
 
   isFediverseWidgetData(data: IFediverseWidget) {
