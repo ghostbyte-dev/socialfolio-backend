@@ -38,7 +38,6 @@ export class UserService {
     }
 
     if (profile.status == Status.Disabled && profileId != jwtUserId) {
-      console.log("disabled: " + profileId + " , " + jwtUserId);
       throw new HttpError(400, "This Profile is disabled");
     }
 
