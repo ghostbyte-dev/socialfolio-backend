@@ -29,21 +29,22 @@ export class UserService {
     if (!profile) {
       throw new HttpError(404, "Profile not found");
     }
+
+    const currentUserId = jwtUserId ? jwtUserId.toString() : null;
     if (
-      profile.status == Status.Unverified &&
-      ((jwtUserId && jwtUserId != profile.id) || !jwtUserId)
+      profile.status == Status.Unverified && jwtUserId != currentUserId
     ) {
       throw new HttpError(400, "This Profile is not verified yet");
     }
 
-    if (profile.status == Status.Disabled && profile.id != jwtUserId) {
+    if (profile.status == Status.Disabled && currentUserId != jwtUserId) {
       throw new HttpError(400, "This Profile is disabled");
     }
 
     const profileViews = await ViewService.getViewsOfProfile(profile._id);
 
     if (context) {
-      if (!jwtUserId || jwtUserId != profile._id.toString()) {
+      if (jwtUserId != currentUserId) {
         const bot = isBot(context);
         if (!bot) {
           const isView: string | null = context.request.url.searchParams.get(
