@@ -30,21 +30,21 @@ export class UserService {
       throw new HttpError(404, "Profile not found");
     }
 
-    const currentUserId = jwtUserId ? jwtUserId.toString() : null;
+    const profileId = profile._id.toString();
     if (
-      profile.status == Status.Unverified && jwtUserId != currentUserId
+      profile.status == Status.Unverified && jwtUserId != profileId
     ) {
       throw new HttpError(400, "This Profile is not verified yet");
     }
 
-    if (profile.status == Status.Disabled && currentUserId != jwtUserId) {
+    if (profile.status == Status.Disabled && profileId != jwtUserId) {
       throw new HttpError(400, "This Profile is disabled");
     }
 
     const profileViews = await ViewService.getViewsOfProfile(profile._id);
 
     if (context) {
-      if (jwtUserId != currentUserId) {
+      if (jwtUserId != profileId) {
         const bot = isBot(context);
         if (!bot) {
           const isView: string | null = context.request.url.searchParams.get(
