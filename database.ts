@@ -1,5 +1,5 @@
 import mongoose from "npm:mongoose";
-import { createClient } from "npm:redis@^4.5";
+import { createClient } from "redis";
 
 const MONGO_URI = Deno.env.get("MONGO_URI") ?? "";
 const REDIS_URI = Deno.env.get("REDIS_URI") ?? "";
