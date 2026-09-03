@@ -2,6 +2,7 @@ services:
   backend:
     build: .
     container_name: deno_backend
+    restart: unless-stopped
     ports:
       - "8001:8001"
     volumes:
