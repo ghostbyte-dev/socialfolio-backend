@@ -13,7 +13,6 @@
     "cors": "https://deno.land/x/cors/mod.ts",
     "mongoose": "npm:mongoose@^8.10.0",
     "bcrypt": "https://deno.land/x/bcrypt/mod.ts",
-    "redis": "npm:redis@^4.5",
     "denoMailer": "https://deno.land/x/denomailer@1.6.0/mod.ts",
     "sharp": "npm:sharp@0.33.5",
     "sinon": "npm:sinon@19.0.2"
